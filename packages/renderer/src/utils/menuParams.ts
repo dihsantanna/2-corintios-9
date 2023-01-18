@@ -22,9 +22,10 @@ export const menuParams = {
   reports: {
     label: 'Relatórios',
     items: [
-      { label: 'Relatório de Entradas', id: 'reportEnters' },
-      { label: 'Relatório de Saídas', id: 'reportExits' },
-      { label: 'Relatório Geral', id: 'reportGeneral' },
+      { label: 'Relatório de Entradas', id: 'entriesReport' },
+      { label: 'Relatório de Saídas', id: 'outputReport' },
+      { label: 'Relatório Geral', id: 'generalReport' },
     ],
   },
 };
+

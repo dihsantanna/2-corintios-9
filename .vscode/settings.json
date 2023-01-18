@@ -4,8 +4,7 @@
       "previewLimit": 50,
       "driver": "SQLite",
       "name": "2-corintios-9",
-      "database": "${workspaceFolder:2-corintios-9}/packages/preload/service/prisma/db/2-corintios-9.db"
+      "database": "${workspaceFolder:2-corintios-9}/packages/preload/src/database/prisma/db/2-corintios-9.db"
     }
-  ],
-  "sqltools.useNodeRuntime": true
+  ]
 }

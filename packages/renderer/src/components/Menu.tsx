@@ -34,15 +34,15 @@ export function Menu({getSelectedScreen}: MenuProps) {
         {Object.entries(menuParams).map(([menuLabel, {label, items}]) => (
         <li className="relative h-max" key={menuLabel}>
           <button
-            className="relative bg-zinc-900 text-zinc-200 w-full h-11 py-2 border-b-2 border-b-zinc-400 hover:bg-green-500 hover:text-zinc-900 rounded-b-sm z-50"
+            className="relative bg-zinc-900 text-zinc-200 w-full h-11 py-2 border-b-2 border-b-zinc-400 hover:bg-teal-500 hover:text-zinc-900 rounded-b-sm z-50"
             onClick={() => toggleMenu(menuLabel as MenuLabelsType)}
           >{label}</button>
           <ul className={`${menuOpened.includes(menuLabel as MenuLabelsType) ? 'opacity-100' : 'absolute transform -translate-y-[1024px] opacity-0'} right-0 w-full z-10 text-zinc-300 transition-opacity duration-200 ease-linear`}>
               {items.map(({ id, label: subLabel }) => (
                 <li
                   className={`py-2 ${selectedScreen === id
-                    ? 'bg-yellow-400 text-zinc-900'
-                    : 'bg-zinc-500 text-zinc-200'} border-b-2 border-b-zinc-900 rounded-b-sm cursor-pointer hover:bg-green-600 hover:text-zinc-900 text-sm`}
+                    ? 'bg-teal-500 text-zinc-900'
+                    : 'bg-zinc-500 text-zinc-200'} border-b-2 border-b-zinc-900 rounded-b-sm cursor-pointer hover:bg-teal-500 hover:text-zinc-900 text-sm`}
                   key={id}
                   onClick={() => selectScreen(id as Screens)}
                 >{subLabel}</li>

@@ -26,7 +26,7 @@ CREATE TABLE "Offer" (
 );
 
 -- CreateTable
-CREATE TABLE "ExpenseType" (
+CREATE TABLE "ExpenseCategory" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "name" TEXT NOT NULL
 );
@@ -34,13 +34,13 @@ CREATE TABLE "ExpenseType" (
 -- CreateTable
 CREATE TABLE "Expense" (
     "id" TEXT NOT NULL PRIMARY KEY,
-    "expense_type_id" TEXT NOT NULL,
+    "expense_category_id" TEXT NOT NULL,
     "title" TEXT NOT NULL,
     "value" REAL NOT NULL,
     "reference_month" TEXT NOT NULL,
     "reference_year" TEXT NOT NULL,
-    CONSTRAINT "Expense_expense_type_id_fkey" FOREIGN KEY ("expense_type_id") REFERENCES "ExpenseType" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+    CONSTRAINT "Expense_expense_category_id_fkey" FOREIGN KEY ("expense_category_id") REFERENCES "ExpenseCategory" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "ExpenseType_name_key" ON "ExpenseType"("name");
+CREATE UNIQUE INDEX "ExpenseCategory_name_key" ON "ExpenseCategory"("name");
