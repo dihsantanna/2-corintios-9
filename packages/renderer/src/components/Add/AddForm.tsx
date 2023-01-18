@@ -1,3 +1,4 @@
+import { ResetButton } from '../ResetButton';
 import { SubmitButton } from '../SubmitButton';
 import type { Screens } from '/@/@types/Screens.type';
 
@@ -5,15 +6,17 @@ interface AddFormProps {
   screenSelected: Screens;
   children: React.ReactNode;
   handleSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
+  handleReset: (event: React.FormEvent<HTMLFormElement>) => void;
   screenName: Screens;
   isLoading: boolean;
   title: string;
 }
 
-export function AddForm({ children, handleSubmit, isLoading, screenName, screenSelected, title }: AddFormProps) {
+export function AddForm({ children, handleSubmit, handleReset, isLoading, screenName, screenSelected, title }: AddFormProps) {
   return (
     <form
       onSubmit={handleSubmit}
+      onReset={handleReset}
       style={{
       display: screenSelected === screenName ? 'flex' : 'none',
       }}
@@ -23,7 +26,10 @@ export function AddForm({ children, handleSubmit, isLoading, screenName, screenS
         <legend className="text-2xl text-zinc-900 font-semibold">{title}</legend>
         {children}
       </fieldset>
-      <SubmitButton isLoading={isLoading} text="Cadastrar" />
+      <div className="flex w-max h-max gap-4">
+        <SubmitButton isLoading={isLoading} text="Cadastrar" />
+        <ResetButton />
+      </div>
     </form>
   );
 }

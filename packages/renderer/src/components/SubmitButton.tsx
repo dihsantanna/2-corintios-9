@@ -7,7 +7,7 @@ interface SubmitButtonProps {
 
 export function SubmitButton({isLoading}: SubmitButtonProps) {
   return (
-          <button
+      <button
         disabled={isLoading}
         type="submit"
         className="bg-zinc-900 hover:bg-teal-500 hover:text-zinc-900 cursor-pointer w-32 h-14 rounded-md font-semibold"

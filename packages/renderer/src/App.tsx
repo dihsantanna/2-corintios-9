@@ -4,6 +4,7 @@ import { Menu } from './components/Menu';
 import type { Screens } from './@types/Screens.type';
 import AddMember from './components/Add/AddMember';
 import { ToastContainer } from 'react-toastify';
+import { AddTithe } from './components/Add/AddTithe';
 import 'react-toastify/dist/ReactToastify.css';
 
 export function App() {
@@ -19,6 +20,7 @@ export function App() {
       </aside>
       <main className="flex flex-1 justify-center items-center">
         <AddMember screenSelected={selectedScreen} />
+        <AddTithe screenSelected={selectedScreen} />
         <Logo className={selectedScreen ? 'w-10 h-10 fixed bottom-4 right-4 opacity-80' : 'w-48 h-48'} />
       </main>
       <ToastContainer

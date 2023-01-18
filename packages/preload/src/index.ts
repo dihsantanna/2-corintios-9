@@ -7,5 +7,6 @@ export { versions } from './versions';
 
 export type { Member, Expense, ExpenseCategory, Offer, Tithe } from '@prisma/client';
 
-export { createMember } from './services/Member';
+export { addMember, findAllMembers } from './services/member';
+export { addTithe } from './services/tithe';
 

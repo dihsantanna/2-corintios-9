@@ -1,13 +1,12 @@
 import { idGenerator } from '../helpers/IdGenerator';
 import { prisma } from '../database';
 
-interface CreateMemberRequest {
+interface AddMemberRequest {
   name: string;
   congregated: boolean;
 }
 
-export const createMember = async (member: CreateMemberRequest) => {
-  console.log(member);
+export const addMember = async (member: AddMemberRequest) => {
   try {
     const newMember = await prisma.member.create({
       data: {
@@ -16,6 +15,15 @@ export const createMember = async (member: CreateMemberRequest) => {
       },
     });
     return newMember;
+  } finally {
+    await prisma.$disconnect();
+  }
+};
+
+export const findAllMembers = async () => {
+  try {
+    const members = await prisma.member.findMany();
+    return members.sort((a, b) => a.name.localeCompare(b.name));
   } finally {
     await prisma.$disconnect();
   }

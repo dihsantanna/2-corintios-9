@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import type { Screens } from '/@/@types/Screens.type';
 import { toast } from 'react-toastify';
-import { createMember } from '#preload';
+import { addMember } from '#preload';
 import { AddForm } from './AddForm';
 
 interface Member {
@@ -39,7 +39,7 @@ export default function AddMember({ screenSelected }: AddMemberProps) {
 
     setLoading(true);
 
-    createMember(member).then(() => {
+    addMember(member).then(() => {
       toast.success(`Membro "${member.name.split(' ')[0]}" cadastrado com sucesso!`, {
         progress: undefined,
       });
@@ -56,29 +56,36 @@ export default function AddMember({ screenSelected }: AddMemberProps) {
     });
   };
 
+  const handleReset = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setMember({
+      name: '',
+      congregated: false,
+    });
+  };
+
   return (
     <AddForm
       handleSubmit={handleSubmit}
+      handleReset={handleReset}
       screenSelected={screenSelected}
       screenName="addMember"
       isLoading={loading}
       title="Cadastrar Membro"
     >
       <label
-        htmlFor="name"
-        className="flex items-center bg-zinc-900 px-3 py-2 border-l-4 border-teal-500 rounded-sm w-8/12"
+        className="flex items-center bg-zinc-900 p-2 border-l-4 border-teal-500 rounded-sm w-8/12"
       >
         <input
-          id="name"
+          required
           name="name"
           placeholder="Escreva o nome do membro aqui"
           onChange={handleChange}
           value={member.name}
-          className="bg-zinc-900 p-2 font-light focus:outline-none block w-full appearance-none leading-normal"
+          className="bg-zinc-900 placeholder:text-zinc-200 font-light focus:outline-none block w-full appearance-none leading-normal"
           />
       </label>
       <label
-        htmlFor="congregated"
         className="relative flex items-center w-max gap-2 text-zinc-900 cursor-pointer"
       >
         {'É Congregado? '}
@@ -86,7 +93,6 @@ export default function AddMember({ screenSelected }: AddMemberProps) {
           type="checkbox"
           checked={member.congregated}
           name="congregated"
-          id="congregated"
           onChange={handleChange}
           className="cursor-pointer"
         />
