@@ -3,6 +3,7 @@ node_modules
 dist
 *.local
 thumbs.db
+2-corintios-9.db
 
 .eslintcache
 .browserslistrc
