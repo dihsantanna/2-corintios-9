@@ -2,9 +2,10 @@ import { useState } from 'react';
 import { ReactComponent as Logo } from '../assets/logo.svg';
 import { Menu } from './components/Menu';
 import type { Screens } from './@types/Screens.type';
-import AddMember from './components/Add/AddMember';
 import { ToastContainer } from 'react-toastify';
+import { AddMember } from './components/Add/AddMember';
 import { AddTithe } from './components/Add/AddTithe';
+import { AddOffer } from './components/Add/AddOffer';
 import 'react-toastify/dist/ReactToastify.css';
 
 export function App() {
@@ -21,6 +22,7 @@ export function App() {
       <main className="flex flex-1 justify-center items-center">
         <AddMember screenSelected={selectedScreen} />
         <AddTithe screenSelected={selectedScreen} />
+        <AddOffer screenSelected={selectedScreen} />
         <Logo className={selectedScreen ? 'w-10 h-10 fixed bottom-4 right-4 opacity-80' : 'w-48 h-48'} />
       </main>
       <ToastContainer

@@ -13,7 +13,7 @@ interface AddMemberProps {
   screenSelected: Screens;
 }
 
-export default function AddMember({ screenSelected }: AddMemberProps) {
+export function AddMember({ screenSelected }: AddMemberProps) {
   const [member, setMember] = useState<Member>({
     name: '',
     congregated: false,
