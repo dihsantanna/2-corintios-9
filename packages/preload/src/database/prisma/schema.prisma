@@ -19,21 +19,21 @@ model Member {
 }
 
 model Tithe {
-  id              String @id
-  member_id       String
-  value           Float
-  reference_month String
-  reference_year  String
-  member          Member @relation(fields: [member_id], references: [id])
+  id             String @id
+  memberId       String
+  value          Float
+  referenceMonth Int
+  referenceYear  Int
+  member         Member @relation(fields: [memberId], references: [id])
 }
 
 model Offer {
-  id              String  @id
-  member_id       String? @default("")
-  value           Float
-  reference_month String
-  reference_year  String
-  member          Member? @relation(fields: [member_id], references: [id])
+  id             String  @id
+  memberId       String? @default("")
+  value          Float
+  referenceMonth Int
+  referenceYear  Int
+  member         Member? @relation(fields: [memberId], references: [id])
 }
 
 model ExpenseCategory {
@@ -43,11 +43,11 @@ model ExpenseCategory {
 }
 
 model Expense {
-  id                  String          @id
-  expense_category_id String
-  title               String
-  value               Float
-  reference_month     String
-  reference_year      String
-  expense_type        ExpenseCategory @relation(fields: [expense_category_id], references: [id])
+  id                String          @id
+  expenseCategoryId String
+  title             String
+  value             Float
+  referenceMonth    Int
+  referenceYear     Int
+  expenseCategory   ExpenseCategory @relation(fields: [expenseCategoryId], references: [id])
 }
