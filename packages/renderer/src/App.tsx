@@ -6,6 +6,7 @@ import { ToastContainer } from 'react-toastify';
 import { AddMember } from './components/Add/AddMember';
 import { AddTithe } from './components/Add/AddTithe';
 import { AddOffer } from './components/Add/AddOffer';
+import { AddExpenseCategory } from './components/Add/AddExpenseCategory';
 import 'react-toastify/dist/ReactToastify.css';
 
 export function App() {
@@ -23,6 +24,7 @@ export function App() {
         <AddMember screenSelected={selectedScreen} />
         <AddTithe screenSelected={selectedScreen} />
         <AddOffer screenSelected={selectedScreen} />
+        <AddExpenseCategory screenSelected={selectedScreen} />
         <Logo className={selectedScreen ? 'w-10 h-10 fixed bottom-4 right-4 opacity-80' : 'w-48 h-48'} />
       </main>
       <ToastContainer

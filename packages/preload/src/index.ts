@@ -10,4 +10,5 @@ export type { Member, Expense, ExpenseCategory, Offer, Tithe } from '@prisma/cli
 export { addMember, findAllMembers } from './services/member';
 export { addTithe } from './services/tithe';
 export { addOffer } from './services/offer';
+export { addExpenseCategory, findAllExpenseCategories } from './services/expenseCategory';
 
