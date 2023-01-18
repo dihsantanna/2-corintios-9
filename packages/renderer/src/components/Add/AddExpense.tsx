@@ -1,49 +1,51 @@
 import { useCallback, useEffect, useState } from 'react';
 import { AddForm } from './AddForm';
 import type { Screens } from '/@/@types/Screens.type';
-import type { Member} from '#preload';
-import { addTithe} from '#preload';
-import { findAllMembers } from '#preload';
+import type { ExpenseCategory} from '#preload';
+import { addExpense} from '#preload';
+import { findAllExpenseCategories } from '#preload';
 import { months } from '/@/utils/months';
 import { getYears } from '/@/utils/years';
 import { toast } from 'react-toastify';
 
-interface Tithe {
-  memberId: string,
-  value: string,
-  referenceMonth: number,
-  referenceYear: number
+interface Expense {
+  expenseCategoryId: string;
+  title: string;
+  value: string;
+  referenceMonth: number;
+  referenceYear: number;
 }
 
-interface AddTitheProps {
+interface AddExpenseProps {
   screenSelected: Screens;
 }
 
-const INITIAL_STATE: Tithe = {
-      memberId: '',
-      value: '',
-      referenceMonth: 0,
-      referenceYear: 0,
+const INITIAL_STATE: Expense = {
+  expenseCategoryId: '',
+  title: '',
+  value: '',
+  referenceMonth: 0,
+  referenceYear: 0,
   };
 
-export function AddTithe({ screenSelected }: AddTitheProps) {
-  const [tithe, setTithe] = useState<Tithe>({...INITIAL_STATE });
+export function AddExpense({ screenSelected }: AddExpenseProps) {
+  const [expense, setExpense] = useState<Expense>({...INITIAL_STATE });
 
-  const [members, setMembers] = useState<Member[]>([]);
+  const [expenseCategories, setExpenseCategories] = useState<ExpenseCategory[]>([]);
   const [loading, setLoading] = useState(false);
 
-  const getAllMembers = useCallback(async () => {
-    const members = await findAllMembers();
-    setMembers(members);
-  }, [setMembers]);
+  const getAllExpenseCategories = useCallback(async () => {
+    const expenseCategories = await findAllExpenseCategories();
+    setExpenseCategories(expenseCategories);
+  }, [setExpenseCategories]);
 
   useEffect(() => {
-    getAllMembers();
-  }, [getAllMembers]);
+    getAllExpenseCategories();
+  }, [getAllExpenseCategories]);
 
-  const formValidate = (floatValue: number, referenceMonth: number, referenceYear: number, memberId: string) => {
+  const formValidate = (floatValue: number, title: string, referenceMonth: number, referenceYear: number, expenseCategoryId: string) => {
     if (floatValue <= 0) {
-      toast.warn('Valor do dízimo deve ser maior que 0', {
+      toast.warn('Valor da despesa deve ser maior que 0', {
         progress: undefined,
       });
       return false;
@@ -57,8 +59,13 @@ export function AddTithe({ screenSelected }: AddTitheProps) {
         progress: undefined,
       });
       return false;
-    } else if (memberId === '') {
-      toast.warn('Por favor selecione o membro', {
+    } else if (expenseCategoryId === '') {
+      toast.warn('Por favor selecione a categoria da despesa', {
+        progress: undefined,
+      });
+      return false;
+    } else if (title.length < 4) {
+      toast.warn('O Título da despesa deve possuir pelo menos 4 caracteres', {
         progress: undefined,
       });
       return false;
@@ -69,31 +76,31 @@ export function AddTithe({ screenSelected }: AddTitheProps) {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const { memberId, value, referenceMonth, referenceYear } = tithe;
+    const { expenseCategoryId, title, value, referenceMonth, referenceYear } = expense;
     const floatValue = parseFloat(value);
 
-    if (!formValidate(floatValue, referenceMonth, referenceYear, memberId)) return;
+    if (!formValidate(floatValue, title,  referenceMonth, referenceYear, expenseCategoryId)) return;
 
     setLoading(true);
-    addTithe({ memberId, value: floatValue, referenceMonth, referenceYear })
+    addExpense({ expenseCategoryId, title, value: floatValue, referenceMonth, referenceYear })
       .then(() => {
-        toast.success('Dízimo cadastrado com sucesso!', {
+        toast.success('Despesa cadastrada com sucesso!', {
           progress: undefined,
         });
       }).catch((err) => {
-        toast.error(`Erro ao cadastrar dízimo: ${err.message}`, {
+        toast.error(`Erro ao cadastrar despesa: ${err.message}`, {
           progress: undefined,
         });
       }).finally(() => {
         setLoading(false);
-        setTithe({...INITIAL_STATE });
+        setExpense({...INITIAL_STATE });
       });
   };
 
   const handleSelectChange = ({ target: { value, name } }: React.ChangeEvent<HTMLSelectElement>) => {
-    setTithe({
-      ...tithe,
-      [name]: name === 'memberId' ? value : +value,
+    setExpense({
+      ...expense,
+      [name]: name === 'expenseCategoryId' ? value : +value,
     });
   };
 
@@ -104,8 +111,8 @@ export function AddTithe({ screenSelected }: AddTitheProps) {
     const valueEdit = value.match(/\d|\.|,/g) || '';
     const newValue = valueEdit.length ? [...valueEdit].join('') : '';
 
-    setTithe({
-      ...tithe,
+    setExpense({
+      ...expense,
       [name]: newValue.replace(',', '.'),
     });
   };
@@ -113,41 +120,60 @@ export function AddTithe({ screenSelected }: AddTitheProps) {
   const handleValueInputBlur = ({ target: { value, name } }: React.FocusEvent<HTMLInputElement>) => {
     const newValue = value ? parseFloat(value).toFixed(2) : '';
 
-    setTithe({
-      ...tithe,
+    setExpense({
+      ...expense,
       [name]: newValue,
+    });
+  };
+
+  const handleChange = ({ target: { value, name } }: React.ChangeEvent<HTMLInputElement>) => {
+    setExpense({
+      ...expense,
+      [name]: value,
     });
   };
 
   const handleReset = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setTithe({...INITIAL_STATE });
+    setExpense({...INITIAL_STATE });
   };
 
   return (
     <AddForm
       handleSubmit={handleSubmit}
       handleReset={handleReset}
-      screenName="addTithe"
+      screenName="addExpense"
       screenSelected={screenSelected}
       isLoading={loading}
-      title="Cadastrar Dízimo"
+      title="Cadastrar Despesa"
     >
       <label
         className="flex items-center bg-zinc-900 p-2 border-l-4 border-teal-500 rounded-sm w-8/12"
       >
         <select
           required
-          name="memberId"
-          value={tithe.memberId}
+          name="expenseCategoryId"
+          value={expense.expenseCategoryId}
           onChange={handleSelectChange}
           className="cursor-pointer bg-zinc-900 font-light focus:outline-none block w-full appearance-none leading-normal"
         >
-          <option disabled selected value="">Selecione o membro</option>
-          {members.map(({id, name}) => (
+          <option disabled selected value="">Selecione uma categoria para a despesa</option>
+          {expenseCategories.map(({id, name}) => (
             <option key={id} value={id}>{`${id} - ${name}`}</option>
           ))}
         </select>
+      </label>
+      <label
+        className="flex items-center bg-zinc-900 p-2 border-l-4 border-teal-500 rounded-sm w-8/12"
+      >
+        <input
+          required
+          name="title"
+          placeholder="Dê um título para a despesa"
+          onChange={handleChange}
+          value={expense.title}
+          className="bg-zinc-900 placeholder:text-zinc-200 font-light focus:outline-none block w-full appearance-none leading-normal"
+          />
       </label>
       <label className="flex gap-2 items-center bg-zinc-900 p-2 border-l-4 border-teal-500 rounded-sm w-4/12">
         <span>R$</span>
@@ -157,8 +183,8 @@ export function AddTithe({ screenSelected }: AddTitheProps) {
           name="value"
           onChange={handleValueInputChange}
           onBlur={handleValueInputBlur}
-          value={tithe.value}
-          placeholder="Valor do Dízimo"
+          value={expense.value}
+          placeholder="Valor da Despesa"
         />
       </label>
       <label
@@ -167,7 +193,7 @@ export function AddTithe({ screenSelected }: AddTitheProps) {
         <select
           required
           name="referenceMonth"
-          value={tithe.referenceMonth}
+          value={expense.referenceMonth}
           onChange={handleSelectChange}
           className="cursor-pointer bg-zinc-900 font-light focus:outline-none block w-full appearance-none leading-normal"
         >
@@ -183,7 +209,7 @@ export function AddTithe({ screenSelected }: AddTitheProps) {
         <select
           required
           name="referenceYear"
-          value={tithe.referenceYear}
+          value={expense.referenceYear}
           onChange={handleSelectChange}
           className="cursor-pointer bg-zinc-900 font-light focus:outline-none block w-full appearance-none leading-normal"
         >

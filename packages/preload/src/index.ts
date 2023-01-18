@@ -11,4 +11,4 @@ export { addMember, findAllMembers } from './services/member';
 export { addTithe } from './services/tithe';
 export { addOffer } from './services/offer';
 export { addExpenseCategory, findAllExpenseCategories } from './services/expenseCategory';
-
+export { addExpense } from './services/expense';

@@ -19,7 +19,7 @@ interface AddOfferProps {
   screenSelected: Screens;
 }
 
-const INITIAL_TITHE: Offer = {
+const INITIAL_STATE: Offer = {
       memberId: '',
       value: '',
       referenceMonth: 0,
@@ -27,7 +27,7 @@ const INITIAL_TITHE: Offer = {
   };
 
 export function AddOffer({ screenSelected }: AddOfferProps) {
-  const [tithe, setOffer] = useState<Offer>({...INITIAL_TITHE });
+  const [tithe, setOffer] = useState<Offer>({...INITIAL_STATE });
 
   const [members, setMembers] = useState<Member[]>([]);
   const [loading, setLoading] = useState(false);
@@ -81,7 +81,7 @@ export function AddOffer({ screenSelected }: AddOfferProps) {
         });
       }).finally(() => {
         setLoading(false);
-        setOffer({...INITIAL_TITHE });
+        setOffer({...INITIAL_STATE });
       });
   };
 
@@ -116,7 +116,7 @@ export function AddOffer({ screenSelected }: AddOfferProps) {
 
   const handleReset = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setOffer({...INITIAL_TITHE });
+    setOffer({...INITIAL_STATE });
   };
 
   return (
