@@ -8,6 +8,7 @@ import { AddTithe } from './components/Add/AddTithe';
 import { AddOffer } from './components/Add/AddOffer';
 import { AddExpenseCategory } from './components/Add/AddExpenseCategory';
 import { AddExpense } from './components/Add/AddExpense';
+import { EditMembers } from './components/Edit/EditMembers';
 import 'react-toastify/dist/ReactToastify.css';
 
 export function App() {
@@ -22,11 +23,14 @@ export function App() {
         <Menu getSelectedScreen={getSelectedScreen} />
       </aside>
       <main className="flex flex-1 justify-center items-center">
+        {/*Add Screens*/}
         <AddMember screenSelected={selectedScreen} />
         <AddTithe screenSelected={selectedScreen} />
         <AddOffer screenSelected={selectedScreen} />
         <AddExpenseCategory screenSelected={selectedScreen} />
         <AddExpense screenSelected={selectedScreen} />
+        {/*Edit Screens*/}
+        <EditMembers screenSelected={selectedScreen} />
         <Logo className={selectedScreen ? 'w-10 h-10 fixed bottom-4 right-4 opacity-80' : 'w-48 h-48'} />
       </main>
       <ToastContainer

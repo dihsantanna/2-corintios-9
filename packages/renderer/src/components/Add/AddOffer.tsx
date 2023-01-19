@@ -66,7 +66,6 @@ export function AddOffer({ screenSelected }: AddOfferProps) {
     event.preventDefault();
     const { memberId, value, referenceMonth, referenceYear } = tithe;
     const floatValue = parseFloat(value);
-    console.log(typeof referenceMonth, typeof referenceYear);
     if (!formValidate(floatValue, referenceMonth, referenceYear)) return;
 
     setLoading(true);

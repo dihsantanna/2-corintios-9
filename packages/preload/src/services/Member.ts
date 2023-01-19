@@ -1,5 +1,6 @@
 import { idGenerator } from '../helpers/IdGenerator';
 import { prisma } from '../database';
+import type { Member } from '@prisma/client';
 
 interface AddMemberRequest {
   name: string;
@@ -24,6 +25,18 @@ export const findAllMembers = async () => {
   try {
     const members = await prisma.member.findMany();
     return members.sort((a, b) => a.name.localeCompare(b.name));
+  } finally {
+    await prisma.$disconnect();
+  }
+};
+
+export const updateMember = async ({id, name, congregated}: Member) => {
+  try {
+    const member = await prisma.member.update({
+      where: { id },
+      data: { name, congregated },
+    });
+    return member;
   } finally {
     await prisma.$disconnect();
   }
