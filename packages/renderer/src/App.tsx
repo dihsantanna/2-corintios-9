@@ -10,6 +10,7 @@ import { AddExpenseCategory } from './components/Add/AddExpenseCategory';
 import { AddExpense } from './components/Add/AddExpense';
 import { EditMembers } from './components/Edit/EditMembers';
 import 'react-toastify/dist/ReactToastify.css';
+import { EditTithes } from './components/Edit/EditTithes';
 
 export function App() {
   const [selectedScreen, setSelectedScreen] = useState<Screens>('' as Screens);
@@ -19,7 +20,7 @@ export function App() {
   };
   return (
     <div className="flex w-screen h-screen">
-      <aside className="border-r-2 border-r-zinc-300 w-1/5 h-screen rounded-r-md overflow-y-auto">
+      <aside className="border-r-2 border-r-zinc-300 w-1/6 h-screen rounded-r-md overflow-y-auto">
         <Menu getSelectedScreen={getSelectedScreen} />
       </aside>
       <main className="flex flex-1 justify-center items-center">
@@ -31,7 +32,13 @@ export function App() {
         <AddExpense screenSelected={selectedScreen} />
         {/*Edit Screens*/}
         <EditMembers screenSelected={selectedScreen} />
-        <Logo className={selectedScreen ? 'w-10 h-10 fixed bottom-4 right-4 opacity-80' : 'w-48 h-48'} />
+        <EditTithes screenSelected={selectedScreen} />
+        <Logo
+          className={
+          (selectedScreen ? 'w-10 h-10 fixed bottom-4 right-4 opacity-80' : 'w-48 h-48')
+          + ' transition-all duration-500 ease-in-out'
+          }
+        />
       </main>
       <ToastContainer
         position="bottom-right"

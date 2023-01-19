@@ -33,7 +33,7 @@ export function EditMembers({ screenSelected }: EditMemberProps) {
     { target: { name, value } }: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
     index: number,
   ) => {
-    const key = name as keyof typeof newMember;
+    const key = name as keyof Member;
     const newMember = {
       ...members[index],
       [key]: key === 'congregated' ? value === 'true' : value,
@@ -116,7 +116,7 @@ export function EditMembers({ screenSelected }: EditMemberProps) {
               name="name"
               value={name}
               onChange={(event) => handleChange(event, index)}
-              className="text-center text-zinc-200 bg-zinc-900 p-2 disabled:p-0 disabled:text-zinc-900 disabled:bg-transparent font-light focus:outline-none block w-full h-full appearance-none leading-normal rounded-sm"
+              className="text-center text-zinc-200 bg-zinc-900 p-2 disabled:p-0 disabled:text-zinc-900 disabled:bg-transparent font-light disabled:font-normal focus:outline-none block w-full h-full appearance-none leading-normal rounded-sm"
               disabled={editing !== id}
             />
           </label>
@@ -125,7 +125,7 @@ export function EditMembers({ screenSelected }: EditMemberProps) {
               value={congregated ? 'true' : 'false'}
               name="congregated"
               onChange={(event) => handleChange(event, index)}
-              className="cursor-pointer disabled:cursor-default text-center text-zinc-200 bg-zinc-900 p-2 disabled:p-0 disabled:text-zinc-900 disabled:bg-transparent font-light focus:outline-none block w-full h-full disabled:appearance-none leading-normal rounded-sm"
+              className="cursor-pointer disabled:cursor-default text-center text-zinc-200 bg-zinc-900 p-2 disabled:p-0 disabled:text-zinc-900 disabled:bg-transparent font-light disabled:font-normal focus:outline-none block w-full h-full disabled:appearance-none leading-normal rounded-sm"
               disabled={editing !== id}
             >
               <option disabled value="">É Congregado?</option>
