@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { Screens } from '/@/@types/Screens.type';
 import { toast } from 'react-toastify';
 import { addExpenseCategory } from '#preload';
@@ -17,6 +17,20 @@ export function AddExpenseCategory({ screenSelected }: AddExpenseCategoryProps) 
     name: '',
   });
   const [loading, setLoading] = useState(false);
+  const mounted = useRef(false);
+
+  useEffect(() => {
+    if (screenSelected === 'addExpenseCategory') {
+      mounted.current = true;
+    }
+
+    if (screenSelected !== 'addExpenseCategory' && mounted.current) {
+      setExpenseCategory({
+        name: '',
+      });
+      mounted.current = false;
+    }
+  }, [screenSelected]);
 
   const handleChange = ({target: {value, name}}: React.ChangeEvent<HTMLInputElement>) => {
     setExpenseCategory({

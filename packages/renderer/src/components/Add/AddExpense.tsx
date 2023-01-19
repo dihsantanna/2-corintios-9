@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { AddForm } from './AddForm';
 import type { Screens } from '/@/@types/Screens.type';
 import type { ExpenseCategory} from '#preload';
@@ -33,15 +33,23 @@ export function AddExpense({ screenSelected }: AddExpenseProps) {
 
   const [expenseCategories, setExpenseCategories] = useState<ExpenseCategory[]>([]);
   const [loading, setLoading] = useState(false);
-
-  const getAllExpenseCategories = useCallback(async () => {
-    const expenseCategories = await findAllExpenseCategories();
-    setExpenseCategories(expenseCategories);
-  }, [setExpenseCategories]);
+  const mounted = useRef(false);
 
   useEffect(() => {
-    getAllExpenseCategories();
-  }, [getAllExpenseCategories]);
+    if (screenSelected === 'addExpense') {
+      findAllExpenseCategories().then((expenseCategories) => {
+        setExpenseCategories(expenseCategories);
+      });
+      mounted.current = true;
+    }
+
+    if (screenSelected !== 'addExpense' && mounted.current) {
+      setExpense({...INITIAL_STATE });
+      mounted.current = false;
+    }
+  }, [screenSelected]);
+
+
 
   const formValidate = (floatValue: number, title: string, referenceMonth: number, referenceYear: number, expenseCategoryId: string) => {
     if (floatValue <= 0) {

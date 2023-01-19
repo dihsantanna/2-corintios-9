@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { Screens } from '/@/@types/Screens.type';
 import { toast } from 'react-toastify';
 import { addMember } from '#preload';
@@ -19,6 +19,21 @@ export function AddMember({ screenSelected }: AddMemberProps) {
     congregated: false,
   });
   const [loading, setLoading] = useState(false);
+  const mounted = useRef(false);
+
+  useEffect(() => {
+    if (screenSelected === 'addMember') {
+      mounted.current = true;
+    }
+
+    if (screenSelected !== 'addMember' && mounted.current) {
+      setMember({
+        name: '',
+        congregated: false,
+      });
+      mounted.current = false;
+    }
+  }, [screenSelected]);
 
   const handleChange = ({target: {type, checked, value, name}}: React.ChangeEvent<HTMLInputElement>) => {
     setMember({

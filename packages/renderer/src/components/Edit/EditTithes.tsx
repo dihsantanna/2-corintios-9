@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { EditForm } from './EditForm';
 import type { Screens } from '/@/@types/Screens.type';
 import type { Member, Tithe} from '#preload';
@@ -26,20 +26,23 @@ export function EditTithes({ screenSelected }: EditTitheProps) {
   const [loading, setLoading] = useState(false);
   const [referenceMonth, setReferenceMonth] = useState(0);
   const [referenceYear, setReferenceYear] = useState(0);
+  const mounted = useRef(false);
 
   useEffect(() => {
-    if (screenSelected !== 'editTithes') {
+    if (screenSelected !== 'editTithes' && mounted.current) {
       setEditing('');
       setReferenceMonth(0);
       setReferenceYear(0);
       setTithes([]);
       setDefaultTithes([]);
+      mounted.current = false;
     }
 
     if (screenSelected === 'editTithes') {
       findAllMembers().then((members) => {
         setMembers(members);
       });
+      mounted.current = true;
     }
   }, [screenSelected]);
 

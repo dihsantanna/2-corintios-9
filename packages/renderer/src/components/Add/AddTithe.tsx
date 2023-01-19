@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { AddForm } from './AddForm';
 import type { Screens } from '/@/@types/Screens.type';
 import type { Member} from '#preload';
@@ -31,15 +31,22 @@ export function AddTithe({ screenSelected }: AddTitheProps) {
 
   const [members, setMembers] = useState<Member[]>([]);
   const [loading, setLoading] = useState(false);
-
-  const getAllMembers = useCallback(async () => {
-    const members = await findAllMembers();
-    setMembers(members);
-  }, [setMembers]);
+  const mounted = useRef(false);
 
   useEffect(() => {
-    getAllMembers();
-  }, [getAllMembers]);
+    if (screenSelected === 'addTithe') {
+      findAllMembers().then((members) => {
+        setMembers(members);
+      });
+      mounted.current = true;
+    }
+
+    if (screenSelected !== 'addTithe' && mounted.current) {
+      setTithe({ ...INITIAL_STATE });
+      setMembers([]);
+      mounted.current = false;
+    }
+  }, [screenSelected]);
 
   const formValidate = (floatValue: number, referenceMonth: number, referenceYear: number, memberId: string) => {
     if (floatValue <= 0) {

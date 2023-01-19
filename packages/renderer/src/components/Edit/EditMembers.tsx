@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { EditForm } from './EditForm';
 import type { Screens } from '/@/@types/Screens.type';
 import type { Member} from '#preload';
@@ -15,13 +15,24 @@ export function EditMembers({ screenSelected }: EditMemberProps) {
   const [members, setMembers] = useState<Member[]>([]);
   const [editing, setEditing] = useState('');
   const [loading, setLoading] = useState(false);
+  const mounted = useRef(false);
 
   useEffect(() => {
-    findAllMembers().then((members) => {
-      setMembers(members);
-      setDefaultMembers(members);
-    });
-  }, []);
+    if (screenSelected !== 'editMembers' && mounted.current) {
+      setEditing('');
+      setMembers([]);
+      setDefaultMembers([]);
+      mounted.current = false;
+    }
+
+    if (screenSelected === 'editMembers') {
+      findAllMembers().then((members) => {
+        setMembers(members);
+        setDefaultMembers(members);
+      });
+      mounted.current = true;
+    }
+  }, [screenSelected]);
 
   const handleReset = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
