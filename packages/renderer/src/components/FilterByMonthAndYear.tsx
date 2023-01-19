@@ -17,7 +17,7 @@ export function FilterByMonthAndYear({ setReferenceMonth, setReferenceYear, mont
         name="filterByMonth"
         onChange={({ target: { value } }) => setReferenceMonth(+value)}
         value={monthValue}
-        className="cursor-pointer text-center text-zinc-200 bg-zinc-900 p-2 font-light focus:outline-none block w-full appearance-none leading-normal rounded-sm"
+        className="cursor-pointer text-center text-zinc-200 bg-zinc-900 p-2 font-light focus:outline-none block w-full leading-normal rounded-sm"
       >
         <option
           disabled
@@ -35,7 +35,7 @@ export function FilterByMonthAndYear({ setReferenceMonth, setReferenceYear, mont
         name="filterByYear"
         onChange={({ target: { value } }) => setReferenceYear(+value)}
         value={yearValue}
-        className="cursor-pointer text-center text-zinc-200 bg-zinc-900 p-2 font-light focus:outline-none block w-full appearance-none leading-normal rounded-sm"
+        className="cursor-pointer text-center text-zinc-200 bg-zinc-900 p-2 font-light focus:outline-none block w-full leading-normal rounded-sm"
       >
         <option
           disabled

@@ -11,6 +11,7 @@ import { AddExpense } from './components/Add/AddExpense';
 import { EditMembers } from './components/Edit/EditMembers';
 import 'react-toastify/dist/ReactToastify.css';
 import { EditTithes } from './components/Edit/EditTithes';
+import { EditOffers } from './components/Edit/EditOffers';
 
 export function App() {
   const [selectedScreen, setSelectedScreen] = useState<Screens>('' as Screens);
@@ -33,6 +34,7 @@ export function App() {
         {/*Edit Screens*/}
         <EditMembers screenSelected={selectedScreen} />
         <EditTithes screenSelected={selectedScreen} />
+        <EditOffers screenSelected={selectedScreen} />
         <Logo
           className={
           (selectedScreen ? 'w-10 h-10 fixed bottom-4 right-4 opacity-80' : 'w-48 h-48')
