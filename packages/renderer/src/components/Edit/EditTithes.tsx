@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { EditForm } from './EditForm';
 import type { Screens } from '/@/@types/Screens.type';
-import type { Member, Tithe} from '#preload';
+import type { Member } from '#preload';
 import { findAllMembers} from '#preload';
 import { findAllTithesWithMemberName, updateTithe } from '#preload';
 import { toast } from 'react-toastify';
@@ -12,10 +12,15 @@ interface EditTitheProps {
   screenSelected: Screens;
 }
 
-interface TitheWithMember extends Tithe {
+interface TitheWithMember {
+  id: string;
+  memberId: string;
+  value: string | number;
+  referenceMonth: number;
+  referenceYear: number;
   member: {
     name: string;
-  }
+  };
 }
 
 export function EditTithes({ screenSelected }: EditTitheProps) {
@@ -24,17 +29,15 @@ export function EditTithes({ screenSelected }: EditTitheProps) {
   const [members, setMembers] = useState<Member[]>([]);
   const [editing, setEditing] = useState('');
   const [loading, setLoading] = useState(false);
-  const [referenceMonth, setReferenceMonth] = useState(0);
-  const [referenceYear, setReferenceYear] = useState(0);
+  const [referenceMonth, setReferenceMonth] = useState(new Date().getMonth() + 1);
+  const [referenceYear, setReferenceYear] = useState(new Date().getFullYear());
   const mounted = useRef(false);
 
   useEffect(() => {
     if (screenSelected !== 'editTithes' && mounted.current) {
       setEditing('');
-      setReferenceMonth(0);
-      setReferenceYear(0);
-      setTithes([]);
-      setDefaultTithes([]);
+      setReferenceMonth(new Date().getMonth() + 1);
+      setReferenceYear(new Date().getFullYear());
       mounted.current = false;
     }
 
@@ -50,8 +53,12 @@ export function EditTithes({ screenSelected }: EditTitheProps) {
     if (referenceMonth !== 0 && referenceYear !== 0) {
       setLoading(true);
       findAllTithesWithMemberName(referenceMonth, referenceYear).then((tithes) => {
-        setTithes(tithes);
-        setDefaultTithes(tithes);
+        const toFixedTithes = tithes.map((tithe) => ({
+          ...tithe,
+          value: (tithe.value as number).toFixed(2),
+        }));
+        setTithes(toFixedTithes);
+        setDefaultTithes(toFixedTithes);
       }).finally(() => {
         setLoading(false);
       });
@@ -78,8 +85,23 @@ export function EditTithes({ screenSelected }: EditTitheProps) {
     const key = name as keyof TitheWithMember;
     const newTithe = {
       ...tithes[index],
-      [key]: name === 'value' ? parseFloat(valueChangeReplace(value, index) || '0') : value,
+      [key]: name === 'value' ? valueChangeReplace(value, index) : value,
     } as TitheWithMember;
+
+    const newTithes = [...tithes];
+    newTithes.splice(index, 1, newTithe);
+
+    setTithes(newTithes);
+  };
+
+  const handleValueInputBlur = (
+    { target: { value } }: React.FocusEvent<HTMLInputElement>, index: number,
+  ) => {
+    const newValue = (value ? parseFloat(value).toFixed(2) : '');
+    const newTithe = {
+      ...tithes[index],
+      value: newValue,
+    };
 
     const newTithes = [...tithes];
     newTithes.splice(index, 1, newTithe);
@@ -102,7 +124,9 @@ export function EditTithes({ screenSelected }: EditTitheProps) {
       return;
     }
 
-    if (editedTithe.value <= 0) {
+    const floatValue = parseFloat(editedTithe.value as string);
+
+    if (floatValue <= 0) {
       toast.warn('Valor deve ser maior que zero', {
         progress: undefined,
       });
@@ -113,7 +137,7 @@ export function EditTithes({ screenSelected }: EditTitheProps) {
     updateTithe({
       id: editedTithe.id,
       memberId: editedTithe.memberId,
-      value: editedTithe.value,
+      value: floatValue,
       referenceMonth: editedTithe.referenceMonth,
       referenceYear: editedTithe.referenceYear,
     }).then(() => {
@@ -132,7 +156,6 @@ export function EditTithes({ screenSelected }: EditTitheProps) {
   };
 
   const orderedTithes = tithes.sort((a, b) => a.member.name.localeCompare(b.member.name));
-  console.log(orderedTithes);
 
   return (
     <div
@@ -177,8 +200,8 @@ export function EditTithes({ screenSelected }: EditTitheProps) {
               value={memberId}
               name="memberId"
               onChange={(event) => handleChange(event, index)}
-              className="cursor-pointer disabled:cursor-default text-center text-zinc-200 bg-zinc-900 p-2 disabled:p-0 disabled:text-zinc-900 disabled:bg-transparent font-light disabled:font-normal focus:outline-none block w-full h-full disabled:appearance-none leading-normal rounded-sm"
-              disabled={editing !== id}
+              className="cursor-default text-center p-0 text-zinc-900 bg-transparent font-normal focus:outline-none block w-full h-full appearance-none leading-normal rounded-sm"
+              disabled
             >
               <option disabled value="">Selecione um Membro</option>
               {members.map(({ id, name }) => (
@@ -187,12 +210,14 @@ export function EditTithes({ screenSelected }: EditTitheProps) {
             </select>
           </label>
           <label className="w-1/12 flex items-center justify-center text-zinc-900">
-            <input
-              name="value"
-              value={value}
-              onChange={(event) => handleChange(event, index)}
-              className="text-center text-zinc-200 bg-zinc-900 p-2 disabled:p-0 disabled:text-zinc-900 disabled:bg-transparent font-light disabled:font-normal focus:outline-none block w-full h-full disabled:appearance-none leading-normal rounded-sm"
-              disabled={editing !== id}
+              <input
+                required
+                name="value"
+                value={value}
+                onChange={(event) => handleChange(event, index)}
+                onBlur={(event) => handleValueInputBlur(event, index)}
+                className="text-center text-zinc-200 bg-zinc-900 p-2 disabled:p-0 disabled:text-zinc-900 disabled:bg-transparent font-light disabled:font-normal focus:outline-none block w-full h-full disabled:appearance-none leading-normal rounded-sm"
+                disabled={editing !== id}
             />
           </label>
         </EditForm>
