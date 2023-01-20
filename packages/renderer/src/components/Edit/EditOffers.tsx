@@ -1,8 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { EditForm } from './EditForm';
 import type { Screens } from '/@/@types/Screens.type';
-import type { Member } from '#preload';
-import { findAllMembers} from '#preload';
 import { findAllOffersWithMemberName, updateOffer } from '#preload';
 import { toast } from 'react-toastify';
 import { FilterByMonthAndYear } from '../FilterByMonthAndYear';
@@ -29,7 +27,6 @@ type OfferType = 'special' | 'loose' | 'all';
 export function EditOffers({ screenSelected }: EditOfferProps) {
   const [defaultOffers, setDefaultOffers] = useState<OfferWithMember[]>([]);
   const [offers, setOffers] = useState<OfferWithMember[]>([]);
-  const [members, setMembers] = useState<Member[]>([]);
   const [editing, setEditing] = useState('');
   const [loading, setLoading] = useState(false);
   const [referenceMonth, setReferenceMonth] = useState(new Date().getMonth() + 1);
@@ -47,9 +44,6 @@ export function EditOffers({ screenSelected }: EditOfferProps) {
     }
 
     if (screenSelected === 'editOffers') {
-      findAllMembers().then((members) => {
-        setMembers(members);
-      });
       mounted.current = true;
     }
   }, [screenSelected]);
@@ -213,7 +207,7 @@ export function EditOffers({ screenSelected }: EditOfferProps) {
       <div
         className="flex w-full h-10 items-center justify-between border-y border-zinc-300 text-zinc-900"
       >
-        <span className="w-1/6 flex items-center justify-center">id</span>
+        <span className="w-1/6 flex items-center justify-center">Id</span>
         <span className="w-4/12 flex items-center justify-center">Membro</span>
         <span className="w-1/12 flex items-center justify-center">Valor (R$)</span>
         <span className="w-2/6 flex items-center justify-center">Editar</span>
@@ -225,7 +219,7 @@ export function EditOffers({ screenSelected }: EditOfferProps) {
           >
             Não há ofertas cadastrados para o mês e ano selecionados!
           </span>
-        : orderedOffers.map(({ id, memberId, value }, index) => (
+        : orderedOffers.map(({ id, memberId, value, member }, index) => (
         <EditForm
           key={id}
           handleSubmit={(event) => handleEdit(event, index)}
@@ -241,18 +235,12 @@ export function EditOffers({ screenSelected }: EditOfferProps) {
               {
                 memberId
                 && (
-                  <select
-                    value={memberId}
-                    name="memberId"
-                    onChange={(event) => handleChange(event, index)}
-                    className="cursor-default text-center text-zinc-900 bg-transparent font-normal focus:outline-none block w-full h-full appearance-none leading-normal rounded-sm"
-                    disabled
-                  >
-                    <option disabled value="">Selecione um Membro</option>
-                    {members.map(({ id, name }) => (
-                      <option key={id} value={id}>{`${id} - ${name}`}</option>
-                    ))}
-                  </select>
+                  <input
+                      value={member?.name}
+                      readOnly
+                      name="memberId"
+                      className="cursor-default text-center p-0 text-zinc-900 bg-transparent font-normal focus:outline-none block w-full h-full appearance-none leading-normal rounded-sm"
+                  />
                 )
               }
           </label>

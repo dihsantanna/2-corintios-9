@@ -1,8 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { EditForm } from './EditForm';
 import type { Screens } from '/@/@types/Screens.type';
-import type { Member } from '#preload';
-import { findAllMembers} from '#preload';
 import { findAllTithesWithMemberName, updateTithe } from '#preload';
 import { toast } from 'react-toastify';
 import { FilterByMonthAndYear } from '../FilterByMonthAndYear';
@@ -26,7 +24,6 @@ interface TitheWithMember {
 export function EditTithes({ screenSelected }: EditTitheProps) {
   const [defaultTithes, setDefaultTithes] = useState<TitheWithMember[]>([]);
   const [tithes, setTithes] = useState<TitheWithMember[]>([]);
-  const [members, setMembers] = useState<Member[]>([]);
   const [editing, setEditing] = useState('');
   const [loading, setLoading] = useState(false);
   const [referenceMonth, setReferenceMonth] = useState(new Date().getMonth() + 1);
@@ -42,9 +39,6 @@ export function EditTithes({ screenSelected }: EditTitheProps) {
     }
 
     if (screenSelected === 'editTithes') {
-      findAllMembers().then((members) => {
-        setMembers(members);
-      });
       mounted.current = true;
     }
   }, [screenSelected]);
@@ -174,7 +168,7 @@ export function EditTithes({ screenSelected }: EditTitheProps) {
       <div
         className="flex w-full h-10 items-center justify-between border-y border-zinc-300 text-zinc-900"
       >
-        <span className="w-1/6 flex items-center justify-center">id</span>
+        <span className="w-1/6 flex items-center justify-center">Id</span>
         <span className="w-4/12 flex items-center justify-center">Membro</span>
         <span className="w-1/12 flex items-center justify-center">Valor (R$)</span>
         <span className="w-2/6 flex items-center justify-center">Editar</span>
@@ -183,7 +177,7 @@ export function EditTithes({ screenSelected }: EditTitheProps) {
         ? <ImSpinner2 className="w-5 h-5 m-auto animate-spin" />
         : !orderedTithes.length
         ? <span className="m-auto text-zinc-500">Não há dízimos cadastrados para o mês e ano selecionados!</span>
-        : orderedTithes.map(({ id, memberId, value }, index) => (
+        : orderedTithes.map(({ id, value, member: { name } }, index) => (
         <EditForm
           key={id}
           handleSubmit={(event) => handleEdit(event, index)}
@@ -196,18 +190,12 @@ export function EditTithes({ screenSelected }: EditTitheProps) {
         >
           <label className="w-1/6 flex items-center justify-center text-zinc-900">{id}</label>
           <label className="w-4/12 flex items-center justify-center text-zinc-900">
-            <select
-              value={memberId}
-              name="memberId"
-              onChange={(event) => handleChange(event, index)}
-              className="cursor-default text-center p-0 text-zinc-900 bg-transparent font-normal focus:outline-none block w-full h-full appearance-none leading-normal rounded-sm"
-              disabled
-            >
-              <option disabled value="">Selecione um Membro</option>
-              {members.map(({ id, name }) => (
-                <option key={id} value={id}>{`${id} - ${name}`}</option>
-              ))}
-            </select>
+            <input
+                value={name}
+                readOnly
+                name="memberId"
+                className="cursor-default text-center p-0 text-zinc-900 bg-transparent font-normal focus:outline-none block w-full h-full appearance-none leading-normal rounded-sm"
+            />
           </label>
           <label className="w-1/12 flex items-center justify-center text-zinc-900">
               <input

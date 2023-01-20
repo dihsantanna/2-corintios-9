@@ -105,7 +105,7 @@ export function EditMembers({ screenSelected }: EditMemberProps) {
       <div
         className="flex w-full h-10 items-center justify-between border-y border-zinc-300 text-zinc-900"
       >
-        <span className="w-1/6 flex items-center justify-center">id</span>
+        <span className="w-1/6 flex items-center justify-center">Id</span>
         <span className="w-4/12 flex items-center justify-center">Nome</span>
         <span className="w-1/12 flex items-center justify-center">Congregado</span>
         <span className="w-2/6 flex items-center justify-center">Editar</span>
