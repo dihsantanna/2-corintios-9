@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { menuParams } from '../utils/menuParams';
 import type { Screens } from '../@types/Screens.type';
+import { BsArrowBarUp } from 'react-icons/bs';
 
 type MenuLabelsType = 'add' | 'edit' | 'reports' | 'themes';
 
@@ -50,6 +51,17 @@ export function Menu({getSelectedScreen}: MenuProps) {
           </ul>
           </li>
         ))}
+        <button
+          className={
+            `absolute -bottom-9 w-full flex items-center justify-center h-9 ${
+              menuOpened.length && 'hover:animate-pulse active:animate-bounce'
+            } z-50`
+          }
+          onClick={() => setMenuOpened([])}
+          disabled={!menuOpened.length}
+        >
+          <BsArrowBarUp className="w-7 h-7 text-zinc-700 z-40" />
+        </button>
       </ul>
     </nav>
   );
