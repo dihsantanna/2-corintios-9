@@ -1,4 +1,4 @@
-import {app, BrowserWindow} from 'electron';
+import {app, BrowserWindow, Menu} from 'electron';
 import {join} from 'path';
 import {URL} from 'url';
 
@@ -15,6 +15,7 @@ async function createWindow() {
   });
 
   browserWindow.setIcon(join(app.getAppPath(), 'packages/renderer/assets/logo.ico'));
+  Menu.setApplicationMenu(null);
 
   /**
    * If the 'show' property of the BrowserWindow's constructor is omitted from the initialization options,

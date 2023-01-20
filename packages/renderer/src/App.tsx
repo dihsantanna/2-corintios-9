@@ -21,7 +21,7 @@ export function App() {
   };
   return (
     <div className="flex w-screen h-screen">
-      <aside className="border-r-2 border-r-zinc-300 w-1/6 h-screen rounded-r-md overflow-y-auto">
+      <aside className="border-r-2 border-r-zinc-300 w-1/6 h-screen rounded-r-sm overflow-y-auto">
         <Menu getSelectedScreen={getSelectedScreen} />
       </aside>
       <main className="flex flex-1 justify-center items-center">
