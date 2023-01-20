@@ -15,7 +15,7 @@ export const menuParams = {
       { label: 'Editar Membros', id: 'editMembers' },
       { label: 'Editar Dízimos', id: 'editTithes' },
       { label: 'Editar Ofertas', id: 'editOffers' },
-      { label: 'Editar Categorias de Despesas', id: 'editExpenseCategories' },
+      { label: 'Editar Categorias de Despesa', id: 'editExpenseCategories' },
       { label: 'Editar Despesas', id: 'editExpenses' },
     ],
   },

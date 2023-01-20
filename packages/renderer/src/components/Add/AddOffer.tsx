@@ -145,7 +145,7 @@ export function AddOffer({ screenSelected }: AddOfferProps) {
         >
           <option disabled selected value="">Selecione o membro</option>
           {members.map(({id, name}) => (
-            <option key={id} value={id}>{`${id} - ${name}`}</option>
+            <option key={id} value={id}>{name}</option>
           ))}
         </select>
         <span

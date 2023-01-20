@@ -167,7 +167,7 @@ export function AddExpense({ screenSelected }: AddExpenseProps) {
         >
           <option disabled selected value="">Selecione uma categoria para a despesa</option>
           {expenseCategories.map(({id, name}) => (
-            <option key={id} value={id}>{`${id} - ${name}`}</option>
+            <option key={id} value={id}>{name}</option>
           ))}
         </select>
       </label>

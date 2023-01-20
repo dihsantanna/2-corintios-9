@@ -207,8 +207,7 @@ export function EditOffers({ screenSelected }: EditOfferProps) {
       <div
         className="flex w-full h-10 items-center justify-between border-y border-zinc-300 text-zinc-900"
       >
-        <span className="w-1/6 flex items-center justify-center">Id</span>
-        <span className="w-4/12 flex items-center justify-center">Membro</span>
+        <span className="w-6/12 flex items-center justify-center">Membro</span>
         <span className="w-1/12 flex items-center justify-center">Valor (R$)</span>
         <span className="w-2/6 flex items-center justify-center">Editar</span>
       </div>
@@ -230,8 +229,7 @@ export function EditOffers({ screenSelected }: EditOfferProps) {
           setIsEditing={handleSetEditing}
           className={(index % 2 === 0 ? 'bg-zinc-100' : '')}
         >
-          <label className="w-1/6 flex items-center justify-center text-zinc-900">{id}</label>
-          <label className="w-4/12 flex items-center justify-center text-zinc-900">
+          <label className="w-6/12 flex items-center justify-center text-zinc-900">
               {
                 memberId
                 && (
@@ -251,7 +249,7 @@ export function EditOffers({ screenSelected }: EditOfferProps) {
                 value={value}
                 onChange={(event) => handleChange(event, index)}
                 onBlur={(event) => handleValueInputBlur(event, index)}
-                className="text-center text-zinc-200 bg-zinc-900 p-2 disabled:p-0 disabled:text-zinc-900 disabled:bg-transparent font-light disabled:font-normal focus:outline-none block w-full h-full disabled:appearance-none leading-normal rounded-sm"
+                className="text-center text-zinc-200 bg-zinc-900 p-2 disabled:p-0 disabled:text-zinc-900 disabled:bg-transparent font-light disabled:font-normal focus:outline-none block w-11/12 h-full disabled:appearance-none leading-normal rounded-sm"
                 disabled={editing !== id}
             />
           </label>

@@ -109,8 +109,7 @@ export function EditExpenseCategories({ screenSelected }: EditExpenseCategoriesP
       <div
         className="flex w-full h-10 items-center justify-between border-y border-zinc-300 text-zinc-900"
       >
-        <span className="w-1/6 flex items-center justify-center">Id</span>
-        <span className="w-5/12 flex items-center justify-center">Nome</span>
+        <span className="w-7/12 flex items-center justify-center">Nome</span>
         <span className="w-2/6 flex items-center justify-center">Editar</span>
       </div>
       {expenseCategories.map(({id, name}, index) => (
@@ -124,13 +123,12 @@ export function EditExpenseCategories({ screenSelected }: EditExpenseCategoriesP
           setIsEditing={handleSetEditing}
           className={(index % 2 === 0 ? 'bg-zinc-100' : '')}
         >
-          <label className="w-1/6 flex items-center justify-center text-zinc-900">{id}</label>
-          <label className="w-5/12 flex items-center justify-center text-zinc-900">
+          <label className="w-7/12 flex items-center justify-center text-zinc-900">
             <input
               name="name"
               value={name}
               onChange={(event) => handleChange(event, index)}
-              className="text-center text-zinc-200 bg-zinc-900 p-2 disabled:p-0 disabled:text-zinc-900 disabled:bg-transparent font-light disabled:font-normal focus:outline-none block w-full h-full appearance-none leading-normal rounded-sm"
+              className="text-center text-zinc-200 bg-zinc-900 p-2 disabled:p-0 disabled:text-zinc-900 disabled:bg-transparent font-light disabled:font-normal focus:outline-none block w-11/12 h-full appearance-none leading-normal rounded-sm"
               disabled={editing !== id}
             />
           </label>
