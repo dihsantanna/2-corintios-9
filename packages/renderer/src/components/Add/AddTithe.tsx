@@ -148,7 +148,7 @@ export function AddTithe({ screenSelected }: AddTitheProps) {
           name="memberId"
           value={tithe.memberId}
           onChange={handleSelectChange}
-          className="cursor-pointer bg-zinc-900 font-light focus:outline-none block w-full appearance-none leading-normal"
+          className="cursor-pointer bg-zinc-900 font-light focus:outline-none block w-full leading-normal"
         >
           <option disabled selected value="">Selecione o membro</option>
           {members.map(({id, name}) => (
@@ -176,7 +176,7 @@ export function AddTithe({ screenSelected }: AddTitheProps) {
           name="referenceMonth"
           value={tithe.referenceMonth}
           onChange={handleSelectChange}
-          className="cursor-pointer bg-zinc-900 font-light focus:outline-none block w-full appearance-none leading-normal"
+          className="cursor-pointer bg-zinc-900 font-light focus:outline-none block w-full leading-normal"
         >
           <option disabled selected value={0}>Selecione o mês</option>
           {Object.entries(months).map(([monthIndex, month]) => (
@@ -192,7 +192,7 @@ export function AddTithe({ screenSelected }: AddTitheProps) {
           name="referenceYear"
           value={tithe.referenceYear}
           onChange={handleSelectChange}
-          className="cursor-pointer bg-zinc-900 font-light focus:outline-none block w-full appearance-none leading-normal"
+          className="cursor-pointer bg-zinc-900 font-light focus:outline-none block w-full leading-normal"
         >
           <option disabled selected value={0}>Selecione o ano</option>
           {getYears().map((year) => (
