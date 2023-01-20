@@ -29,8 +29,8 @@ export function EditForm({
         {
           isEditing
             ? <>
-              <SubmitButton text="SALVAR" isLoading={isLoading} className="w-1/5 h-7" />
-              <ResetButton text="FECHAR" className="w-1/5 h-7" />
+              <SubmitButton text="SALVAR" isLoading={isLoading} className="w-1/5 h-6" />
+              <ResetButton text="FECHAR" className="w-1/5 h-6" />
             </>
             : <button
               onClick={() => setIsEditing(editingId)}
