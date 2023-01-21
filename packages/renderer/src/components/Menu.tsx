@@ -48,6 +48,7 @@ export function Menu({setSelectedScreen, selectedScreen}: MenuProps) {
           </li>
         ))}
         <button
+          title="Fechar todos os menus"
           className={
             `absolute -bottom-9 w-full flex items-center justify-center h-9 ${
               menuOpened.length && 'hover:animate-pulse active:animate-bounce'
