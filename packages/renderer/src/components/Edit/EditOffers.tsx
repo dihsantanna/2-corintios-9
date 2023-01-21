@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { EditForm } from './EditForm';
 import type { Screens } from '/@/@types/Screens.type';
-import { findAllOffersWithMemberName, updateOffer, deleteOffer } from '#preload';
+import { findOffersWithMemberNameByReferences, updateOffer, deleteOffer } from '#preload';
 import { toast } from 'react-toastify';
 import { FilterByMonthAndYear } from '../FilterByMonthAndYear';
 import { ImSpinner2 } from 'react-icons/im';
@@ -61,7 +61,7 @@ export function EditOffers({ screenSelected }: EditOfferProps) {
   useEffect(() => {
     if (referenceMonth !== 0 && referenceYear !== 0) {
       setLoading(true);
-      findAllOffersWithMemberName(referenceMonth, referenceYear).then((offers) => {
+      findOffersWithMemberNameByReferences(referenceMonth, referenceYear).then((offers) => {
         const filteredOffers = filterOfferByType(offers).map((offer) => (
           {
             ...offer,

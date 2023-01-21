@@ -23,7 +23,7 @@ export const addOffer = async (offer: AddOfferRequest) => {
   }
 };
 
-export const findAllOffersWithMemberName = async (referenceMonth: number, referenceYear: number) => {
+export const findOffersWithMemberNameByReferences = async (referenceMonth: number, referenceYear: number) => {
   try {
     const offers = await prisma.offer.findMany({
       where: {

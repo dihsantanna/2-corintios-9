@@ -23,7 +23,7 @@ export const addTithe = async (tithe: AddTitheRequest) => {
   }
 };
 
-export const findAllTithesWithMemberName = async (referenceMonth: number, referenceYear: number) => {
+export const findTithesWithMemberNameByReferences = async (referenceMonth: number, referenceYear: number) => {
   try {
     const tithes = await prisma.tithe.findMany({
       where: {

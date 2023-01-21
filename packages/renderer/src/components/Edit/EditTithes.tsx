@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { EditForm } from './EditForm';
 import type { Screens } from '/@/@types/Screens.type';
-import { findAllTithesWithMemberName, updateTithe, deleteTithe } from '#preload';
+import { findTithesWithMemberNameByReferences, updateTithe, deleteTithe } from '#preload';
 import { toast } from 'react-toastify';
 import { FilterByMonthAndYear } from '../FilterByMonthAndYear';
 import { ImSpinner2 } from 'react-icons/im';
@@ -46,7 +46,7 @@ export function EditTithes({ screenSelected }: EditTitheProps) {
   useEffect(() => {
     if (referenceMonth !== 0 && referenceYear !== 0) {
       setLoading(true);
-      findAllTithesWithMemberName(referenceMonth, referenceYear).then((tithes) => {
+      findTithesWithMemberNameByReferences(referenceMonth, referenceYear).then((tithes) => {
         const toFixedTithes = tithes.map((tithe) => ({
           ...tithe,
           value: (tithe.value as number).toFixed(2),
