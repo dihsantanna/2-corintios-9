@@ -66,3 +66,14 @@ export const updateTithe = async (tithe: Tithe) => {
     await prisma.$disconnect();
   }
 };
+
+export const deleteTithe = async (id: string) => {
+  try {
+    const tithe = await prisma.tithe.delete({
+      where: { id },
+    });
+    return tithe;
+  } finally {
+    await prisma.$disconnect();
+  }
+};

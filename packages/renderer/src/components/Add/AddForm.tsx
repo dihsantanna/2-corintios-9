@@ -27,8 +27,8 @@ export function AddForm({ children, handleSubmit, handleReset, isLoading, screen
         {children}
       </fieldset>
       <div className="flex w-max h-max gap-4">
-        <SubmitButton isLoading={isLoading} text="Cadastrar" />
-        <ResetButton />
+        <SubmitButton isLoading={isLoading} text="Cadastrar" className="w-32 h-14" />
+        <ResetButton className="w-32 h-14" />
       </div>
     </form>
   );

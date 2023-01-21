@@ -44,3 +44,14 @@ export const updateExpenseCategory = async (expenseCategory: ExpenseCategory) =>
     await prisma.$disconnect();
   }
 };
+
+export const deleteExpenseCategory = async (id: string) => {
+  try {
+    const expenseCategory = await prisma.expenseCategory.delete({
+      where: { id },
+    });
+    return expenseCategory;
+  } finally {
+    await prisma.$disconnect();
+  }
+};

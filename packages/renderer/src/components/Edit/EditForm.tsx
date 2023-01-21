@@ -1,5 +1,7 @@
 import { SubmitButton } from '../SubmitButton';
 import { ResetButton } from '../ResetButton';
+import { DeleteModal } from '../DeleteModal';
+import { useState } from 'react';
 
 interface EditFormProps {
   children?: React.ReactNode
@@ -10,11 +12,16 @@ interface EditFormProps {
   editingId: string
   setIsEditing: (id: string) => void
   className?: React.FormHTMLAttributes<HTMLFormElement>['className']
+  onDelete: () => void
+  deleteMessage: string
+  deleteTitle: string
 }
 
 export function EditForm({
-  children, handleSubmit, handleReset, isLoading, isEditing, editingId, setIsEditing, className,
+  children, handleSubmit, handleReset, isLoading, isEditing, editingId, setIsEditing, className, onDelete, deleteMessage, deleteTitle,
 }: EditFormProps) {
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+
   return (
     <form
       onSubmit={handleSubmit}
@@ -29,16 +36,35 @@ export function EditForm({
         {
           isEditing
             ? <>
-              <SubmitButton text="SALVAR" isLoading={isLoading} className="w-1/5 h-6" />
-              <ResetButton text="FECHAR" className="w-1/5 h-6" />
+              <SubmitButton text="SALVAR" isLoading={isLoading} className="w-1/3 h-11" />
+              <ResetButton text="FECHAR" className="w-1/3 h-11" />
             </>
-            : <button
-              onClick={() => setIsEditing(editingId)}
-              className="bg-zinc-900 hover:bg-teal-500 hover:text-zinc-900 cursor-pointer w-20 h-11 rounded-md font-semibold"
-            >
-              EDITAR
-            </button>
+            : (
+              <>
+                <button
+                  onClick={() => setIsEditing(editingId)}
+                  className="bg-zinc-900 hover:bg-teal-500 hover:text-zinc-900 cursor-pointer w-1/3 h-11 rounded-md font-semibold"
+                  type="button"
+                >
+                  EDITAR
+                </button>
+                <button
+                  onClick={() => setShowDeleteModal(true)}
+                  className="bg-red-600 hover:bg-yellow-500 hover:text-zinc-900 cursor-pointer w-1/3 h-11 rounded-md font-semibold"
+                  type="button"
+                >
+                  EXCLUIR
+                </button>
+              </>
+            )
         }
+        <DeleteModal
+          message={deleteMessage}
+          title={deleteTitle}
+          onDelete={onDelete}
+          onHide={setShowDeleteModal}
+          show={showDeleteModal}
+        />
       </div>
     </form>
   );

@@ -41,3 +41,14 @@ export const updateMember = async ({id, name, congregated}: Member) => {
     await prisma.$disconnect();
   }
 };
+
+export const deleteMember = async (id: string) => {
+  try {
+    const member = await prisma.member.delete({
+      where: { id },
+    });
+    return member;
+  } finally {
+    await prisma.$disconnect();
+  }
+};

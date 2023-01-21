@@ -66,3 +66,14 @@ export const updateOffer = async (offer: Offer) => {
     await prisma.$disconnect();
   }
 };
+
+export const deleteOffer = async (id: string) => {
+  try {
+    const offer = await prisma.offer.delete({
+      where: { id },
+    });
+    return offer;
+  } finally {
+    await prisma.$disconnect();
+  }
+};

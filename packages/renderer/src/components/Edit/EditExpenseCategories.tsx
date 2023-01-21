@@ -2,8 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { EditForm } from './EditForm';
 import type { Screens } from '/@/@types/Screens.type';
 import type { ExpenseCategory } from '#preload';
-import { updateExpenseCategory } from '#preload';
-import { findAllExpenseCategories } from '#preload';
+import { findAllExpenseCategories, updateExpenseCategory, deleteExpenseCategory } from '#preload';
 import { toast } from 'react-toastify';
 
 interface EditExpenseCategoriesProps {
@@ -94,6 +93,24 @@ export function EditExpenseCategories({ screenSelected }: EditExpenseCategoriesP
     }) ;
   };
 
+  const handleDelete = (id: string, index: number) => {
+    deleteExpenseCategory(id).then(() => {
+      const newExpenseCategories = [...expenseCategories];
+      newExpenseCategories.splice(index, 1);
+      setExpenseCategories(newExpenseCategories);
+      setDefaultExpenseCategories(newExpenseCategories);
+
+      toast.success('Categoria de Despesa excluída com sucesso!', {
+        progress: undefined,
+      });
+    })
+      .catch((err) => {
+        toast.error(`Erro ao excluir categoria de despesa: ${err.message}`, {
+          progress: undefined,
+        });
+    });
+  };
+
   return (
     <div
       style={{
@@ -122,6 +139,9 @@ export function EditExpenseCategories({ screenSelected }: EditExpenseCategoriesP
           isEditing={editing === id}
           setIsEditing={handleSetEditing}
           className={(index % 2 === 0 ? 'bg-zinc-100' : '')}
+          onDelete={() => handleDelete(id, index)}
+          deleteMessage={`Tem certeza que deseja excluir a categoria "${name}"? Esta ação não poderá ser desfeita. Clique em "SIM" para confirmar.`}
+          deleteTitle="Excluir Oferta"
         >
           <label className="w-7/12 flex items-center justify-center text-zinc-900">
             <input

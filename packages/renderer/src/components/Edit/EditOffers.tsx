@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { EditForm } from './EditForm';
 import type { Screens } from '/@/@types/Screens.type';
-import { findAllOffersWithMemberName, updateOffer } from '#preload';
+import { findAllOffersWithMemberName, updateOffer, deleteOffer } from '#preload';
 import { toast } from 'react-toastify';
 import { FilterByMonthAndYear } from '../FilterByMonthAndYear';
 import { ImSpinner2 } from 'react-icons/im';
@@ -166,6 +166,24 @@ export function EditOffers({ screenSelected }: EditOfferProps) {
     }) ;
   };
 
+    const handleDelete = (id: string, index: number) => {
+      deleteOffer(id).then(() => {
+        const newOffers = [...offers];
+        newOffers.splice(index, 1);
+        setOffers(newOffers);
+        setDefaultOffers(newOffers);
+
+        toast.success('Oferta excluída com sucesso!', {
+          progress: undefined,
+        });
+      })
+        .catch((err) => {
+          toast.error(`Erro ao excluir oferta: ${err.message}`, {
+            progress: undefined,
+          });
+      });
+    };
+
   const orderedOffers = (offers.sort((a, b) => (
     a.member?.name && b.member?.name
       ? (a.member?.name as string).localeCompare(b.member?.name as string)
@@ -228,6 +246,9 @@ export function EditOffers({ screenSelected }: EditOfferProps) {
           isEditing={editing === id}
           setIsEditing={handleSetEditing}
           className={(index % 2 === 0 ? 'bg-zinc-100' : '')}
+          onDelete={() => handleDelete(id, index)}
+          deleteMessage={`Tem certeza que deseja excluir esta oferta, no valor de "R$ ${value}"? Esta ação não poderá ser desfeita. Clique em "SIM" para confirmar.`}
+          deleteTitle="Excluir Oferta"
         >
           <label className="w-6/12 flex items-center justify-center text-zinc-900">
               {

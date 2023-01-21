@@ -2,8 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { EditForm } from './EditForm';
 import type { Screens } from '/@/@types/Screens.type';
 import type { Member} from '#preload';
-import { updateMember } from '#preload';
-import { findAllMembers } from '#preload';
+import { findAllMembers, updateMember, deleteMember } from '#preload';
 import { toast } from 'react-toastify';
 
 interface EditMemberProps {
@@ -94,6 +93,24 @@ export function EditMembers({ screenSelected }: EditMemberProps) {
     }) ;
   };
 
+  const handleDelete = (id: string, index: number) => {
+    deleteMember(id).then(() => {
+      const newMembers = [...members];
+      newMembers.splice(index, 1);
+      setMembers(newMembers);
+      setDefaultMembers(newMembers);
+
+      toast.success('Membro excluído com sucesso!', {
+        progress: undefined,
+      });
+    })
+      .catch((err) => {
+        toast.error(`Erro ao excluir membro: ${err.message}`, {
+          progress: undefined,
+        });
+      });
+  };
+
   return (
     <div
       style={{
@@ -123,6 +140,9 @@ export function EditMembers({ screenSelected }: EditMemberProps) {
           isEditing={editing === id}
           setIsEditing={handleSetEditing}
           className={(index % 2 === 0 ? 'bg-zinc-100' : '')}
+          onDelete={() => handleDelete(id, index)}
+          deleteMessage={`Tem certeza que deseja excluir o membro "${name.split(' ')[0]}"? Esta ação não poderá ser desfeita. Clique em "SIM" para confirmar.`}
+          deleteTitle="Excluir Membro"
         >
 
           <label className="w-6/12 flex items-center justify-center text-zinc-900">

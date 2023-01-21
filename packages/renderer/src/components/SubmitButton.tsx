@@ -12,7 +12,7 @@ export function SubmitButton({ isLoading, text, className}: SubmitButtonProps) {
       disabled={isLoading}
       type="submit"
       className={
-        'bg-zinc-900 hover:bg-teal-500 hover:text-zinc-900 cursor-pointer w-32 h-14 flex items-center justify-center rounded-md font-semibold '
+        'bg-zinc-900 hover:bg-teal-500 hover:text-zinc-900 cursor-pointer flex items-center justify-center rounded-md font-semibold '
         + className || ''
       }
     >

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { EditForm } from './EditForm';
 import type { Screens } from '/@/@types/Screens.type';
-import { findAllTithesWithMemberName, updateTithe } from '#preload';
+import { findAllTithesWithMemberName, updateTithe, deleteTithe } from '#preload';
 import { toast } from 'react-toastify';
 import { FilterByMonthAndYear } from '../FilterByMonthAndYear';
 import { ImSpinner2 } from 'react-icons/im';
@@ -149,6 +149,24 @@ export function EditTithes({ screenSelected }: EditTitheProps) {
     }) ;
   };
 
+    const handleDelete = (id: string, index: number) => {
+      deleteTithe(id).then(() => {
+        const newTithes = [...tithes];
+        newTithes.splice(index, 1);
+        setTithes(newTithes);
+        setDefaultTithes(newTithes);
+
+        toast.success('Dízimo excluído com sucesso!', {
+          progress: undefined,
+        });
+      })
+        .catch((err) => {
+          toast.error(`Erro ao excluir dízimo: ${err.message}`, {
+            progress: undefined,
+          });
+        });
+    };
+
   const orderedTithes = tithes.sort((a, b) => a.member.name.localeCompare(b.member.name));
 
   return (
@@ -186,6 +204,9 @@ export function EditTithes({ screenSelected }: EditTitheProps) {
           isEditing={editing === id}
           setIsEditing={handleSetEditing}
           className={(index % 2 === 0 ? 'bg-zinc-100' : '')}
+          onDelete={() => handleDelete(id, index)}
+          deleteMessage={`Tem certeza que deseja excluir este dízimo, no valor de "R$ ${value}"? Esta ação não poderá ser desfeita. Clique em "SIM" para confirmar.`}
+          deleteTitle="Excluir Dízimo"
         >
           <label className="w-6/12 flex items-center justify-center text-zinc-900">
             <input
