@@ -11,4 +11,4 @@ export { addMember, findAllMembers, updateMember, deleteMember } from './service
 export { addTithe, findTithesWithMemberNameByReferences, updateTithe, deleteTithe } from './services/tithe';
 export { addOffer, findOffersWithMemberNameByReferences, updateOffer, deleteOffer } from './services/offer';
 export { addExpenseCategory, findAllExpenseCategories, updateExpenseCategory, deleteExpenseCategory } from './services/expenseCategory';
-export { addExpense } from './services/expense';
+export { addExpense, findExpensesWithCategoryNameByReferences, updateExpense, deleteExpense } from './services/expense';

@@ -57,7 +57,7 @@ export function EditTithes({ screenSelected }: EditTitheProps) {
         setLoading(false);
       });
     }
-  }, [referenceMonth, referenceYear]);
+  }, [referenceMonth, referenceYear, screenSelected]);
 
   const handleReset = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();

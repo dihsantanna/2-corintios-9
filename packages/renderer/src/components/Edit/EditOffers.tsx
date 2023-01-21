@@ -74,7 +74,7 @@ export function EditOffers({ screenSelected }: EditOfferProps) {
         setLoading(false);
       });
     }
-  }, [referenceMonth, referenceYear, offerType]);
+  }, [referenceMonth, referenceYear, screenSelected]);
 
   const handleReset = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();

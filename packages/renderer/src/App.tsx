@@ -13,6 +13,7 @@ import { EditTithes } from './components/Edit/EditTithes';
 import { EditOffers } from './components/Edit/EditOffers';
 import { EditExpenseCategories } from './components/Edit/EditExpenseCategories';
 import { FaChurch } from 'react-icons/fa';
+import { EditExpenses } from './components/Edit/EditExpenses';
 import 'react-toastify/dist/ReactToastify.css';
 
 export function App() {
@@ -35,6 +36,7 @@ export function App() {
         <EditTithes screenSelected={selectedScreen} />
         <EditOffers screenSelected={selectedScreen} />
         <EditExpenseCategories screenSelected={selectedScreen} />
+        <EditExpenses screenSelected={selectedScreen} />
         <Logo
           className={
           (selectedScreen ? 'w-10 h-10 fixed bottom-4 right-4 opacity-80' : 'w-48 h-48')
