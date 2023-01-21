@@ -6,17 +6,13 @@ import { BsArrowBarUp } from 'react-icons/bs';
 type MenuLabelsType = 'add' | 'edit' | 'reports' | 'themes';
 
 interface MenuProps {
-  getSelectedScreen: (screen: Screens) => void;
+  setSelectedScreen: (screen: Screens) => void;
+  selectedScreen: Screens | '';
 }
 
-export function Menu({getSelectedScreen}: MenuProps) {
+export function Menu({setSelectedScreen, selectedScreen}: MenuProps) {
   const [menuOpened, setMenuOpened] = useState<MenuLabelsType[]>([]);
-  const [selectedScreen, setSelectedScreen] = useState('');
 
-  const selectScreen = (screen: Screens) => {
-    getSelectedScreen(screen);
-    setSelectedScreen(screen);
-  };
 
   const toggleMenu = (menuLabel: MenuLabelsType) => {
     const menu = [ ...menuOpened ];
@@ -45,7 +41,7 @@ export function Menu({getSelectedScreen}: MenuProps) {
                     ? 'bg-teal-500 text-zinc-900'
                     : 'bg-zinc-400 text-zinc-200'} border-b-2 border-b-zinc-900 rounded-b-sm cursor-pointer hover:bg-teal-500 hover:text-zinc-900 text-sm`}
                   key={id}
-                  onClick={() => selectScreen(id as Screens)}
+                  onClick={() => setSelectedScreen(id as Screens)}
                 >{subLabel}</li>
             ))}
           </ul>
