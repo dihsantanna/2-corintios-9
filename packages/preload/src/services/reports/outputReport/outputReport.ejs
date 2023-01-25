@@ -247,69 +247,52 @@
         <%= `Relatório referente ao mês de ${months[referenceMonth]} de ${referenceYear}` %>
       </div>
       <main class="main-content">
-        <div class="table">
-          <div class="table-title">
-            Registro Mensal de Dizimistas
-          </div>
-          <div class="table-header">
-            <span class="table-row-left">Nome</span>
-            <span class="table-row-right">Valor</span>
-          </div>
-          <% membersWithTithe.map(({name, Tithe: tithe}) => { %>
-            <div class="table-row-content">
-              <span class="table-row-left">
-                <%= name %>
-              </span>
-              <span class="table-row-right">
-                <%= tithe.reduce((acc, {value}) => acc + value, 0).toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) %>
+        <% expenseCategories.map(({ id: categoryId, name }) => { %>
+          <div class="table">
+            <div class="table-title">
+              <%= name %>
+            </div>
+            <div class="table-header">
+              <span class="table-row-left">Título</span>
+              <span class="table-row-right">Valor</span>
+            </div>
+            <% if (expenses.find(({ expenseCategoryId }) => expenseCategoryId === categoryId)) { %>
+              <% expenses.filter(({ expenseCategoryId }) => expenseCategoryId === categoryId).map(({ id, title, value }) => { %>
+                <div class="table-row-content">
+                  <span class="table-row-left">
+                    <%= title %>
+                  </span>
+                  <span class="table-row-right">
+                    <%= value.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) %>
+                  </span>
+                </div>
+              <% }) %>
+            <% } else { %>
+              <div class="table-row-content">
+                <span class="table-row-left">
+                  &nbsp;
+                </span>
+                <span class="table-row-right">
+                  <%= 0.0.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %>
+                </span>
+              </div>
+            <% } %>
+            <div class="sub-total-content">
+              <span class="sub-total">
+                Total: <%= expenses.reduce((total, { expenseCategoryId, value }) => (
+                  expenseCategoryId === categoryId ? total + value : total
+                  ), 0).toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) %>
               </span>
             </div>
-          <% }) %>
-          <div class="sub-total-content">
-            <span class="sub-total">
-              Total: <%= totalTithes.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) %>
-            </span>
           </div>
-        </div>
-        <div class="table">
-          <div class="table-title">
-            Registro Mensal de Ofertas Especiais
-          </div>
-          <div class="table-header">
-            <span class="table-row-left">Nome</span>
-            <span class="table-row-right">Valor</span>
-          </div>
-          <% membersWithOffer.map(({ name, Offer: offers}) => { %>
-            <div class="table-row-content">
-              <span class="table-row-left">
-                <%= name %>
-              </span>
-              <span class="table-row-right">
-                <%= offers.reduce((acc, { value }) => acc + value, 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %>
-              </span>
-            </div>
-          <% }) %>
-          <div class="sub-total-content">
-            <span class="sub-total">
-              Total: <%= totalSpecialOffers.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %>
-            </span>
-          </div>
-          <div class="table-title">
-            Registro Mensal de Ofertas de Gazofilácio
-          </div>
-          <div class="sub-total-content">
-            <span class="sub-total">
-              Total: <%= totalLooseOffers.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %>
-            </span>
-          </div>
-        </div>
+        <% }) %>
       </main>
       <div class="total-content">
         <span>
-          Total de Entradas
+          Total de Saídas
         </span>
         <span>
-          <%= (totalOffers + totalTithes).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %>
+          <%= totalExpenses.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %>
         </span>
       </div>
     </div>

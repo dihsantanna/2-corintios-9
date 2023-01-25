@@ -50,7 +50,7 @@ export function Report({
       />
       <div
         id="entries-report-to-pdf"
-        className="w-[800px] min-h-[91.6%] pl-12 pr-6 pt-8 rounded-md border border-zinc-200 flex flex-col items-center justify-between overflow-y-auto scrollbar-thin scrollbar-thumb-gray-800 scrollbar-track-zinc-100 scroll-smooth"
+        className="w-[800px] min-h-[90%] pl-12 pr-6 pt-8 rounded-md border border-zinc-200 flex flex-col items-center overflow-y-auto scrollbar-thin scrollbar-thumb-gray-800 scrollbar-track-zinc-100 scroll-smooth"
       >
         <header
           className="relative flex items-center justify-center h-16 w-full"

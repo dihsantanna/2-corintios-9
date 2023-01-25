@@ -82,3 +82,20 @@ export const deleteExpense = async (id: string) => {
     await prisma.$disconnect();
   }
 };
+
+export const findAllExpensesByReferences = async (
+  referenceMonth: number,
+  referenceYear: number,
+) => {
+  try {
+    const expenses = await prisma.expense.findMany({
+      where: {
+        referenceMonth,
+        referenceYear,
+      },
+    });
+    return expenses;
+  } finally {
+    await prisma.$disconnect();
+  }
+};

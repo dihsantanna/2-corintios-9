@@ -16,6 +16,7 @@ import { FaChurch } from 'react-icons/fa';
 import { EditExpenses } from './components/Edit/EditExpenses';
 import { EntriesReport } from './components/Report/EntriesReport';
 import 'react-toastify/dist/ReactToastify.css';
+import { OutputReport } from './components/Report/OutputReport';
 
 export function App() {
   const [selectedScreen, setSelectedScreen] = useState<Screens>('' as Screens);
@@ -43,6 +44,7 @@ export function App() {
 
         {/*Report Screens*/}
         <EntriesReport screenSelected={selectedScreen} />
+        <OutputReport screenSelected={selectedScreen} />
 
         <Logo
           className={

@@ -42,6 +42,8 @@ export {
   findExpensesWithCategoryNameByReferences,
   updateExpense,
   deleteExpense,
+  findAllExpensesByReferences,
 } from './services/expense';
 
 export {createEntriesReport} from './services/reports/entriesReport';
+export {createOutputReport} from './services/reports/outputReport';
