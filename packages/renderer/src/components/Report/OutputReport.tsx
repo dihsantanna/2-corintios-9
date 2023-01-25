@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Report } from './Report';
+import { ReportView } from './ReportView';
 import {
   findAllExpensesByReferences,
   findAllExpenseCategories,
@@ -7,7 +7,7 @@ import {
 } from '#preload';
 import type { Expense, ExpenseCategory } from '#preload';
 import type { Screens } from '/@/@types/Screens.type';
-import { ExpensesTable } from './Tables/ExpensesTable';
+import { toast } from 'react-toastify';
 
 interface OutputReportProps {
   screenSelected: Screens;
@@ -19,9 +19,10 @@ export function OutputReport({ screenSelected }: OutputReportProps) {
   const [referenceMonth, setReferenceMonth] = useState(new Date().getMonth() + 1);
   const [referenceYear, setReferenceYear] = useState(new Date().getFullYear());
   const [totalExpenses, setTotalExpenses] = useState(0);
+  const [pdf, setPdf] = useState<Buffer | null>(null);
   const mounted = useRef(false);
 
-  const reportToPDF = async () => {
+  const getPDF = async () => {
     return await createOutputReport({
       expenses,
       totalExpenses,
@@ -31,8 +32,8 @@ export function OutputReport({ screenSelected }: OutputReportProps) {
     });
   };
 
-  const calculateTotalExpenses = () => {
-    const total = expenses.reduce((total, expense) => total + expense.value, 0);
+  const calculateTotalExpenses = (expensesArr: Expense[]) => {
+    const total = expensesArr.reduce((total, expense) => total + expense.value, 0);
     setTotalExpenses(total);
   };
 
@@ -40,6 +41,7 @@ export function OutputReport({ screenSelected }: OutputReportProps) {
     if (screenSelected !== 'outputReport' && mounted.current) {
       setExpenses([]);
       setTotalExpenses(0);
+      setPdf(null);
       setReferenceMonth(new Date().getMonth() + 1);
       setReferenceYear(new Date().getFullYear());
       mounted.current = false;
@@ -52,7 +54,7 @@ export function OutputReport({ screenSelected }: OutputReportProps) {
             .then((expenses) => {
               setExpenseCategories(expenseCategories);
               setExpenses(expenses);
-              calculateTotalExpenses();
+              calculateTotalExpenses(expenses);
               mounted.current = true;
             });
         });
@@ -64,14 +66,21 @@ export function OutputReport({ screenSelected }: OutputReportProps) {
       findAllExpensesByReferences(referenceMonth, referenceYear)
         .then((expenses) => {
           setExpenses(expenses);
-          calculateTotalExpenses();
+          calculateTotalExpenses(expenses);
           mounted.current = true;
         });
     }
   }, [referenceMonth, referenceYear, screenSelected]);
 
+  useEffect(() => {
+    setPdf(null);
+    getPDF().then((newPdf) => setPdf(newPdf)).catch((error) => {
+      toast.error((error as Error).message);
+    });
+  }, [expenses]);
+
   return (
-    <Report
+    <ReportView
       screenSelected={screenSelected}
       screenName="outputReport"
       title="Relatório de Saídas"
@@ -79,23 +88,7 @@ export function OutputReport({ screenSelected }: OutputReportProps) {
       referenceYear={referenceYear}
       setReferenceMonth={setReferenceMonth}
       setReferenceYear={setReferenceYear}
-      reportToPdf={reportToPDF}
-    >
-      <ExpensesTable
-        expenseCategories={expenseCategories}
-        expenses={expenses}
-      />
-      <div className="w-full bg-yellow-300 font-semibold mt-6 p-3 border flex flex-col items-center justify-center">
-        <span>
-          Total de Saídas
-        </span>
-        <span>
-          {
-            totalExpenses
-            .toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
-          }
-        </span>
-      </div>
-    </Report>
+      pdf={pdf}
+    />
   );
 }

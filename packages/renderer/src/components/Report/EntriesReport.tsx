@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Report } from './Report';
+import { ReportView } from './ReportView';
 import {
   findAllMembersWithTithesByReferences,
   findAllMembersWithOffersByReferences,
@@ -9,8 +9,7 @@ import {
 import type { Offer } from '#preload';
 import type { Screens } from '/@/@types/Screens.type';
 import type { MemberWithTithe, MemberWithOffer } from '#preload';
-import { TithesTable } from './Tables/TithesTable';
-import { OffersTable } from './Tables/OffersTable';
+import { toast } from 'react-toastify';
 
 interface EntriesReportProps {
   screenSelected: Screens;
@@ -22,11 +21,34 @@ export function EntriesReport({ screenSelected }: EntriesReportProps) {
   const [looseOffers, setLooseOffers] = useState<Offer[]>([]);
   const [referenceMonth, setReferenceMonth] = useState(new Date().getMonth() + 1);
   const [referenceYear, setReferenceYear] = useState(new Date().getFullYear());
-  const [totalTithes, setTotalTithes] = useState(0);
-  const [totalOffers, setTotalOffers] = useState(0);
+  const [pdf, setPdf] = useState<Buffer | null>(null);
+
   const mounted = useRef(false);
 
-  const reportToPDF = async () => {
+  const getTotalTithes = () => {
+    return membersWithTithe
+      .reduce((acc, { Tithe: tithe }) => (
+        acc + tithe.reduce((acc, { value }) => acc + value, 0)
+      ), 0);
+  };
+
+  const getTotalSpecialOffers = () => {
+    return membersWithOffer
+      .reduce((acc, { Offer: offers }) => (
+        acc + offers.reduce((acc, { value }) => acc + value, 0)
+      ), 0);
+  };
+
+  const getTotalLooseOffers = () => {
+    return looseOffers.reduce((acc, { value }) => acc + value, 0);
+  };
+
+  const getTotalOffers = () => getTotalLooseOffers() + getTotalSpecialOffers();
+
+  const getPDF = async () => {
+    const totalTithes = getTotalTithes();
+    const totalOffers = getTotalOffers();
+
     return await createEntriesReport({
       membersWithTithe,
       totalTithes,
@@ -73,8 +95,15 @@ export function EntriesReport({ screenSelected }: EntriesReportProps) {
     }
   }, [referenceMonth, referenceYear, screenSelected]);
 
+  useEffect(() => {
+    setPdf(null);
+    getPDF().then((newPdf) => setPdf(newPdf)).catch((error) => {
+      toast.error((error as Error).message);
+    });
+  }, [membersWithTithe, membersWithOffer, looseOffers]);
+
   return (
-    <Report
+    <ReportView
       screenSelected={screenSelected}
       screenName="entriesReport"
       title="Relatório de Entradas"
@@ -82,28 +111,7 @@ export function EntriesReport({ screenSelected }: EntriesReportProps) {
       referenceYear={referenceYear}
       setReferenceMonth={setReferenceMonth}
       setReferenceYear={setReferenceYear}
-      reportToPdf={reportToPDF}
-    >
-      <TithesTable
-        membersWithTithe={membersWithTithe}
-        getTotal={setTotalTithes}
-      />
-      <OffersTable
-        membersWithOffer={membersWithOffer}
-        looseOffers={looseOffers}
-        getTotal={setTotalOffers}
-      />
-      <div className="w-full bg-yellow-300 font-semibold mt-6 p-3 border flex flex-col items-center justify-center">
-        <span>
-          Total de Entradas
-        </span>
-        <span>
-          {
-            (totalOffers + totalTithes)
-            .toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
-          }
-        </span>
-      </div>
-    </Report>
+      pdf={pdf}
+    />
   );
 }
