@@ -165,7 +165,7 @@ export function AddExpense({ screenSelected }: AddExpenseProps) {
           onChange={handleSelectChange}
           className="cursor-pointer bg-zinc-900 font-light focus:outline-none block w-full leading-normal"
         >
-          <option disabled selected value="">Selecione uma categoria para a despesa</option>
+          <option disabled value="">Selecione uma categoria para a despesa</option>
           {expenseCategories.map(({id, name}) => (
             <option key={id} value={id}>{name}</option>
           ))}
@@ -205,7 +205,7 @@ export function AddExpense({ screenSelected }: AddExpenseProps) {
           onChange={handleSelectChange}
           className="cursor-pointer bg-zinc-900 font-light focus:outline-none block w-full leading-normal"
         >
-          <option disabled selected value={0}>Selecione o mês</option>
+          <option disabled value={0}>Selecione o mês</option>
           {Object.entries(months).map(([monthIndex, month]) => (
             <option key={`${monthIndex}-${month}`} value={monthIndex}>{month}</option>
           ))}
@@ -221,7 +221,7 @@ export function AddExpense({ screenSelected }: AddExpenseProps) {
           onChange={handleSelectChange}
           className="cursor-pointer bg-zinc-900 font-light focus:outline-none block w-full leading-normal"
         >
-          <option disabled selected value={0}>Selecione o ano</option>
+          <option disabled value={0}>Selecione o ano</option>
           {getYears().map((year) => (
             <option key={year} value={year}>{year}</option>
           ))}

@@ -1,8 +1,8 @@
-import {app, session} from 'electron';
+import {app} from 'electron';
 import './security-restrictions';
 import {restoreOrCreateWindow} from '/@/mainWindow';
-import * as path from 'path';
-import * as os from 'os';
+// import * as path from 'path';
+// import * as os from 'os';
 
 /**
  * Prevent electron from running multiple instances.
@@ -45,13 +45,13 @@ app
  * Install Vue.js or any other extension in development mode only.
  * Note: You must install `electron-devtools-installer` manually
  */
-if (import.meta.env.DEV) {
- const reactDevToolsPath = path.join(os.homedir(), 'AppData/local/Google/Chrome/User Data/Default/Extensions/fmkadmapgofadopljbjfkapdkoienihi/4.27.1_0');
+// if (import.meta.env.DEV) {
+//  const reactDevToolsPath = path.join(os.homedir(), 'AppData/local/Google/Chrome/User Data/Default/Extensions/fmkadmapgofadopljbjfkapdkoienihi/4.27.1_0');
 
- app.whenReady().then(async () => {
-   await session.defaultSession.loadExtension(reactDevToolsPath);
- }).catch(e => console.error('Failed install react devtools:', e));
-}
+//  app.whenReady().then(async () => {
+//    await session.defaultSession.loadExtension(reactDevToolsPath);
+//  }).catch(e => console.error('Failed install react devtools:', e));
+// }
 
 /**
  * Check for new version of the application - production mode only.

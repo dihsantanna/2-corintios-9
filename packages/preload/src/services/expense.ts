@@ -1,6 +1,6 @@
-import { idGenerator } from '../helpers/IdGenerator';
-import { prisma } from '../database';
-import type { Expense } from '@prisma/client';
+import {idGenerator} from '../helpers/IdGenerator';
+import {prisma} from '../database';
+import type {Expense} from '@prisma/client';
 
 interface AddExpenseRequest {
   expenseCategoryId: string;
@@ -24,7 +24,10 @@ export const addExpense = async (expense: AddExpenseRequest) => {
   }
 };
 
-export const findExpensesWithCategoryNameByReferences = async (referenceMonth: number, referenceYear: number) => {
+export const findExpensesWithCategoryNameByReferences = async (
+  referenceMonth: number,
+  referenceYear: number,
+) => {
   try {
     const expenses = await prisma.expense.findMany({
       where: {

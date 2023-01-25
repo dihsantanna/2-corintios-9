@@ -1,4 +1,5 @@
-export type Screens = 'addMember'
+export type Screens =
+  | 'addMember'
   | 'addTithe'
   | 'addOffer'
   | 'addExpenseCategory'

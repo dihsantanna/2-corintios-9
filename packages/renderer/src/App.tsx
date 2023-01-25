@@ -14,6 +14,7 @@ import { EditOffers } from './components/Edit/EditOffers';
 import { EditExpenseCategories } from './components/Edit/EditExpenseCategories';
 import { FaChurch } from 'react-icons/fa';
 import { EditExpenses } from './components/Edit/EditExpenses';
+import { EntriesReport } from './components/Report/EntriesReport';
 import 'react-toastify/dist/ReactToastify.css';
 
 export function App() {
@@ -24,19 +25,25 @@ export function App() {
       <aside className="border-r-2 border-r-zinc-300 w-1/6 h-screen rounded-r-sm overflow-y-auto">
         <Menu setSelectedScreen={setSelectedScreen} selectedScreen={selectedScreen} />
       </aside>
-      <main className="flex flex-1 justify-center items-center">
+      <main className="flex flex-1 justify-center items-center w-5/6">
+
         {/*Add Screens*/}
         <AddMember screenSelected={selectedScreen} />
         <AddTithe screenSelected={selectedScreen} />
         <AddOffer screenSelected={selectedScreen} />
         <AddExpenseCategory screenSelected={selectedScreen} />
         <AddExpense screenSelected={selectedScreen} />
+
         {/*Edit Screens*/}
         <EditMembers screenSelected={selectedScreen} />
         <EditTithes screenSelected={selectedScreen} />
         <EditOffers screenSelected={selectedScreen} />
         <EditExpenseCategories screenSelected={selectedScreen} />
         <EditExpenses screenSelected={selectedScreen} />
+
+        {/*Report Screens*/}
+        <EntriesReport screenSelected={selectedScreen} />
+
         <Logo
           className={
           (selectedScreen ? 'w-10 h-10 fixed bottom-4 right-4 opacity-80' : 'w-48 h-48')

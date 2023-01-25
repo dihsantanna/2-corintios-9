@@ -1,6 +1,6 @@
-import { idGenerator } from '../helpers/IdGenerator';
-import { prisma } from '../database';
-import type { ExpenseCategory } from '@prisma/client';
+import {idGenerator} from '../helpers/IdGenerator';
+import {prisma} from '../database';
+import type {ExpenseCategory} from '@prisma/client';
 
 interface AddExpenseCategoryRequest {
   name: string;
@@ -48,7 +48,7 @@ export const updateExpenseCategory = async (expenseCategory: ExpenseCategory) =>
 export const deleteExpenseCategory = async (id: string) => {
   try {
     const expenseCategory = await prisma.expenseCategory.delete({
-      where: { id },
+      where: {id},
     });
     return expenseCategory;
   } finally {

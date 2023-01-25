@@ -1,6 +1,6 @@
-import { idGenerator } from '../helpers/IdGenerator';
-import { prisma } from '../database';
-import type { Offer } from '@prisma/client';
+import {idGenerator} from '../helpers/IdGenerator';
+import {prisma} from '../database';
+import type {Offer} from '@prisma/client';
 
 interface AddOfferRequest {
   memberId: string | null;
@@ -23,7 +23,10 @@ export const addOffer = async (offer: AddOfferRequest) => {
   }
 };
 
-export const findOffersWithMemberNameByReferences = async (referenceMonth: number, referenceYear: number) => {
+export const findOffersWithMemberNameByReferences = async (
+  referenceMonth: number,
+  referenceYear: number,
+) => {
   try {
     const offers = await prisma.offer.findMany({
       where: {
@@ -70,9 +73,27 @@ export const updateOffer = async (offer: Offer) => {
 export const deleteOffer = async (id: string) => {
   try {
     const offer = await prisma.offer.delete({
-      where: { id },
+      where: {id},
     });
     return offer;
+  } finally {
+    await prisma.$disconnect();
+  }
+};
+
+export const findAllLooseOffersByReferences = async (
+  referenceMonth: number,
+  referenceYear: number,
+) => {
+  try {
+    const offers = await prisma.offer.findMany({
+      where: {
+        referenceMonth,
+        referenceYear,
+        memberId: null,
+      },
+    });
+    return offers;
   } finally {
     await prisma.$disconnect();
   }

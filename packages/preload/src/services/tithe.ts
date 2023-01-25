@@ -1,6 +1,6 @@
-import { idGenerator } from '../helpers/IdGenerator';
-import { prisma } from '../database';
-import type { Tithe } from '@prisma/client';
+import {idGenerator} from '../helpers/IdGenerator';
+import {prisma} from '../database';
+import type {Tithe} from '@prisma/client';
 
 interface AddTitheRequest {
   memberId: string;
@@ -23,7 +23,10 @@ export const addTithe = async (tithe: AddTitheRequest) => {
   }
 };
 
-export const findTithesWithMemberNameByReferences = async (referenceMonth: number, referenceYear: number) => {
+export const findTithesWithMemberNameByReferences = async (
+  referenceMonth: number,
+  referenceYear: number,
+) => {
   try {
     const tithes = await prisma.tithe.findMany({
       where: {
@@ -70,7 +73,7 @@ export const updateTithe = async (tithe: Tithe) => {
 export const deleteTithe = async (id: string) => {
   try {
     const tithe = await prisma.tithe.delete({
-      where: { id },
+      where: {id},
     });
     return tithe;
   } finally {

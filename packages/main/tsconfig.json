@@ -13,6 +13,11 @@
       "/@/*": ["./src/*"]
     }
   },
-  "include": ["src/**/*.ts", "../../types/**/*.d.ts", "../renderer/types/svgr.d.ts", "../renderer/types/svgr.d.ts"],
+  "include": [
+    "src/**/*.ts",
+    "../../types/**/*.d.ts",
+    "../renderer/types/svgr.d.ts",
+    "../renderer/types/svgr.d.ts"
+  ],
   "exclude": ["**/*.spec.ts", "**/*.test.ts"]
 }
