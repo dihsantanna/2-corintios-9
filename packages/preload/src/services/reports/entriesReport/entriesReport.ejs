@@ -143,6 +143,7 @@
       display: flex;
       font-weight: 600;
       justify-content: center;
+      page-break-before: avoid;
       width: 100%;
     }
 
@@ -152,6 +153,7 @@
       border-collapse: collapse;
       display: flex;
       padding: 4px;
+      page-break-before: avoid;
       width: 50%;
     }
 
@@ -168,6 +170,7 @@
       color: <%=twColors.zinc[900] %>;
       display: flex;
       justify-content: center;
+      page-break-before: avoid;
       width: 100%;
     }
 
@@ -176,6 +179,7 @@
       display: flex;
       flex-direction: column;
       justify-content: center;
+      page-break-before: avoid;
     }
 
     .sub-total {
@@ -202,6 +206,10 @@
       justify-content: center;
       margin-top: 24px;
       width: 100%;
+    }
+
+    .total-content span {
+      page-break-before: avoid;
     }
   </style>
   <body>
