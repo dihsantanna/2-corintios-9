@@ -1,11 +1,8 @@
-import type { Screens } from '/@/@types/Screens.type';
 import { FilterByMonthAndYear } from '../FilterByMonthAndYear';
 import { months } from '/@/utils/months';
 import { FaFilePdf } from 'react-icons/fa';
 
 interface ReportViewProps {
-  screenSelected: Screens;
-  screenName: Screens;
   title: string;
   setReferenceMonth: React.Dispatch<React.SetStateAction<number>>;
   setReferenceYear: React.Dispatch<React.SetStateAction<number>>;
@@ -17,8 +14,6 @@ interface ReportViewProps {
 type MonthKey = keyof typeof months;
 
 export function ReportView({
-  screenSelected,
-  screenName,
   title,
   setReferenceMonth,
   setReferenceYear,
@@ -29,9 +24,6 @@ export function ReportView({
   const pdfUrl = () => URL.createObjectURL(new Blob([pdf as Buffer], { type: 'application/pdf' }));
   return (
     <div
-      style={{
-        display: screenSelected === screenName ? 'flex' : 'none',
-      }}
       className="flex flex-col items-center justify-center w-full h-full text-zinc-900 relative"
     >
       <FilterByMonthAndYear

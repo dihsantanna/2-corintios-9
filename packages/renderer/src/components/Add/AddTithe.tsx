@@ -1,6 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { AddForm } from './AddForm';
-import type { Screens } from '/@/@types/Screens.type';
 import type { Member} from '#preload';
 import { addTithe} from '#preload';
 import { findAllMembers } from '#preload';
@@ -15,10 +14,6 @@ interface Tithe {
   referenceYear: number
 }
 
-interface AddTitheProps {
-  screenSelected: Screens;
-}
-
 const INITIAL_STATE: Tithe = {
       memberId: '',
       value: '',
@@ -26,27 +21,18 @@ const INITIAL_STATE: Tithe = {
       referenceYear: 0,
   };
 
-export function AddTithe({ screenSelected }: AddTitheProps) {
+export function AddTithe() {
   const [tithe, setTithe] = useState<Tithe>({...INITIAL_STATE });
 
   const [members, setMembers] = useState<Member[]>([]);
   const [loading, setLoading] = useState(false);
-  const mounted = useRef(false);
 
   useEffect(() => {
-    if (screenSelected === 'addTithe') {
-      findAllMembers().then((members) => {
-        setMembers(members);
-      });
-      mounted.current = true;
-    }
+    findAllMembers().then((newMembers) => {
+      setMembers(newMembers);
+    });
+  }, []);
 
-    if (screenSelected !== 'addTithe' && mounted.current) {
-      setTithe({ ...INITIAL_STATE });
-      setMembers([]);
-      mounted.current = false;
-    }
-  }, [screenSelected]);
 
   const formValidate = (floatValue: number, referenceMonth: number, referenceYear: number, memberId: string) => {
     if (floatValue <= 0) {
@@ -135,8 +121,6 @@ export function AddTithe({ screenSelected }: AddTitheProps) {
     <AddForm
       handleSubmit={handleSubmit}
       handleReset={handleReset}
-      screenName="addTithe"
-      screenSelected={screenSelected}
       isLoading={loading}
       title="Cadastrar Dízimo"
     >

@@ -1,6 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { AddForm } from './AddForm';
-import type { Screens } from '/@/@types/Screens.type';
 import type { Member} from '#preload';
 import { addOffer} from '#preload';
 import { findAllMembers } from '#preload';
@@ -15,10 +14,6 @@ interface Offer {
   referenceYear: number
 }
 
-interface AddOfferProps {
-  screenSelected: Screens;
-}
-
 const INITIAL_STATE: Offer = {
       memberId: '',
       value: '',
@@ -26,27 +21,17 @@ const INITIAL_STATE: Offer = {
       referenceYear: 0,
   };
 
-export function AddOffer({ screenSelected }: AddOfferProps) {
+export function AddOffer() {
   const [tithe, setOffer] = useState<Offer>({...INITIAL_STATE });
-
   const [members, setMembers] = useState<Member[]>([]);
   const [loading, setLoading] = useState(false);
-  const mounted = useRef(false);
+
 
   useEffect(() => {
-    if (screenSelected === 'addOffer') {
-      findAllMembers().then((members) => {
-        setMembers(members);
-      });
-      mounted.current = true;
-    }
-
-    if (screenSelected !== 'addOffer' && mounted.current) {
-      setOffer({ ...INITIAL_STATE });
-      setMembers([]);
-      mounted.current = false;
-    }
-  }, [screenSelected]);
+    findAllMembers().then((members) => {
+      setMembers(members);
+    });
+  }, []);
 
   const formValidate = (floatValue: number, referenceMonth: number, referenceYear: number) => {
     if (floatValue <= 0) {
@@ -129,8 +114,6 @@ export function AddOffer({ screenSelected }: AddOfferProps) {
     <AddForm
       handleSubmit={handleSubmit}
       handleReset={handleReset}
-      screenName="addOffer"
-      screenSelected={screenSelected}
       isLoading={loading}
       title="Cadastrar Oferta"
     >

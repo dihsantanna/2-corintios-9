@@ -1,6 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { AddForm } from './AddForm';
-import type { Screens } from '/@/@types/Screens.type';
 import type { ExpenseCategory} from '#preload';
 import { addExpense} from '#preload';
 import { findAllExpenseCategories } from '#preload';
@@ -16,10 +15,6 @@ interface Expense {
   referenceYear: number;
 }
 
-interface AddExpenseProps {
-  screenSelected: Screens;
-}
-
 const INITIAL_STATE: Expense = {
   expenseCategoryId: '',
   title: '',
@@ -28,28 +23,17 @@ const INITIAL_STATE: Expense = {
   referenceYear: 0,
   };
 
-export function AddExpense({ screenSelected }: AddExpenseProps) {
+export function AddExpense() {
   const [expense, setExpense] = useState<Expense>({...INITIAL_STATE });
 
   const [expenseCategories, setExpenseCategories] = useState<ExpenseCategory[]>([]);
   const [loading, setLoading] = useState(false);
-  const mounted = useRef(false);
 
   useEffect(() => {
-    if (screenSelected === 'addExpense') {
-      findAllExpenseCategories().then((expenseCategories) => {
-        setExpenseCategories(expenseCategories);
-      });
-      mounted.current = true;
-    }
-
-    if (screenSelected !== 'addExpense' && mounted.current) {
-      setExpense({...INITIAL_STATE });
-      mounted.current = false;
-    }
-  }, [screenSelected]);
-
-
+    findAllExpenseCategories().then((expenseCategories) => {
+      setExpenseCategories(expenseCategories);
+    });
+  }, []);
 
   const formValidate = (floatValue: number, title: string, referenceMonth: number, referenceYear: number, expenseCategoryId: string) => {
     if (floatValue <= 0) {
@@ -150,8 +134,6 @@ export function AddExpense({ screenSelected }: AddExpenseProps) {
     <AddForm
       handleSubmit={handleSubmit}
       handleReset={handleReset}
-      screenName="addExpense"
-      screenSelected={screenSelected}
       isLoading={loading}
       title="Cadastrar Despesa"
     >

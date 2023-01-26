@@ -1,37 +1,22 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { EditForm } from './EditForm';
-import type { Screens } from '/@/@types/Screens.type';
 import type { Member} from '#preload';
 import { findAllMembers, updateMember, deleteMember } from '#preload';
 import { toast } from 'react-toastify';
 
-interface EditMemberProps {
-  screenSelected: Screens;
-}
 
-export function EditMembers({ screenSelected }: EditMemberProps) {
+export function EditMembers() {
   const [defaultMembers, setDefaultMembers] = useState<Member[]>([]);
   const [members, setMembers] = useState<Member[]>([]);
   const [editing, setEditing] = useState('');
   const [loading, setLoading] = useState(false);
-  const mounted = useRef(false);
 
   useEffect(() => {
-    if (screenSelected !== 'editMembers' && mounted.current) {
-      setEditing('');
-      setMembers([]);
-      setDefaultMembers([]);
-      mounted.current = false;
-    }
-
-    if (screenSelected === 'editMembers') {
-      findAllMembers().then((members) => {
-        setMembers(members);
-        setDefaultMembers(members);
-      });
-      mounted.current = true;
-    }
-  }, [screenSelected]);
+    findAllMembers().then((members) => {
+      setMembers(members);
+      setDefaultMembers(members);
+    });
+  }, []);
 
   const handleReset = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -113,10 +98,7 @@ export function EditMembers({ screenSelected }: EditMemberProps) {
 
   return (
     <div
-      style={{
-      display: screenSelected === 'editMembers' ? 'flex' : 'none',
-      }}
-      className="flex-col items-center w-full h-full"
+      className="flex flex-col items-center w-full h-full"
     >
       <h1
         className="flex items-center font-semibold text-2xl text-zinc-900 h-20"

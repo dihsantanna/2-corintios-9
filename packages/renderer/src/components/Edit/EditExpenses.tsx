@@ -1,15 +1,10 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { EditForm } from './EditForm';
-import type { Screens } from '/@/@types/Screens.type';
 import type { ExpenseCategory } from '#preload';
 import { findAllExpenseCategories, findExpensesWithCategoryNameByReferences, updateExpense, deleteExpense } from '#preload';
 import { toast } from 'react-toastify';
 import { FilterByMonthAndYear } from '../FilterByMonthAndYear';
 import { ImSpinner2 } from 'react-icons/im';
-
-interface EditExpensesProps {
-  screenSelected: Screens;
-}
 
 interface ExpensesWithExpenseCategory {
   id: string;
@@ -23,7 +18,7 @@ interface ExpensesWithExpenseCategory {
   };
 }
 
-export function EditExpenses({ screenSelected }: EditExpensesProps) {
+export function EditExpenses() {
   const [defaultExpenses, setDefaultExpenses] = useState<ExpensesWithExpenseCategory[]>([]);
   const [expenses, setExpenses] = useState<ExpensesWithExpenseCategory[]>([]);
   const [expenseCategories, setExpenseCategories] = useState<ExpenseCategory[]>([]);
@@ -32,26 +27,12 @@ export function EditExpenses({ screenSelected }: EditExpensesProps) {
   const [loading, setLoading] = useState(false);
   const [referenceMonth, setReferenceMonth] = useState(new Date().getMonth() + 1);
   const [referenceYear, setReferenceYear] = useState(new Date().getFullYear());
-  const mounted = useRef(false);
 
   useEffect(() => {
-    if (screenSelected !== 'editExpenses' && mounted.current) {
-      setEditing('');
-      setExpenses([]);
-      setReferenceMonth(new Date().getMonth() + 1);
-      setReferenceYear(new Date().getFullYear());
-      setExpenseCategories([]);
-      setCategorySelected('all');
-      mounted.current = false;
-    }
-
-    if (screenSelected === 'editExpenses') {
-      findAllExpenseCategories().then((expenseCategories) => {
-        setExpenseCategories(expenseCategories);
-        mounted.current = true;
-      });
-    }
-  }, [screenSelected]);
+    findAllExpenseCategories().then((expenseCategories) => {
+      setExpenseCategories(expenseCategories);
+    });
+  }, []);
 
   useEffect(() => {
     if (referenceMonth !== 0 && referenceYear !== 0) {
@@ -67,7 +48,7 @@ export function EditExpenses({ screenSelected }: EditExpensesProps) {
         setLoading(false);
       });
     }
-  }, [referenceMonth, referenceYear, screenSelected]);
+  }, [referenceMonth, referenceYear]);
 
   const handleReset = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -198,14 +179,17 @@ export function EditExpenses({ screenSelected }: EditExpensesProps) {
     }
   };
 
-  const orderedExpenses = handleFilter();
+  const filteredExpenses = handleFilter();
+
+  const orderedExpenses = filteredExpenses.sort((a, b) => {
+    if (a.expenseCategory.name.toLocaleLowerCase() > b.expenseCategory.name.toLocaleLowerCase()) return 1;
+    if (a.title.localeCompare(b.title) < 0) return -1;
+    return 0;
+  });
 
   return (
     <div
-      style={{
-      display: screenSelected === 'editExpenses' ? 'flex' : 'none',
-      }}
-      className="flex-col items-center w-full h-full"
+      className="flex flex-col items-center w-full h-full"
     >
       <h1
         className="flex items-center font-semibold text-2xl text-zinc-900 h-20"

@@ -1,16 +1,11 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { EditForm } from './EditForm';
-import type { Screens } from '/@/@types/Screens.type';
 import { findTithesWithMemberNameByReferences, updateTithe, deleteTithe } from '#preload';
 import { toast } from 'react-toastify';
 import { FilterByMonthAndYear } from '../FilterByMonthAndYear';
 import { ImSpinner2 } from 'react-icons/im';
 
-interface EditTitheProps {
-  screenSelected: Screens;
-}
-
-interface TitheWithMember {
+export interface TitheWithMember {
   id: string;
   memberId: string;
   value: string | number;
@@ -21,27 +16,13 @@ interface TitheWithMember {
   };
 }
 
-export function EditTithes({ screenSelected }: EditTitheProps) {
+export function EditTithes() {
   const [defaultTithes, setDefaultTithes] = useState<TitheWithMember[]>([]);
   const [tithes, setTithes] = useState<TitheWithMember[]>([]);
   const [editing, setEditing] = useState('');
   const [loading, setLoading] = useState(false);
   const [referenceMonth, setReferenceMonth] = useState(new Date().getMonth() + 1);
   const [referenceYear, setReferenceYear] = useState(new Date().getFullYear());
-  const mounted = useRef(false);
-
-  useEffect(() => {
-    if (screenSelected !== 'editTithes' && mounted.current) {
-      setEditing('');
-      setReferenceMonth(new Date().getMonth() + 1);
-      setReferenceYear(new Date().getFullYear());
-      mounted.current = false;
-    }
-
-    if (screenSelected === 'editTithes') {
-      mounted.current = true;
-    }
-  }, [screenSelected]);
 
   useEffect(() => {
     if (referenceMonth !== 0 && referenceYear !== 0) {
@@ -57,7 +38,7 @@ export function EditTithes({ screenSelected }: EditTitheProps) {
         setLoading(false);
       });
     }
-  }, [referenceMonth, referenceYear, screenSelected]);
+  }, [referenceMonth, referenceYear]);
 
   const handleReset = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -171,10 +152,7 @@ export function EditTithes({ screenSelected }: EditTitheProps) {
 
   return (
     <div
-      style={{
-      display: screenSelected === 'editTithes' ? 'flex' : 'none',
-      }}
-      className="flex-col items-center w-full h-full"
+      className="flex flex-col items-center w-full h-full"
     >
       <h1 className="flex items-center font-semibold text-2xl text-zinc-900 h-20">Editar Dízimos</h1>
       <FilterByMonthAndYear

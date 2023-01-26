@@ -1,5 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
-import type { Screens } from '/@/@types/Screens.type';
+import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { addExpenseCategory } from '#preload';
 import { AddForm } from './AddForm';
@@ -8,29 +7,11 @@ interface ExpenseCategory {
   name: string;
 }
 
-interface AddExpenseCategoryProps {
-  screenSelected: Screens;
-}
-
-export function AddExpenseCategory({ screenSelected }: AddExpenseCategoryProps) {
+export function AddExpenseCategory() {
   const [expenseCategory, setExpenseCategory] = useState<ExpenseCategory>({
     name: '',
   });
   const [loading, setLoading] = useState(false);
-  const mounted = useRef(false);
-
-  useEffect(() => {
-    if (screenSelected === 'addExpenseCategory') {
-      mounted.current = true;
-    }
-
-    if (screenSelected !== 'addExpenseCategory' && mounted.current) {
-      setExpenseCategory({
-        name: '',
-      });
-      mounted.current = false;
-    }
-  }, [screenSelected]);
 
   const handleChange = ({target: {value, name}}: React.ChangeEvent<HTMLInputElement>) => {
     setExpenseCategory({
@@ -78,8 +59,6 @@ export function AddExpenseCategory({ screenSelected }: AddExpenseCategoryProps) 
     <AddForm
       handleSubmit={handleSubmit}
       handleReset={handleReset}
-      screenSelected={screenSelected}
-      screenName="addExpenseCategory"
       isLoading={loading}
       title="Cadastrar Categoria de Despesa"
     >

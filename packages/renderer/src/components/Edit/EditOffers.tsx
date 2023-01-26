@@ -1,16 +1,11 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { EditForm } from './EditForm';
-import type { Screens } from '/@/@types/Screens.type';
 import { findOffersWithMemberNameByReferences, updateOffer, deleteOffer } from '#preload';
 import { toast } from 'react-toastify';
 import { FilterByMonthAndYear } from '../FilterByMonthAndYear';
 import { ImSpinner2 } from 'react-icons/im';
 
-interface EditOfferProps {
-  screenSelected: Screens;
-}
-
-interface OfferWithMember {
+export interface OfferWithMember {
   id: string;
   memberId: string | null;
   value: string | number;
@@ -24,7 +19,7 @@ interface OfferWithMember {
 type OfferType = 'special' | 'loose' | 'all';
 
 
-export function EditOffers({ screenSelected }: EditOfferProps) {
+export function EditOffers() {
   const [defaultOffers, setDefaultOffers] = useState<OfferWithMember[]>([]);
   const [offers, setOffers] = useState<OfferWithMember[]>([]);
   const [editing, setEditing] = useState('');
@@ -32,21 +27,6 @@ export function EditOffers({ screenSelected }: EditOfferProps) {
   const [referenceMonth, setReferenceMonth] = useState(new Date().getMonth() + 1);
   const [referenceYear, setReferenceYear] = useState(new Date().getFullYear());
   const [offerType, setOfferType] = useState<OfferType>('all');
-  const mounted = useRef(false);
-
-  useEffect(() => {
-    if (screenSelected !== 'editOffers' && mounted.current) {
-      setEditing('');
-      setReferenceMonth(new Date().getMonth() + 1);
-      setReferenceYear(new Date().getFullYear());
-      setOfferType('all');
-      mounted.current = false;
-    }
-
-    if (screenSelected === 'editOffers') {
-      mounted.current = true;
-    }
-  }, [screenSelected]);
 
   const filterOfferByType = (offers: OfferWithMember[]): OfferWithMember[] => {
     if (offerType === 'special') {
@@ -62,19 +42,19 @@ export function EditOffers({ screenSelected }: EditOfferProps) {
     if (referenceMonth !== 0 && referenceYear !== 0) {
       setLoading(true);
       findOffersWithMemberNameByReferences(referenceMonth, referenceYear).then((offers) => {
-        const filteredOffers = filterOfferByType(offers).map((offer) => (
+        const newOffers = offers.map((offer) => (
           {
             ...offer,
             value: (offer.value as number).toFixed(2),
           }
         ));
-        setOffers(filteredOffers);
-        setDefaultOffers(filteredOffers);
+        setOffers(newOffers);
+        setDefaultOffers(newOffers);
       }).finally(() => {
         setLoading(false);
       });
     }
-  }, [referenceMonth, referenceYear, screenSelected]);
+  }, [referenceMonth, referenceYear]);
 
   const handleReset = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -184,7 +164,9 @@ export function EditOffers({ screenSelected }: EditOfferProps) {
       });
     };
 
-  const orderedOffers = (offers.sort((a, b) => (
+  const filtered = filterOfferByType(offers);
+
+  const orderedOffers = (filtered.sort((a, b) => (
     a.member?.name && b.member?.name
       ? (a.member?.name as string).localeCompare(b.member?.name as string)
       : 0
@@ -192,10 +174,7 @@ export function EditOffers({ screenSelected }: EditOfferProps) {
 
   return (
     <div
-      style={{
-      display: screenSelected === 'editOffers' ? 'flex' : 'none',
-      }}
-      className="flex-col items-center w-full h-full"
+      className="flex flex-col items-center w-full h-full"
     >
       <h1
         className="flex items-center font-semibold text-2xl text-zinc-900 h-20"

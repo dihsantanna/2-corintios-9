@@ -15,8 +15,10 @@ import { EditExpenseCategories } from './components/Edit/EditExpenseCategories';
 import { FaChurch } from 'react-icons/fa';
 import { EditExpenses } from './components/Edit/EditExpenses';
 import { EntriesReport } from './components/Report/EntriesReport';
-import 'react-toastify/dist/ReactToastify.css';
 import { OutputReport } from './components/Report/OutputReport';
+// import { GeneralReport } from './components/Report/GeneralReport';
+import 'react-toastify/dist/ReactToastify.css';
+// import {BalanceConfig} from './components/BalanceConfig';
 
 export function App() {
   const [selectedScreen, setSelectedScreen] = useState<Screens>('' as Screens);
@@ -27,24 +29,26 @@ export function App() {
         <Menu setSelectedScreen={setSelectedScreen} selectedScreen={selectedScreen} />
       </aside>
       <main className="flex flex-1 justify-center items-center w-5/6">
+        {/* { !selectedScreen && <BalanceConfig /> } */}
 
         {/*Add Screens*/}
-        <AddMember screenSelected={selectedScreen} />
-        <AddTithe screenSelected={selectedScreen} />
-        <AddOffer screenSelected={selectedScreen} />
-        <AddExpenseCategory screenSelected={selectedScreen} />
-        <AddExpense screenSelected={selectedScreen} />
+        { selectedScreen === 'addMember' && <AddMember /> }
+        { selectedScreen === 'addTithe' &&  <AddTithe /> }
+        { selectedScreen === 'addOffer' && <AddOffer /> }
+        { selectedScreen === 'addExpenseCategory' && <AddExpenseCategory /> }
+        { selectedScreen === 'addExpense' && <AddExpense />}
 
         {/*Edit Screens*/}
-        <EditMembers screenSelected={selectedScreen} />
-        <EditTithes screenSelected={selectedScreen} />
-        <EditOffers screenSelected={selectedScreen} />
-        <EditExpenseCategories screenSelected={selectedScreen} />
-        <EditExpenses screenSelected={selectedScreen} />
+        { selectedScreen === 'editMembers' && <EditMembers /> }
+        { selectedScreen === 'editTithes' && <EditTithes /> }
+        { selectedScreen === 'editOffers' && <EditOffers /> }
+        { selectedScreen === 'editExpenseCategories' && <EditExpenseCategories />}
+        { selectedScreen === 'editExpenses' && <EditExpenses />}
 
         {/*Report Screens*/}
-        <EntriesReport screenSelected={selectedScreen} />
-        <OutputReport screenSelected={selectedScreen} />
+        { selectedScreen === 'entriesReport' && <EntriesReport />}
+        { selectedScreen === 'outputReport' && <OutputReport />}
+        {/* { selectedScreen === 'generalReport' && <GeneralReport />} */}
 
         <Logo
           className={

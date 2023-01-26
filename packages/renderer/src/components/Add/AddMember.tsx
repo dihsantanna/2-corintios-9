@@ -1,5 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
-import type { Screens } from '/@/@types/Screens.type';
+import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { addMember } from '#preload';
 import { AddForm } from './AddForm';
@@ -9,31 +8,13 @@ interface Member {
   congregated: boolean;
 }
 
-interface AddMemberProps {
-  screenSelected: Screens;
-}
 
-export function AddMember({ screenSelected }: AddMemberProps) {
+export function AddMember() {
   const [member, setMember] = useState<Member>({
     name: '',
     congregated: false,
   });
   const [loading, setLoading] = useState(false);
-  const mounted = useRef(false);
-
-  useEffect(() => {
-    if (screenSelected === 'addMember') {
-      mounted.current = true;
-    }
-
-    if (screenSelected !== 'addMember' && mounted.current) {
-      setMember({
-        name: '',
-        congregated: false,
-      });
-      mounted.current = false;
-    }
-  }, [screenSelected]);
 
   const handleChange = ({target: {type, checked, value, name}}: React.ChangeEvent<HTMLInputElement>) => {
     setMember({
@@ -83,8 +64,6 @@ export function AddMember({ screenSelected }: AddMemberProps) {
     <AddForm
       handleSubmit={handleSubmit}
       handleReset={handleReset}
-      screenSelected={screenSelected}
-      screenName="addMember"
       isLoading={loading}
       title="Cadastrar Membro"
     >

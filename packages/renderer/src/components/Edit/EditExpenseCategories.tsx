@@ -1,37 +1,21 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { EditForm } from './EditForm';
-import type { Screens } from '/@/@types/Screens.type';
 import type { ExpenseCategory } from '#preload';
 import { findAllExpenseCategories, updateExpenseCategory, deleteExpenseCategory } from '#preload';
 import { toast } from 'react-toastify';
 
-interface EditExpenseCategoriesProps {
-  screenSelected: Screens;
-}
-
-export function EditExpenseCategories({ screenSelected }: EditExpenseCategoriesProps) {
+export function EditExpenseCategories() {
   const [defaultExpenseCategories, setDefaultExpenseCategories] = useState<ExpenseCategory[]>([]);
   const [expenseCategories, setExpenseCategories] = useState<ExpenseCategory[]>([]);
   const [editing, setEditing] = useState('');
   const [loading, setLoading] = useState(false);
-  const mounted = useRef(false);
 
   useEffect(() => {
-    if (screenSelected !== 'editExpenseCategories' && mounted.current) {
-      setEditing('');
-      setExpenseCategories([]);
-      setDefaultExpenseCategories([]);
-      mounted.current = false;
-    }
-
-    if (screenSelected === 'editExpenseCategories') {
-      findAllExpenseCategories().then((expenseCategories) => {
-        setExpenseCategories(expenseCategories);
-        setDefaultExpenseCategories(expenseCategories);
-      });
-      mounted.current = true;
-    }
-  }, [screenSelected]);
+    findAllExpenseCategories().then((expenseCategories) => {
+      setExpenseCategories(expenseCategories);
+      setDefaultExpenseCategories(expenseCategories);
+    });
+  }, []);
 
   const handleReset = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -113,10 +97,7 @@ export function EditExpenseCategories({ screenSelected }: EditExpenseCategoriesP
 
   return (
     <div
-      style={{
-      display: screenSelected === 'editExpenseCategories' ? 'flex' : 'none',
-      }}
-      className="flex-col items-center w-full h-full"
+      className="flex flex-col items-center w-full h-full"
     >
       <h1
         className="flex items-center font-semibold text-2xl text-zinc-900 h-20"
