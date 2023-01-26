@@ -67,11 +67,12 @@ export function AddExpenseCategory() {
       >
         <input
           required
+          title="Nome da Categoria de Despesa"
           name="name"
           placeholder="Escreva o nome da categoria aqui"
           onChange={handleChange}
           value={expenseCategory.name}
-          className="bg-zinc-900 placeholder:text-zinc-200 font-light focus:outline-none block w-full appearance-none leading-normal"
+          className="focus:outline-2 focus:outline-teal-500 bg-zinc-900 placeholder:text-zinc-200 font-light block w-full appearance-none leading-normal"
           />
       </label>
     </AddForm>

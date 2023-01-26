@@ -69,12 +69,20 @@ export function App() {
         pauseOnHover
         theme="dark"
       />
-      <FaChurch
-        title="Voltar para tela inicial"
-        className="w-14 h-14 text-zinc-900 opacity-90 hover:opacity-100 fixed top-2 right-12 cursor-pointer"
-        onClick={() => setSelectedScreen('' as Screens)}
-        visibility={selectedScreen ? 'visible' : 'hidden'}
-      />
+      {
+        selectedScreen && (
+          <button
+              tabIndex={0}
+              className="focus:outline-none focus:text-teal-500 text-zinc-900  hover:text-teal-500 fixed top-2 right-12 cursor-pointer"
+              onClick={() => setSelectedScreen('' as Screens)}
+            >
+              <FaChurch
+                title="Voltar para tela inicial"
+                className="w-14 h-14"
+              />
+            </button>
+        )
+      }
     </div>
   );
 }

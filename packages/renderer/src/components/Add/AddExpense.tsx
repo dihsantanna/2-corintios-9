@@ -142,14 +142,15 @@ export function AddExpense() {
       >
         <select
           required
+          title="Selecione uma categoria para a despesa"
           name="expenseCategoryId"
           value={expense.expenseCategoryId}
           onChange={handleSelectChange}
-          className="cursor-pointer bg-zinc-900 font-light focus:outline-none block w-full leading-normal"
+          className="focus:outline-2 focus:outline-teal-500 cursor-pointer bg-zinc-900 font-light block w-full leading-normal"
         >
           <option disabled value="">Selecione uma categoria para a despesa</option>
           {expenseCategories.map(({id, name}) => (
-            <option key={id} value={id}>{name}</option>
+            <option title={name} key={id} value={id}>{name}</option>
           ))}
         </select>
       </label>
@@ -158,18 +159,20 @@ export function AddExpense() {
       >
         <input
           required
+          title="Dê um título para a despesa"
           name="title"
           placeholder="Dê um título para a despesa"
           onChange={handleChange}
           value={expense.title}
-          className="bg-zinc-900 placeholder:text-zinc-200 font-light focus:outline-none block w-full appearance-none leading-normal"
+          className="focus:outline-2 focus:outline-teal-500 bg-zinc-900 placeholder:text-zinc-200 font-light block w-full appearance-none leading-normal"
           />
       </label>
       <label className="flex gap-2 items-center bg-zinc-900 p-2 border-l-4 border-teal-500 rounded-sm w-4/12">
         <span>R$</span>
         <input
           required
-          className="bg-zinc-900 placeholder:text-zinc-200 font-light focus:outline-none block w-full appearance-none leading-normal"
+          title="Valor da Despesa"
+          className="focus:outline-2 focus:outline-teal-500 bg-zinc-900 placeholder:text-zinc-200 font-light block w-full appearance-none leading-normal"
           name="value"
           onChange={handleValueInputChange}
           onBlur={handleValueInputBlur}
@@ -182,14 +185,15 @@ export function AddExpense() {
       >
         <select
           required
+          title="Selecione o mês da despesa"
           name="referenceMonth"
           value={expense.referenceMonth}
           onChange={handleSelectChange}
-          className="cursor-pointer bg-zinc-900 font-light focus:outline-none block w-full leading-normal"
+          className="focus:outline-2 focus:outline-teal-500 cursor-pointer bg-zinc-900 font-light block w-full leading-normal"
         >
           <option disabled value={0}>Selecione o mês</option>
           {Object.entries(months).map(([monthIndex, month]) => (
-            <option key={`${monthIndex}-${month}`} value={monthIndex}>{month}</option>
+            <option title={month} key={`${monthIndex}-${month}`} value={monthIndex}>{month}</option>
           ))}
         </select>
       </label>
@@ -198,14 +202,15 @@ export function AddExpense() {
       >
         <select
           required
+          title="Selecione o ano da despesa"
           name="referenceYear"
           value={expense.referenceYear}
           onChange={handleSelectChange}
-          className="cursor-pointer bg-zinc-900 font-light focus:outline-none block w-full leading-normal"
+          className="focus:outline-2 focus:outline-teal-500 cursor-pointer bg-zinc-900 font-light block w-full leading-normal"
         >
           <option disabled value={0}>Selecione o ano</option>
           {getYears().map((year) => (
-            <option key={year} value={year}>{year}</option>
+            <option title={year.toString()} key={year} value={year}>{year}</option>
           ))}
         </select>
       </label>

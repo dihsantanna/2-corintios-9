@@ -129,10 +129,11 @@ export function AddTithe() {
       >
         <select
           required
+          title="Selecione o membro"
           name="memberId"
           value={tithe.memberId}
           onChange={handleSelectChange}
-          className="cursor-pointer bg-zinc-900 font-light focus:outline-none block w-full leading-normal"
+          className="focus:outline-2 focus:outline-teal-500 cursor-pointer bg-zinc-900 font-light block w-full leading-normal"
         >
           <option disabled value="">Selecione o membro</option>
           {members.map(({id, name}) => (
@@ -144,7 +145,8 @@ export function AddTithe() {
         <span>R$</span>
         <input
           required
-          className="bg-zinc-900 placeholder:text-zinc-200 font-light focus:outline-none block w-full appearance-none leading-normal"
+          title="Valor do Dízimo"
+          className="focus:outline-2 focus:outline-teal-500 bg-zinc-900 placeholder:text-zinc-200 font-light block w-full appearance-none leading-normal"
           name="value"
           onChange={handleValueInputChange}
           onBlur={handleValueInputBlur}
@@ -157,14 +159,15 @@ export function AddTithe() {
       >
         <select
           required
+          title="Selecione o mês do dízimo"
           name="referenceMonth"
           value={tithe.referenceMonth}
           onChange={handleSelectChange}
-          className="cursor-pointer bg-zinc-900 font-light focus:outline-none block w-full leading-normal"
+          className="focus:outline-2 focus:outline-teal-500 cursor-pointer bg-zinc-900 font-light block w-full leading-normal"
         >
           <option disabled value={0}>Selecione o mês</option>
           {Object.entries(months).map(([monthIndex, month]) => (
-            <option key={`${monthIndex}-${month}`} value={monthIndex}>{month}</option>
+            <option title={month} key={`${monthIndex}-${month}`} value={monthIndex}>{month}</option>
           ))}
         </select>
       </label>
@@ -173,14 +176,15 @@ export function AddTithe() {
       >
         <select
           required
+          title="Selecione o ano do dízimo"
           name="referenceYear"
           value={tithe.referenceYear}
           onChange={handleSelectChange}
-          className="cursor-pointer bg-zinc-900 font-light focus:outline-none block w-full leading-normal"
+          className="focus:outline-2 focus:outline-teal-500 cursor-pointer bg-zinc-900 font-light block w-full leading-normal"
         >
           <option disabled value={0}>Selecione o ano</option>
           {getYears().map((year) => (
-            <option key={year} value={year}>{year}</option>
+            <option title={year.toString()} key={year} value={year}>{year}</option>
           ))}
         </select>
       </label>

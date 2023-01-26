@@ -69,26 +69,28 @@ export function AddMember() {
     >
       <label
         className="flex items-center bg-zinc-900 p-2 border-l-4 border-teal-500 rounded-sm w-8/12"
-      >
+        >
         <input
           required
+          title="Nome do membro"
           name="name"
           placeholder="Escreva o nome do membro aqui"
           onChange={handleChange}
           value={member.name}
-          className="bg-zinc-900 placeholder:text-zinc-200 font-light focus:outline-none block w-full appearance-none leading-normal"
+          className="focus:outline-2 focus:outline-teal-500 bg-zinc-900 placeholder:text-zinc-200 font-light block w-full appearance-none leading-normal"
           />
       </label>
       <label
         className="relative flex items-center w-max gap-2 text-zinc-900 cursor-pointer"
-      >
+        >
         {'É Congregado? '}
         <input
           type="checkbox"
+          title="Marque a caixa caso não seja membro"
           checked={member.congregated}
           name="congregated"
           onChange={handleChange}
-          className="cursor-pointer"
+          className="focus:outline-2 focus:outline-teal-500 cursor-pointer"
         />
         <span className="absolute w-max -bottom-4 text-xs italic text-zinc-900 left-0">
           * marque a caixa caso não seja membro
