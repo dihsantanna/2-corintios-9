@@ -14,10 +14,11 @@ export function FilterByMonthAndYear({ setReferenceMonth, setReferenceYear, mont
       className="flex items-center justify-center gap-2 py-2"
     >
       <select
+        title='Escolha um mês'
         name="filterByMonth"
         onChange={({ target: { value } }) => setReferenceMonth(+value)}
         value={monthValue}
-        className="cursor-pointer text-center text-zinc-200 bg-zinc-900 p-2 font-light focus:outline-none block w-full leading-normal rounded-sm"
+        className="focus:outline-2 focus:outline-teal-500 cursor-pointer text-center text-zinc-200 bg-zinc-900 p-2 font-light block w-full leading-normal rounded-sm"
       >
         <option
           disabled
@@ -27,15 +28,16 @@ export function FilterByMonthAndYear({ setReferenceMonth, setReferenceYear, mont
         </option>
         {
           Object.entries(months).map(([key, value]) => (
-            <option key={key} value={key}>{value}</option>
+            <option title={value} key={key} value={key}>{value}</option>
           ))
         }
       </select>
       <select
+        title='Escolha um ano'
         name="filterByYear"
         onChange={({ target: { value } }) => setReferenceYear(+value)}
         value={yearValue}
-        className="cursor-pointer text-center text-zinc-200 bg-zinc-900 p-2 font-light focus:outline-none block w-full leading-normal rounded-sm"
+        className="focus:outline-2 focus:outline-teal-500 cursor-pointer text-center text-zinc-200 bg-zinc-900 p-2 font-light block w-full leading-normal rounded-sm"
       >
         <option
           disabled
@@ -45,7 +47,7 @@ export function FilterByMonthAndYear({ setReferenceMonth, setReferenceYear, mont
         </option>
         {
           getYears().map((year) => (
-            <option key={year} value={year}>{year}</option>
+            <option title={year.toString()} key={year} value={year}>{year}</option>
           ))
         }
       </select>

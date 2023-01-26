@@ -12,12 +12,18 @@ export function BalanceConfig() {
   const [show, setShow] = useState(false);
   const [referenceMonth, setReferenceMonth] = useState(new Date().getMonth() + 1);
   const [referenceYear, setReferenceYear] = useState(new Date().getFullYear());
+  const [defaultBalance, setDefaultBalance] = useState({
+    value: 0,
+    referenceMonth: new Date().getMonth() + 1,
+    referenceYear: new Date().getFullYear(),
+  });
   const [balance, setBalance] = useState('');
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     findBalanceById('INITIAL_BALANCE').then((balance) => {
       if (balance) {
+        setDefaultBalance(balance);
         setBalance(balance.value.toFixed(2));
         setReferenceMonth(balance.referenceMonth);
         setReferenceYear(balance.referenceYear);
@@ -87,23 +93,30 @@ export function BalanceConfig() {
         progress: undefined,
       });
     }).finally(() => {
+      setDefaultBalance({
+        value: floatValue,
+        referenceMonth,
+        referenceYear,
+      });
       setLoading(false);
       setShow(false);
     });
 
   };
 
-  const handleReset = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleReset = (event: React.FormEvent<HTMLFormElement | HTMLButtonElement>) => {
     event.preventDefault();
-    setBalance('');
-    setReferenceMonth(new Date().getMonth() + 1);
-    setReferenceYear(new Date().getFullYear());
+    setBalance(defaultBalance.value.toFixed(2));
+    setReferenceMonth(defaultBalance.referenceMonth);
+    setReferenceYear(defaultBalance.referenceYear);
+    setShow(false);
   };
 
   return (
     <>
       <button
-        className="flex items-center fixed top-4 right-6 bg-zinc-900 rounded-sm
+        tabIndex={0}
+        className="focus:outline-none focus:bg-teal-500 focus:text-zinc-900 flex items-center fixed top-4 right-6 bg-zinc-900 rounded-sm
         px-2 py-1 hover:text-zinc-900 hover:bg-teal-500"
         onClick={() => setShow(true)}
       >
@@ -140,10 +153,16 @@ export function BalanceConfig() {
               >
                 <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
                   <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                    <IoCloseSharp
-                      className="cursor-pointer absolute top-2 right-2 fill-zinc-900 w-6 h-6 hover:fill-red-600"
-                      onClick={() => setShow(false)}
-                    />
+                    <button
+                      title='Fechar menu de configuração de saldo inicial'
+                      type='reset'
+                      className="focus:outline-none focus:text-red-600 cursor-pointer absolute top-2 right-2 text-zinc-900 hover:text-red-600"
+                      onClick={handleReset}
+                    >
+                      <IoCloseSharp
+                      className="w-6 h-6"
+                      />
+                    </button>
                     <div className="flex flex-col items-center justify-center ">
                       <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
                         <Dialog.Title as="h3" className="text-lg font-medium leading-6 text-gray-900">
@@ -167,8 +186,8 @@ export function BalanceConfig() {
                             <label className="flex items-center bg-zinc-900 p-2 border-l-4 border-teal-500 rounded-sm w-full text-zinc-200 text-sm">
                               R$
                               <input
-                                className="bg-zinc-900 placeholder:text-zinc-200 focus:outline-none block w-full appearance-none leading-normal pl-2"
-                                title="Saldo Inicial"
+                                className="focus:outline-2 focus:outline-teal-500 bg-zinc-900 placeholder:text-zinc-200 focus:outline-none block w-full appearance-none leading-normal pl-2"
+                                title="Valor do Saldo Inicial"
                                 name="balance"
                                 placeholder="Digite o saldo inicial"
                                 onChange={handleBalanceInputChange}
@@ -181,10 +200,12 @@ export function BalanceConfig() {
                                 className="w-1/2 h-8"
                                 text="SALVAR"
                                 isLoading={loading}
+                                title="Salvar saldo inicial"
                               />
                               <ResetButton
+                                title="Cancelar configuração de saldo inicial"
                                 className="w-1/2 h-8"
-                                text="LIMPAR"
+                                text="CANCELAR"
                               />
                             </div>
                           </form>
