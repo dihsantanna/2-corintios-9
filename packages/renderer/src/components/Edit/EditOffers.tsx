@@ -190,14 +190,15 @@ export function EditOffers() {
         />
         <div className="flex items-center justify-center gap-2 py-2">
           <select
-            className="cursor-pointer text-center text-zinc-200 bg-zinc-900 p-2 font-light focus:outline-none block w-full leading-normal rounded-sm"
+            title="Selecione um tipo de oferta"
+            className="focus:outline-2 focus:outline-teal-500 cursor-pointer text-center text-zinc-200 bg-zinc-900 p-2 font-light block w-full leading-normal rounded-sm"
             value={offerType}
             onChange={({ target: { value } }) => setOfferType(value as OfferType)}
           >
             <option value="" disabled>Selecione um tipo de oferta</option>
-            <option value="all">Todas as ofertas</option>
-            <option value="special">Ofertas especiais</option>
-            <option value="loose">Ofertas de gazofilácio</option>
+            <option title="Todas" value="all">Todas as ofertas</option>
+            <option title="Especiais" value="special">Ofertas especiais</option>
+            <option title="Gazofilácio" value="loose">Ofertas de gazofilácio</option>
           </select>
         </div>
       </div>
@@ -208,53 +209,58 @@ export function EditOffers() {
         <span className="w-1/12 flex items-center justify-center">Valor (R$)</span>
         <span className="w-2/6 flex items-center justify-center">Editar</span>
       </div>
-      {loading && editing === ''
-        ? <ImSpinner2 className="w-5 h-5 m-auto animate-spin" />
-        : !orderedOffers.length
-          ? <span className="m-auto text-zinc-500"
+      <div className="w-full h-full overflow-auto scrollbar-thin scrollbar-thumb-zinc-900 scrollbar-track-zinc-300">
+        {loading && editing === ''
+          ? <ImSpinner2 className="w-5 h-5 m-auto animate-spin" />
+          : !orderedOffers.length
+            ? <span className="m-auto text-zinc-500"
+            >
+              Não há ofertas cadastrados para o mês e ano selecionados!
+            </span>
+          : orderedOffers.map(({ id, memberId, value, member }, index) => (
+          <EditForm
+            key={id}
+            handleSubmit={(event) => handleEdit(event, index)}
+            handleReset={handleReset}
+            isLoading={loading}
+            editingId={id}
+            isEditing={editing === id}
+            setIsEditing={handleSetEditing}
+            className={(index % 2 === 0 ? 'bg-zinc-100' : '')}
+            onDelete={() => handleDelete(id, index)}
+            deleteMessage={`Tem certeza que deseja excluir esta oferta, no valor de "R$ ${value}"? Esta ação não poderá ser desfeita. Clique em "SIM" para confirmar.`}
+            deleteTitle="Excluir Oferta"
+            editType='oferta'
           >
-            Não há ofertas cadastrados para o mês e ano selecionados!
-          </span>
-        : orderedOffers.map(({ id, memberId, value, member }, index) => (
-        <EditForm
-          key={id}
-          handleSubmit={(event) => handleEdit(event, index)}
-          handleReset={handleReset}
-          isLoading={loading}
-          editingId={id}
-          isEditing={editing === id}
-          setIsEditing={handleSetEditing}
-          className={(index % 2 === 0 ? 'bg-zinc-100' : '')}
-          onDelete={() => handleDelete(id, index)}
-          deleteMessage={`Tem certeza que deseja excluir esta oferta, no valor de "R$ ${value}"? Esta ação não poderá ser desfeita. Clique em "SIM" para confirmar.`}
-          deleteTitle="Excluir Oferta"
-        >
-          <label className="w-6/12 flex items-center justify-center text-zinc-900">
-              {
-                memberId
-                && (
-                  <input
+            <label className="w-6/12 flex items-center justify-center text-zinc-900">
+                {
+                  memberId
+                  && (
+                    <input
+                      title="Nome do membro"
                       value={member?.name}
                       readOnly
                       name="memberId"
-                      className="cursor-default text-center p-0 text-zinc-900 bg-transparent font-normal focus:outline-none block w-full h-full appearance-none leading-normal rounded-sm"
-                  />
-                )
-              }
-          </label>
-          <label className="w-1/12 flex items-center justify-center text-zinc-900">
-              <input
-                required
-                name="value"
-                value={value}
-                onChange={(event) => handleChange(event, index)}
-                onBlur={(event) => handleValueInputBlur(event, index)}
-                className="text-center text-zinc-200 bg-zinc-900 p-2 disabled:p-0 disabled:text-zinc-900 disabled:bg-transparent font-light disabled:font-normal focus:outline-none block w-11/12 h-full disabled:appearance-none leading-normal rounded-sm"
-                disabled={editing !== id}
-            />
-          </label>
-        </EditForm>
-      ))}
+                      className="cursor-default text-center p-0 text-zinc-900 bg-transparent font-normal block w-full h-full appearance-none leading-normal rounded-sm"
+                    />
+                  )
+                }
+            </label>
+            <label className="w-1/12 flex items-center justify-center text-zinc-900">
+                <input
+                  required
+                  title="Valor da oferta"
+                  name="value"
+                  value={value}
+                  onChange={(event) => handleChange(event, index)}
+                  onBlur={(event) => handleValueInputBlur(event, index)}
+                  className="focus:outline-2 focus:outline-teal-500 text-center text-zinc-200 bg-zinc-900 p-2 disabled:p-0 disabled:text-zinc-900 disabled:bg-transparent font-light disabled:font-normal block w-11/12 h-full disabled:appearance-none leading-normal rounded-sm"
+                  disabled={editing !== id}
+              />
+            </label>
+          </EditForm>
+        ))}
+      </div>
     </div>
   );
 }

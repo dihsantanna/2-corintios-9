@@ -204,14 +204,15 @@ export function EditExpenses() {
         />
         <div className="flex items-center justify-center gap-2 py-2">
           <select
-            className="cursor-pointer text-center text-zinc-200 bg-zinc-900 p-2 font-light focus:outline-none block w-full leading-normal rounded-sm"
+            title="Selecione uma categoria de despesa"
+            className="focus:outline-2 focus:outline-teal-500 cursor-pointer text-center text-zinc-200 bg-zinc-900 p-2 font-light block w-full leading-normal rounded-sm"
             value={categorySelected}
             onChange={({ target: { value } }) => setCategorySelected(value)}
           >
             <option value="" disabled>Selecione uma categoria</option>
-            <option value="all">Todas as Despesas</option>
+            <option title="Todas" value="all">Todas as Despesas</option>
             {expenseCategories.map((category) => (
-              <option key={category.id} value={category.id}>{category.name}</option>
+              <option title={category.name} key={category.id} value={category.id}>{category.name}</option>
             ))}
           </select>
         </div>
@@ -224,60 +225,67 @@ export function EditExpenses() {
         <span className="w-1/12 flex items-center justify-center">Valor (R$)</span>
         <span className="w-2/6 flex items-center justify-center">Editar</span>
       </div>
-      {loading && editing === ''
-        ? <ImSpinner2 className="w-5 h-5 m-auto animate-spin" />
-        : !orderedExpenses.length
-        ? <span className="m-auto text-zinc-500">Não há Despesas cadastradas para o mês e ano selecionados!</span>
-        : orderedExpenses.map(({ id, expenseCategoryId, title, value }, index) => (
-        <EditForm
-          key={id}
-          handleSubmit={(event) => handleEdit(event, index)}
-          handleReset={handleReset}
-          isLoading={loading}
-          editingId={id}
-          isEditing={editing === id}
-          setIsEditing={handleSetEditing}
-          className={(index % 2 === 0 ? 'bg-zinc-100' : '')}
-          onDelete={() => handleDelete(id, index)}
-          deleteMessage={`Tem certeza que deseja excluir esta despesa, no valor de "R$ ${value}"? Esta ação não poderá ser desfeita. Clique em "SIM" para confirmar.`}
-          deleteTitle="Excluir Despesa"
-        >
-          <label className="w-4/12 flex items-center justify-center text-zinc-900">
-            <select
-                value={expenseCategoryId}
-                name="expenseCategoryId"
-                onChange={(event) => handleChange(event, index)}
-                className="text-center text-zinc-200 bg-zinc-900 p-2 disabled:p-0 disabled:text-zinc-900 disabled:bg-transparent font-light disabled:font-normal focus:outline-none block w-11/12 h-full disabled:appearance-none leading-normal rounded-sm"
-                disabled={editing !== id}
-              >
-                {expenseCategories.map(({id, name}) => (
-                  <option key={id} value={id}>{name}</option>
-                ))}
-            </select>
+      <div className="w-full h-full overflow-auto scrollbar-thin scrollbar-thumb-zinc-900 scrollbar-track-zinc-300">
+        {loading && editing === ''
+          ? <ImSpinner2 className="w-5 h-5 m-auto animate-spin" />
+          : !orderedExpenses.length
+          ? <span className="m-auto text-zinc-500">Não há Despesas cadastradas para o mês e ano selecionados!</span>
+          : orderedExpenses.map(({ id, expenseCategoryId, title, value }, index) => (
+          <EditForm
+            key={id}
+            handleSubmit={(event) => handleEdit(event, index)}
+            handleReset={handleReset}
+            isLoading={loading}
+            editingId={id}
+            isEditing={editing === id}
+            setIsEditing={handleSetEditing}
+            className={(index % 2 === 0 ? 'bg-zinc-100' : '')}
+            onDelete={() => handleDelete(id, index)}
+            deleteMessage={`Tem certeza que deseja excluir esta despesa, no valor de "R$ ${value}"? Esta ação não poderá ser desfeita. Clique em "SIM" para confirmar.`}
+            deleteTitle="Excluir Despesa"
+            editType="despesa"
+          >
+            <label className="w-4/12 flex items-center justify-center text-zinc-900">
+                <select
+                  title="Selecione uma categoria de despesa"
+                  value={expenseCategoryId}
+                  name="expenseCategoryId"
+                  onChange={(event) => handleChange(event, index)}
+                  className="focus:outline-2 focus:outline-teal-500 text-center text-zinc-200 bg-zinc-900 p-2 disabled:p-0 disabled:text-zinc-900 disabled:bg-transparent font-light disabled:font-normal block w-11/12 h-full disabled:appearance-none leading-normal rounded-sm"
+                  disabled={editing !== id}
+                >
+                  <option value="" disabled>Selecione uma categoria</option>
+                  {expenseCategories.map(({id, name}) => (
+                    <option title={name} key={id} value={id}>{name}</option>
+                  ))}
+              </select>
+              </label>
+              <label className="w-3/12 flex items-center justify-center text-zinc-900">
+                <input
+                  required
+                  title="Título da Despesa"
+                  name="title"
+                  value={title}
+                  onChange={(event) => handleChange(event, index)}
+                  className="focus:outline-2 focus:outline-teal-500 text-center text-zinc-200 bg-zinc-900 p-2 disabled:p-0 disabled:text-zinc-900 disabled:bg-transparent font-light disabled:font-normal block w-11/12 h-full disabled:appearance-none leading-normal rounded-sm"
+                  disabled={editing !== id}
+              />
             </label>
-            <label className="w-3/12 flex items-center justify-center text-zinc-900">
-              <input
-                required
-                name="title"
-                value={title}
-                onChange={(event) => handleChange(event, index)}
-                className="text-center text-zinc-200 bg-zinc-900 p-2 disabled:p-0 disabled:text-zinc-900 disabled:bg-transparent font-light disabled:font-normal focus:outline-none block w-11/12 h-full disabled:appearance-none leading-normal rounded-sm"
-                disabled={editing !== id}
-            />
-          </label>
-          <label className="w-1/12 flex items-center justify-center text-zinc-900">
-              <input
-                required
-                name="value"
-                value={value}
-                onChange={(event) => handleChange(event, index)}
-                onBlur={(event) => handleValueInputBlur(event, index)}
-                className="text-center text-zinc-200 bg-zinc-900 p-2 disabled:p-0 disabled:text-zinc-900 disabled:bg-transparent font-light disabled:font-normal focus:outline-none block w-11/12 h-full disabled:appearance-none leading-normal rounded-sm"
-                disabled={editing !== id}
-            />
-          </label>
-        </EditForm>
-      ))}
+            <label className="w-1/12 flex items-center justify-center text-zinc-900">
+                <input
+                  required
+                  title="Valor da Despesa"
+                  name="value"
+                  value={value}
+                  onChange={(event) => handleChange(event, index)}
+                  onBlur={(event) => handleValueInputBlur(event, index)}
+                  className="focus:outline-2 focus:outline-teal-500 text-center text-zinc-200 bg-zinc-900 p-2 disabled:p-0 disabled:text-zinc-900 disabled:bg-transparent font-light disabled:font-normal block w-11/12 h-full disabled:appearance-none leading-normal rounded-sm"
+                  disabled={editing !== id}
+              />
+            </label>
+          </EditForm>
+        ))}
+      </div>
     </div>
   );
 }

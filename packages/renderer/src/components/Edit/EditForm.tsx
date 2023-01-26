@@ -15,10 +15,11 @@ interface EditFormProps {
   onDelete: () => void
   deleteMessage: string
   deleteTitle: string
+  editType?: string
 }
 
 export function EditForm({
-  children, handleSubmit, handleReset, isLoading, isEditing, editingId, setIsEditing, className, onDelete, deleteMessage, deleteTitle,
+  children, handleSubmit, handleReset, isLoading, isEditing, editingId, setIsEditing, className, onDelete, deleteMessage, deleteTitle, editType,
 }: EditFormProps) {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
@@ -36,21 +37,23 @@ export function EditForm({
         {
           isEditing
             ? <>
-              <SubmitButton text="SALVAR" isLoading={isLoading} className="w-1/3 h-11" />
-              <ResetButton text="FECHAR" className="w-1/3 h-11" />
+              <SubmitButton title={`Salvar ${editType}`} text="SALVAR" isLoading={isLoading} className="w-1/3 h-10" />
+              <ResetButton title='Cancelar Edição' text="FECHAR" className="w-1/3 h-10" />
             </>
             : (
               <>
                 <button
+                  title={`Editar ${editType || 'item'}`}
                   onClick={() => setIsEditing(editingId)}
-                  className="bg-zinc-900 hover:bg-teal-500 hover:text-zinc-900 cursor-pointer w-1/3 h-11 rounded-md font-semibold"
+                  className="focus:outline-none focus:bg-teal-500 focus:text-zinc-900 bg-zinc-900 hover:bg-teal-500 hover:text-zinc-900 cursor-pointer w-1/3 h-11 rounded-md font-semibold"
                   type="button"
                 >
                   EDITAR
                 </button>
                 <button
+                  title={`Excluir ${editType || 'item'}`}
                   onClick={() => setShowDeleteModal(true)}
-                  className="bg-red-600 hover:bg-yellow-500 hover:text-zinc-900 cursor-pointer w-1/3 h-11 rounded-md font-semibold"
+                  className="focus:outline-none focus:bg-yellow-500 focus:text-zinc-900 bg-red-600 hover:bg-yellow-500 hover:text-zinc-900 cursor-pointer w-1/3 h-11 rounded-md font-semibold"
                   type="button"
                 >
                   EXCLUIR

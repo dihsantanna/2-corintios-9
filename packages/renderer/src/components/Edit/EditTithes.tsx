@@ -168,45 +168,52 @@ export function EditTithes() {
         <span className="w-1/12 flex items-center justify-center">Valor (R$)</span>
         <span className="w-2/6 flex items-center justify-center">Editar</span>
       </div>
-      {loading && editing === ''
-        ? <ImSpinner2 className="w-5 h-5 m-auto animate-spin" />
-        : !orderedTithes.length
-        ? <span className="m-auto text-zinc-500">Não há dízimos cadastrados para o mês e ano selecionados!</span>
-        : orderedTithes.map(({ id, value, member: { name } }, index) => (
-        <EditForm
-          key={id}
-          handleSubmit={(event) => handleEdit(event, index)}
-          handleReset={handleReset}
-          isLoading={loading}
-          editingId={id}
-          isEditing={editing === id}
-          setIsEditing={handleSetEditing}
-          className={(index % 2 === 0 ? 'bg-zinc-100' : '')}
-          onDelete={() => handleDelete(id, index)}
-          deleteMessage={`Tem certeza que deseja excluir este dízimo, no valor de "R$ ${value}"? Esta ação não poderá ser desfeita. Clique em "SIM" para confirmar.`}
-          deleteTitle="Excluir Dízimo"
-        >
-          <label className="w-6/12 flex items-center justify-center text-zinc-900">
-            <input
+      <div className="w-full h-full overflow-auto scrollbar-thin scrollbar-thumb-zinc-900 scrollbar-track-zinc-300">
+        {loading && editing === ''
+          ? <ImSpinner2 className="w-5 h-5 m-auto animate-spin" />
+          : !orderedTithes.length
+            ? <span className="m-auto text-zinc-500">
+              Não há dízimos cadastrados para o mês e ano selecionados!
+            </span>
+          : orderedTithes.map(({ id, value, member: { name } }, index) => (
+          <EditForm
+            key={id}
+            handleSubmit={(event) => handleEdit(event, index)}
+            handleReset={handleReset}
+            isLoading={loading}
+            editingId={id}
+            isEditing={editing === id}
+            setIsEditing={handleSetEditing}
+            className={(index % 2 === 0 ? 'bg-zinc-100' : '')}
+            onDelete={() => handleDelete(id, index)}
+            deleteMessage={`Tem certeza que deseja excluir este dízimo, no valor de "R$ ${value}"? Esta ação não poderá ser desfeita. Clique em "SIM" para confirmar.`}
+            deleteTitle="Excluir Dízimo"
+            editType='dízimo'
+          >
+            <label className="w-6/12 flex items-center justify-center text-zinc-900">
+              <input
+                title="Nome do membro"
                 value={name}
                 readOnly
                 name="memberId"
                 className="cursor-default text-center p-0 text-zinc-900 bg-transparent font-normal focus:outline-none block w-full h-full appearance-none leading-normal rounded-sm"
-            />
-          </label>
-          <label className="w-1/12 flex items-center justify-center text-zinc-900">
-              <input
-                required
-                name="value"
-                value={value}
-                onChange={(event) => handleChange(event, index)}
-                onBlur={(event) => handleValueInputBlur(event, index)}
-                className="text-center text-zinc-200 bg-zinc-900 p-2 disabled:p-0 disabled:text-zinc-900 disabled:bg-transparent font-light disabled:font-normal focus:outline-none block w-11/12 h-full disabled:appearance-none leading-normal rounded-sm"
-                disabled={editing !== id}
-            />
-          </label>
-        </EditForm>
-      ))}
+              />
+            </label>
+            <label className="w-1/12 flex items-center justify-center text-zinc-900">
+                <input
+                  required
+                  title="Valor do dízimo"
+                  name="value"
+                  value={value}
+                  onChange={(event) => handleChange(event, index)}
+                  onBlur={(event) => handleValueInputBlur(event, index)}
+                  className="focus:outline-2 focus:outline-teal-500 text-center text-zinc-200 bg-zinc-900 p-2 disabled:p-0 disabled:text-zinc-900 disabled:bg-transparent font-light disabled:font-normal focus:outline-none block w-11/12 h-full disabled:appearance-none leading-normal rounded-sm"
+                  disabled={editing !== id}
+              />
+            </label>
+          </EditForm>
+        ))}
+      </div>
     </div>
   );
 }
