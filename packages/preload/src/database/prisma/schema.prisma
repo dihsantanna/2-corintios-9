@@ -51,3 +51,10 @@ model Expense {
   referenceYear     Int
   expenseCategory   ExpenseCategory @relation(fields: [expenseCategoryId], references: [id])
 }
+
+model Balance {
+  id             String @id
+  value          Float
+  referenceMonth Int
+  referenceYear  Int
+}

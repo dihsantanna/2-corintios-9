@@ -99,3 +99,47 @@ export const findAllExpensesByReferences = async (
     await prisma.$disconnect();
   }
 };
+
+interface FindExpensesByRangeRequest {
+  previousMonth: number;
+  previousYear: number;
+  currentMonth: number;
+  currentYear: number;
+}
+
+export const findExpensesByRange = async ({
+  previousMonth,
+  previousYear,
+  currentMonth,
+  currentYear,
+}: FindExpensesByRangeRequest) => {
+  try {
+    const expenses = await prisma.expense.findMany({
+      where: {
+        AND: [
+          {
+            referenceYear: {
+              gt: previousYear,
+            },
+          },
+          {
+            referenceYear: {
+              lte: currentYear,
+            },
+          },
+        ],
+      },
+    });
+    return expenses.filter(({referenceMonth, referenceYear}) => {
+      if (referenceYear === previousYear) {
+        return referenceMonth >= previousMonth;
+      }
+      if (referenceYear === currentYear) {
+        return referenceMonth <= currentMonth;
+      }
+      return true;
+    });
+  } finally {
+    await prisma.$disconnect();
+  }
+};

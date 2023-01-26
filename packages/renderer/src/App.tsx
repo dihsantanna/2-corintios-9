@@ -16,9 +16,9 @@ import { FaChurch } from 'react-icons/fa';
 import { EditExpenses } from './components/Edit/EditExpenses';
 import { EntriesReport } from './components/Report/EntriesReport';
 import { OutputReport } from './components/Report/OutputReport';
-// import { GeneralReport } from './components/Report/GeneralReport';
+import { GeneralReport } from './components/Report/GeneralReport';
 import 'react-toastify/dist/ReactToastify.css';
-// import {BalanceConfig} from './components/BalanceConfig';
+import {BalanceConfig} from './components/BalanceConfig';
 
 export function App() {
   const [selectedScreen, setSelectedScreen] = useState<Screens>('' as Screens);
@@ -29,7 +29,7 @@ export function App() {
         <Menu setSelectedScreen={setSelectedScreen} selectedScreen={selectedScreen} />
       </aside>
       <main className="flex flex-1 justify-center items-center w-5/6">
-        {/* { !selectedScreen && <BalanceConfig /> } */}
+        { !selectedScreen && <BalanceConfig /> }
 
         {/*Add Screens*/}
         { selectedScreen === 'addMember' && <AddMember /> }
@@ -48,7 +48,7 @@ export function App() {
         {/*Report Screens*/}
         { selectedScreen === 'entriesReport' && <EntriesReport />}
         { selectedScreen === 'outputReport' && <OutputReport />}
-        {/* { selectedScreen === 'generalReport' && <GeneralReport />} */}
+        { selectedScreen === 'generalReport' && <GeneralReport />}
 
         <Logo
           className={

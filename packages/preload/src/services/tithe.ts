@@ -80,3 +80,47 @@ export const deleteTithe = async (id: string) => {
     await prisma.$disconnect();
   }
 };
+
+interface FindTithesByRangeRequest {
+  previousMonth: number;
+  previousYear: number;
+  currentMonth: number;
+  currentYear: number;
+}
+
+export const findTithesByRange = async ({
+  previousMonth,
+  previousYear,
+  currentMonth,
+  currentYear,
+}: FindTithesByRangeRequest) => {
+  try {
+    const tithes = await prisma.tithe.findMany({
+      where: {
+        AND: [
+          {
+            referenceYear: {
+              gt: previousYear,
+            },
+          },
+          {
+            referenceYear: {
+              lte: currentYear,
+            },
+          },
+        ],
+      },
+    });
+    return tithes.filter(({referenceMonth, referenceYear}) => {
+      if (referenceYear === previousYear) {
+        return referenceMonth >= previousMonth;
+      }
+      if (referenceYear === currentYear) {
+        return referenceMonth <= currentMonth;
+      }
+      return true;
+    });
+  } finally {
+    await prisma.$disconnect();
+  }
+};

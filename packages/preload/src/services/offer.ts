@@ -98,3 +98,47 @@ export const findAllLooseOffersByReferences = async (
     await prisma.$disconnect();
   }
 };
+
+interface FindOffersByRangeRequest {
+  previousMonth: number;
+  previousYear: number;
+  currentMonth: number;
+  currentYear: number;
+}
+
+export const findOffersByRange = async ({
+  previousMonth,
+  previousYear,
+  currentMonth,
+  currentYear,
+}: FindOffersByRangeRequest) => {
+  try {
+    const offers = await prisma.offer.findMany({
+      where: {
+        AND: [
+          {
+            referenceYear: {
+              gt: previousYear,
+            },
+          },
+          {
+            referenceYear: {
+              lte: currentYear,
+            },
+          },
+        ],
+      },
+    });
+    return offers.filter(({referenceMonth, referenceYear}) => {
+      if (referenceYear === previousYear) {
+        return referenceMonth >= previousMonth;
+      }
+      if (referenceYear === currentYear) {
+        return referenceMonth <= currentMonth;
+      }
+      return true;
+    });
+  } finally {
+    await prisma.$disconnect();
+  }
+};
