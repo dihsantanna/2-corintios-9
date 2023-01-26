@@ -46,7 +46,7 @@ export function ReportView({
                 />
                 <a
                   title="Salvar PDF"
-                  className="absolute top-11 right-[120px] inline-flex justify-center rounded-md bg-green-700 px-2 py-[6px] text-base font-medium text-zinc-200 shadow-sm hover:bg-green-600 hover:text-zinc-50 z-30"
+                  className="focus:outline-2 focus:outline-teal-500 absolute top-11 right-[120px] inline-flex justify-center rounded-md bg-green-700 px-2 py-[6px] text-base font-medium text-zinc-200 shadow-sm hover:bg-green-600 hover:text-zinc-50 z-30"
                   href={pdfUrl()}
                   download={
                     `${title} ${months[referenceMonth as MonthKey]}-${referenceYear}.pdf`
