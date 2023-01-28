@@ -34,7 +34,7 @@ export function AddExpenseCategory() {
     setLoading(true);
 
     try {
-      await window.expenseCategoryModel.create(expenseCategory);
+      await window.expenseCategory.create(expenseCategory);
       toast.success('Categoria de despesa cadastrada com sucesso!', {
         progress: undefined,
       });

@@ -1,51 +1,61 @@
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
-import { IMemberState } from 'main/@types/Member';
+import { IExpenseCategoryState } from 'main/@types/ExpenseCategory';
 import { AddForm } from './AddForm';
 import { months } from '../../utils/months';
 import { getYears } from '../../utils/years';
 
-interface Offer {
-  memberId: string;
+interface Expense {
+  expenseCategoryId: string;
+  title: string;
   value: string;
   referenceMonth: number;
   referenceYear: number;
 }
 
-const INITIAL_STATE: Offer = {
-  memberId: '',
+const INITIAL_STATE: Expense = {
+  expenseCategoryId: '',
+  title: '',
   value: '',
   referenceMonth: 0,
   referenceYear: 0,
 };
 
-export function AddOffer() {
-  const [tithe, setOffer] = useState<Offer>({ ...INITIAL_STATE });
-  const [members, setMembers] = useState<IMemberState[]>([]);
+export function AddExpense() {
+  const [expense, setExpense] = useState<Expense>({ ...INITIAL_STATE });
+
+  const [expenseCategories, setExpenseCategories] = useState<
+    IExpenseCategoryState[]
+  >([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const getMembers = async () => {
+    const getExpenseCategories = async () => {
       try {
-        const newMembers = await window.member.findAll();
-        setMembers(newMembers);
+        const newExpenseCategories = await window.expenseCategory.findAll();
+        setExpenseCategories(newExpenseCategories);
       } catch (err) {
-        toast.error(`Erro ao carregar membros: ${(err as Error).message}`, {
-          progress: undefined,
-        });
+        toast.error(
+          `Erro ao carregar categorias de despesa: ${(err as Error).message}`,
+          {
+            progress: undefined,
+          }
+        );
       }
     };
 
-    getMembers();
+    getExpenseCategories();
   }, []);
 
   const formValidate = (
     floatValue: number,
+    title: string,
     referenceMonth: number,
-    referenceYear: number
+    referenceYear: number,
+    expenseCategoryId: string
   ) => {
     if (floatValue <= 0) {
-      toast.warn('Valor da oferta deve ser maior que 0', {
+      toast.warn('Valor da despesa deve ser maior que 0', {
         progress: undefined,
       });
       return false;
@@ -62,43 +72,67 @@ export function AddOffer() {
       });
       return false;
     }
+    if (expenseCategoryId === '') {
+      toast.warn('Por favor selecione a categoria da despesa', {
+        progress: undefined,
+      });
+      return false;
+    }
+    if (title.length < 4) {
+      toast.warn('O Título da despesa deve possuir pelo menos 4 caracteres', {
+        progress: undefined,
+      });
+      return false;
+    }
 
     return true;
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const { memberId, value, referenceMonth, referenceYear } = tithe;
+    const { expenseCategoryId, title, value, referenceMonth, referenceYear } =
+      expense;
     const floatValue = parseFloat(value);
-    if (!formValidate(floatValue, referenceMonth, referenceYear)) return;
+
+    if (
+      !formValidate(
+        floatValue,
+        title,
+        referenceMonth,
+        referenceYear,
+        expenseCategoryId
+      )
+    )
+      return;
 
     setLoading(true);
     try {
-      await window.offer.create({
-        memberId: memberId || null,
+      await window.expense.create({
+        expenseCategoryId,
+        title,
         value: floatValue,
         referenceMonth,
         referenceYear,
       });
-      toast.success('Oferta cadastrada com sucesso!', {
+      toast.success('Despesa cadastrada com sucesso!', {
         progress: undefined,
       });
     } catch (err) {
-      toast.error(`Erro ao cadastrar oferta: ${(err as Error).message}`, {
+      toast.error(`Erro ao cadastrar despesa: ${(err as Error).message}`, {
         progress: undefined,
       });
     } finally {
       setLoading(false);
-      setOffer({ ...INITIAL_STATE });
+      setExpense({ ...INITIAL_STATE });
     }
   };
 
   const handleSelectChange = ({
     target: { value, name },
   }: React.ChangeEvent<HTMLSelectElement>) => {
-    setOffer({
-      ...tithe,
-      [name]: name === 'memberId' ? value : +value,
+    setExpense({
+      ...expense,
+      [name]: name === 'expenseCategoryId' ? value : +value,
     });
   };
 
@@ -111,8 +145,8 @@ export function AddOffer() {
     const valueEdit = value.match(/\d|\.|,/g) || '';
     const newValue = valueEdit.length ? [...valueEdit].join('') : '';
 
-    setOffer({
-      ...tithe,
+    setExpense({
+      ...expense,
       [name]: newValue.replace(',', '.'),
     });
   };
@@ -122,15 +156,24 @@ export function AddOffer() {
   }: React.FocusEvent<HTMLInputElement>) => {
     const newValue = value ? parseFloat(value).toFixed(2) : '';
 
-    setOffer({
-      ...tithe,
+    setExpense({
+      ...expense,
       [name]: newValue,
+    });
+  };
+
+  const handleChange = ({
+    target: { value, name },
+  }: React.ChangeEvent<HTMLInputElement>) => {
+    setExpense({
+      ...expense,
+      [name]: value,
     });
   };
 
   const handleReset = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setOffer({ ...INITIAL_STATE });
+    setExpense({ ...INITIAL_STATE });
   };
 
   return (
@@ -138,48 +181,57 @@ export function AddOffer() {
       handleSubmit={handleSubmit}
       handleReset={handleReset}
       isLoading={loading}
-      title="Cadastrar Oferta"
+      title="Cadastrar Despesa"
     >
-      <label className="relative flex items-center bg-zinc-900 p-2 border-l-4 border-teal-500 rounded-sm w-8/12">
+      <label className="flex items-center bg-zinc-900 p-2 border-l-4 border-teal-500 rounded-sm w-8/12">
         <select
-          name="memberId"
-          title="Selecione o membro caso a oferta seja especial"
-          value={tithe.memberId}
+          required
+          title="Selecione uma categoria para a despesa"
+          name="expenseCategoryId"
+          value={expense.expenseCategoryId}
           onChange={handleSelectChange}
           className="cursor-pointer bg-zinc-900 font-light block w-full leading-normal"
         >
           <option disabled value="">
-            Selecione o membro
+            Selecione uma categoria para a despesa
           </option>
-          {members.map(({ id, name }) => (
+          {expenseCategories.map(({ id, name }) => (
             <option title={name} key={id} value={id}>
               {name}
             </option>
           ))}
         </select>
-        <span className="absolute w-max -bottom-4 text-xs italic text-zinc-900 right-0">
-          * selecione o membro em caso de oferta especial
-        </span>
+      </label>
+      <label className="flex items-center bg-zinc-900 p-2 border-l-4 border-teal-500 rounded-sm w-8/12">
+        <input
+          required
+          title="Dê um título para a despesa"
+          name="title"
+          placeholder="Dê um título para a despesa"
+          onChange={handleChange}
+          value={expense.title}
+          className="bg-zinc-900 placeholder:text-zinc-200 font-light block w-full appearance-none leading-normal"
+        />
       </label>
       <label className="flex gap-2 items-center bg-zinc-900 p-2 border-l-4 border-teal-500 rounded-sm w-4/12">
         <span>R$</span>
         <input
           required
-          title="Valor da Oferta"
+          title="Valor da Despesa"
           className="bg-zinc-900 placeholder:text-zinc-200 font-light block w-full appearance-none leading-normal"
           name="value"
           onChange={handleValueInputChange}
           onBlur={handleValueInputBlur}
-          value={tithe.value}
-          placeholder="Valor do Oferta"
+          value={expense.value}
+          placeholder="Valor da Despesa"
         />
       </label>
       <label className="flex items-center bg-zinc-900 p-2 border-l-4 border-teal-500 rounded-sm w-4/12">
         <select
           required
-          title="Selecione o mês da oferta"
+          title="Selecione o mês da despesa"
           name="referenceMonth"
-          value={tithe.referenceMonth}
+          value={expense.referenceMonth}
           onChange={handleSelectChange}
           className="cursor-pointer bg-zinc-900 font-light block w-full leading-normal"
         >
@@ -200,9 +252,9 @@ export function AddOffer() {
       <label className="flex items-center bg-zinc-900 p-2 border-l-4 border-teal-500 rounded-sm w-4/12">
         <select
           required
-          title="Selecione o ano da oferta"
+          title="Selecione o ano da despesa"
           name="referenceYear"
-          value={tithe.referenceYear}
+          value={expense.referenceYear}
           onChange={handleSelectChange}
           className="cursor-pointer bg-zinc-900 font-light block w-full leading-normal"
         >

@@ -28,7 +28,7 @@ export function AddTithe() {
   useEffect(() => {
     const getMembers = async () => {
       try {
-        const newMembers = await window.memberModel.findAll();
+        const newMembers = await window.member.findAll();
         setMembers(newMembers);
       } catch (err) {
         toast.error(`Erro ao carregar membros: ${(err as Error).message}`, {
@@ -84,7 +84,7 @@ export function AddTithe() {
 
     setLoading(true);
     try {
-      await window.titheModel.create({
+      await window.tithe.create({
         memberId,
         value: floatValue,
         referenceMonth,

@@ -8,7 +8,7 @@ import { AddMember } from './components/Add/AddMember';
 import { AddTithe } from './components/Add/AddTithe';
 import { AddOffer } from './components/Add/AddOffer';
 import { AddExpenseCategory } from './components/Add/AddExpenseCategory';
-// import { AddExpense } from './components/Add/AddExpense';
+import { AddExpense } from './components/Add/AddExpense';
 // import { EditMembers } from './components/Edit/EditMembers';
 // import { EditTithes } from './components/Edit/EditTithes';
 // import { EditOffers } from './components/Edit/EditOffers';
@@ -39,7 +39,7 @@ export function App() {
         {selectedScreen === 'addTithe' && <AddTithe />}
         {selectedScreen === 'addOffer' && <AddOffer />}
         {selectedScreen === 'addExpenseCategory' && <AddExpenseCategory />}
-        {/* {selectedScreen === 'addExpense' && <AddExpense />} */}
+        {selectedScreen === 'addExpense' && <AddExpense />}
 
         {/* Edit Screens */}
         {/* {selectedScreen === 'editMembers' && <EditMembers />}

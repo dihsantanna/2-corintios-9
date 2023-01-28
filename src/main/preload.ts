@@ -2,7 +2,11 @@ import { contextBridge, ipcRenderer } from 'electron';
 import { IMember, IMemberState } from './@types/Member';
 import { ITithe } from './@types/Tithe';
 import { IOffer } from './@types/Offer';
-import { IExpenseCategory } from './@types/ExpenseCategory';
+import {
+  IExpenseCategory,
+  IExpenseCategoryState,
+} from './@types/ExpenseCategory';
+import { IExpense } from './@types/Expense';
 
 const memberHandler = {
   create: async (member: IMember) => {
@@ -32,14 +36,27 @@ const expenseCategoryHandler = {
       expenseCategory
     ) as Promise<void>;
   },
+  findAll: async () => {
+    return ipcRenderer.invoke('expenseCategory:findAll') as Promise<
+      IExpenseCategoryState[]
+    >;
+  },
 };
 
-contextBridge.exposeInMainWorld('memberModel', memberHandler);
-contextBridge.exposeInMainWorld('titheModel', titheHandler);
-contextBridge.exposeInMainWorld('offerModel', offerHandler);
-contextBridge.exposeInMainWorld('expenseCategoryModel', expenseCategoryHandler);
+const expenseHandler = {
+  create: async (expense: IExpense) => {
+    return ipcRenderer.invoke('expense:create', expense) as Promise<void>;
+  },
+};
+
+contextBridge.exposeInMainWorld('member', memberHandler);
+contextBridge.exposeInMainWorld('tithe', titheHandler);
+contextBridge.exposeInMainWorld('offer', offerHandler);
+contextBridge.exposeInMainWorld('expenseCategory', expenseCategoryHandler);
+contextBridge.exposeInMainWorld('expense', expenseHandler);
 
 export type MemberHandler = typeof memberHandler;
 export type TitheHandler = typeof titheHandler;
 export type OfferHandler = typeof offerHandler;
 export type ExpenseCategoryHandler = typeof expenseCategoryHandler;
+export type ExpenseHandler = typeof expenseHandler;

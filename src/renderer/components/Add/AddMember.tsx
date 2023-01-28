@@ -36,7 +36,7 @@ export function AddMember() {
     setLoading(true);
 
     try {
-      await window.memberModel.create(member);
+      await window.member.create(member);
       toast.success(
         `Membro "${member.name.split(' ')[0]}" cadastrado com sucesso!`,
         {

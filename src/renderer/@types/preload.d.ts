@@ -1,5 +1,6 @@
 import {
   ExpenseCategoryHandler,
+  ExpenseHandler,
   MemberHandler,
   OfferHandler,
   TitheHandler,
@@ -7,10 +8,11 @@ import {
 
 declare global {
   interface Window {
-    memberModel: MemberHandler;
-    titheModel: TitheHandler;
-    offerModel: OfferHandler;
-    expenseCategoryModel: ExpenseCategoryHandler;
+    member: MemberHandler;
+    tithe: TitheHandler;
+    offer: OfferHandler;
+    expenseCategory: ExpenseCategoryHandler;
+    expense: ExpenseHandler;
   }
 }
 

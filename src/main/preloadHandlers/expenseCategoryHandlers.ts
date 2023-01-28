@@ -7,4 +7,9 @@ export const expenseCategoryHandlers = () => {
     const model = new ExpenseCategory();
     model.create(expenseCategory as IExpenseCategory);
   });
+
+  ipcMain.handle('expenseCategory:findAll', async () => {
+    const model = new ExpenseCategory();
+    return model.findAll();
+  });
 };
