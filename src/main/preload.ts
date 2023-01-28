@@ -15,6 +15,12 @@ const memberHandler = {
   findAll: async () => {
     return ipcRenderer.invoke('member:findAll') as Promise<IMemberState[]>;
   },
+  update: async (member: IMember) => {
+    return ipcRenderer.invoke('member:update', member) as Promise<void>;
+  },
+  delete: async (memberId: string) => {
+    return ipcRenderer.invoke('member:delete', memberId) as Promise<void>;
+  },
 };
 
 const titheHandler = {

@@ -9,7 +9,7 @@ import { AddTithe } from './components/Add/AddTithe';
 import { AddOffer } from './components/Add/AddOffer';
 import { AddExpenseCategory } from './components/Add/AddExpenseCategory';
 import { AddExpense } from './components/Add/AddExpense';
-// import { EditMembers } from './components/Edit/EditMembers';
+import { EditMembers } from './components/Edit/EditMembers';
 // import { EditTithes } from './components/Edit/EditTithes';
 // import { EditOffers } from './components/Edit/EditOffers';
 // import { EditExpenseCategories } from './components/Edit/EditExpenseCategories';
@@ -42,11 +42,11 @@ export function App() {
         {selectedScreen === 'addExpense' && <AddExpense />}
 
         {/* Edit Screens */}
-        {/* {selectedScreen === 'editMembers' && <EditMembers />}
-        {selectedScreen === 'editTithes' && <EditTithes />}
-        {selectedScreen === 'editOffers' && <EditOffers />}
-        {selectedScreen === 'editExpenseCategories' && <EditExpenseCategories />}
-        {selectedScreen === 'editExpenses' && <EditExpenses />} */}
+        {selectedScreen === 'editMembers' && <EditMembers />}
+        {/* {selectedScreen === 'editTithes' && <EditTithes />} */}
+        {/* {selectedScreen === 'editOffers' && <EditOffers />} */}
+        {/* {selectedScreen === 'editExpenseCategories' && <EditExpenseCategories />} */}
+        {/* {selectedScreen === 'editExpenses' && <EditExpenses />} */}
 
         {/* Report Screens */}
         {/* {selectedScreen === 'entriesReport' && <EntriesReport />}
