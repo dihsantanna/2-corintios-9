@@ -15,7 +15,7 @@ import log from 'electron-log';
 import { DatabaseConnection } from './db/DatabaseConnection';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
-import { createPreloadHandlers } from './preloadEvents';
+import { createPreloadHandlers } from './preloadHandlers';
 
 class AppUpdater {
   constructor() {
