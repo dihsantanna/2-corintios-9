@@ -1,7 +1,0 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-body {
-  @apply text-zinc-200 placeholder-zinc-200 font-sans;
-}

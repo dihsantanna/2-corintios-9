@@ -1,4 +1,12 @@
-.github/actions/**/*.js linguist-detectable=false
-scripts/*.js linguist-detectable=false
-*.config.js linguist-detectable=false
-* text=auto eol=lf
+*       text    eol=lf
+*.exe   binary
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.ico   binary
+*.icns  binary
+*.eot   binary
+*.otf   binary
+*.ttf   binary
+*.woff  binary
+*.woff2 binary

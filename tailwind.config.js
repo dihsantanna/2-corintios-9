@@ -1,7 +1,17 @@
-/** @type {import('tailwindcss').Config} */
+/* eslint-disable global-require */
+const colors = require('tailwindcss/colors');
+
 module.exports = {
-  content: ['./packages/renderer/src/index.html', './packages/renderer/src/**/*.{js,ts,jsx,tsx}'],
+  content: ['./src/renderer/**/*.{js,jsx,ts,tsx,ejs}'],
   theme: {
+    extend: {
+      colors: {
+        sky: colors.sky,
+        cyan: colors.cyan,
+      },
+    },
+  },
+  variants: {
     extend: {},
   },
   plugins: [require('tailwind-scrollbar')],
