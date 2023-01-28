@@ -9,3 +9,7 @@ export interface IExpense {
 export interface IExpenseState extends IExpense {
   id: string;
 }
+
+export interface IExpenseStateWithCategoryName extends IExpenseState {
+  expenseCategoryName: string;
+}

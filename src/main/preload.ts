@@ -6,7 +6,11 @@ import {
   IExpenseCategory,
   IExpenseCategoryState,
 } from './@types/ExpenseCategory';
-import { IExpense } from './@types/Expense';
+import {
+  IExpense,
+  IExpenseState,
+  IExpenseStateWithCategoryName,
+} from './@types/Expense';
 
 const memberHandler = {
   create: async (member: IMember) => {
@@ -96,6 +100,22 @@ const expenseCategoryHandler = {
 const expenseHandler = {
   create: async (expense: IExpense) => {
     return ipcRenderer.invoke('expense:create', expense) as Promise<void>;
+  },
+  findAllByReferencesWithMemberName: async (
+    referenceMonth: number,
+    referenceYear: number
+  ) => {
+    return ipcRenderer.invoke(
+      'expense:findAllByReferencesWithMemberName',
+      referenceMonth,
+      referenceYear
+    ) as Promise<IExpenseStateWithCategoryName[]>;
+  },
+  update: async (expense: IExpenseState) => {
+    return ipcRenderer.invoke('expense:update', expense) as Promise<void>;
+  },
+  delete: async (expenseId: string) => {
+    return ipcRenderer.invoke('expense:delete', expenseId) as Promise<void>;
   },
 };
 

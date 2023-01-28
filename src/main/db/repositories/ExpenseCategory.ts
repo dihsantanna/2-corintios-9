@@ -16,10 +16,17 @@ export class ExpenseCategory {
 
   constructor(private db = new DatabaseConnection()) {}
 
-  create = ({ name }: IExpenseCategory) => {
-    const id = this.id();
-    this.db.run(createQuery, [id, name]);
-    this.db.close();
+  create = async ({ name }: IExpenseCategory) => {
+    return new Promise<void>((resolve, reject) => {
+      const id = this.id();
+      this.db.run(createQuery, [id, name], (err) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve();
+        }
+      });
+    }).finally(() => this.db.close());
   };
 
   findAll = async () => {

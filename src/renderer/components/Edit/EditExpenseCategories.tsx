@@ -132,34 +132,40 @@ export function EditExpenseCategories() {
         <span className="w-7/12 flex items-center justify-center">Nome</span>
         <span className="w-2/6 flex items-center justify-center">Editar</span>
       </div>
-      <div className="w-full h-full overflow-auto scrollbar-thin scrollbar-thumb-zinc-900 scrollbar-track-zinc-300">
-        {expenseCategories.map(({ id, name }, index) => (
-          <EditForm
-            key={id}
-            handleSubmit={(event) => handleEdit(event, index)}
-            handleReset={handleReset}
-            isLoading={loading}
-            editingId={id}
-            isEditing={editing === id}
-            setIsEditing={handleSetEditing}
-            className={index % 2 === 0 ? 'bg-zinc-100' : ''}
-            onDelete={() => handleDelete(id, index)}
-            deleteMessage={`Tem certeza que deseja excluir a categoria "${name}"? Esta ação não poderá ser desfeita. Clique em "SIM" para confirmar.`}
-            deleteTitle="Excluir Oferta"
-            editType="categoria de despesa"
-          >
-            <label className="w-7/12 flex items-center justify-center text-zinc-900">
-              <input
-                title="Nome da categoria de despesa"
-                name="name"
-                value={name}
-                onChange={(event) => handleChange(event, index)}
-                className="text-center text-zinc-200 bg-zinc-900 disabled:p-0 disabled:text-zinc-900 disabled:bg-transparent font-light disabled:font-normal block w-11/12 h-full appearance-none leading-normal rounded-sm"
-                disabled={editing !== id}
-              />
-            </label>
-          </EditForm>
-        ))}
+      <div className="w-full h-full flex flex-col overflow-auto scrollbar-thin scrollbar-thumb-zinc-900 scrollbar-track-zinc-300">
+        {!expenseCategories.length ? (
+          <span className="m-auto text-zinc-500">
+            Não há Despesas cadastradas para o mês e ano selecionados!
+          </span>
+        ) : (
+          expenseCategories.map(({ id, name }, index) => (
+            <EditForm
+              key={id}
+              handleSubmit={(event) => handleEdit(event, index)}
+              handleReset={handleReset}
+              isLoading={loading}
+              editingId={id}
+              isEditing={editing === id}
+              setIsEditing={handleSetEditing}
+              className={index % 2 === 0 ? 'bg-zinc-100' : ''}
+              onDelete={() => handleDelete(id, index)}
+              deleteMessage={`Tem certeza que deseja excluir a categoria "${name}"? Esta ação não poderá ser desfeita. Clique em "SIM" para confirmar.`}
+              deleteTitle="Excluir Oferta"
+              editType="categoria de despesa"
+            >
+              <label className="w-7/12 flex items-center justify-center text-zinc-900">
+                <input
+                  title="Nome da categoria de despesa"
+                  name="name"
+                  value={name}
+                  onChange={(event) => handleChange(event, index)}
+                  className="text-center text-zinc-200 bg-zinc-900 disabled:p-0 disabled:text-zinc-900 disabled:bg-transparent font-light disabled:font-normal block w-11/12 h-full appearance-none leading-normal rounded-sm"
+                  disabled={editing !== id}
+                />
+              </label>
+            </EditForm>
+          ))
+        )}
       </div>
     </div>
   );
