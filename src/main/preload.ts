@@ -1,6 +1,6 @@
 import { contextBridge, ipcRenderer } from 'electron';
 import { IMember, IMemberState } from './@types/Member';
-import { ITithe } from './@types/Tithe';
+import { ITithe, ITitheState, ITitheStateWithMemberName } from './@types/Tithe';
 import { IOffer } from './@types/Offer';
 import {
   IExpenseCategory,
@@ -26,6 +26,22 @@ const memberHandler = {
 const titheHandler = {
   create: async (tithe: ITithe) => {
     return ipcRenderer.invoke('tithe:create', tithe) as Promise<void>;
+  },
+  findAllByReferencesWithMemberName: async (
+    referenceMonth: number,
+    referenceYear: number
+  ) => {
+    return ipcRenderer.invoke(
+      'tithe:findAllByReferencesWithMemberName',
+      referenceMonth,
+      referenceYear
+    ) as Promise<ITitheStateWithMemberName[]>;
+  },
+  update: async (tithe: ITitheState) => {
+    return ipcRenderer.invoke('tithe:update', tithe) as Promise<void>;
+  },
+  delete: async (titheId: string) => {
+    return ipcRenderer.invoke('tithe:delete', titheId) as Promise<void>;
   },
 };
 

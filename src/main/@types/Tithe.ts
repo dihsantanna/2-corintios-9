@@ -8,3 +8,7 @@ export interface ITithe {
 export interface ITitheState extends ITithe {
   id: string;
 }
+
+export interface ITitheStateWithMemberName extends ITitheState {
+  memberName: string;
+}
