@@ -7,4 +7,9 @@ export const memberEvents = () => {
     const model = new Member();
     model.create(member as IMember);
   });
+
+  ipcMain.handle('member:findAll', async () => {
+    const model = new Member();
+    return model.findAll();
+  });
 };

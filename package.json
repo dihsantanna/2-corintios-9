@@ -268,7 +268,8 @@
   "electronmon": {
     "patterns": [
       "!**/**",
-      "src/main/**"
+      "src/main/**",
+      "!./src/main/db/2corintios9.db"
     ],
     "logLevel": "quiet"
   }
