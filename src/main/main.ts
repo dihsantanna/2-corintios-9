@@ -15,7 +15,7 @@ import log from 'electron-log';
 import { DatabaseConnection } from './db/DatabaseConnection';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
-import { createPreloadEvents } from './preloadEvents';
+import { createPreloadHandlers } from './preloadEvents';
 
 class AppUpdater {
   constructor() {
@@ -30,7 +30,7 @@ db.createTables();
 
 let mainWindow: BrowserWindow | null = null;
 
-createPreloadEvents();
+createPreloadHandlers();
 
 if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');

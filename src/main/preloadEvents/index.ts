@@ -1,7 +1,9 @@
 import { memberEvents } from './memberEvents';
-import { titheEvents } from './tithesEvents';
+import { offerEvents } from './offerEvents';
+import { titheEvents } from './titheEvents';
 
-export const createPreloadEvents = () => {
+export const createPreloadHandlers = () => {
   memberEvents();
   titheEvents();
+  offerEvents();
 };

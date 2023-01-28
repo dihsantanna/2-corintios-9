@@ -4,3 +4,7 @@ export interface ITithe {
   referenceMonth: number;
   referenceYear: number;
 }
+
+export interface ITitheState extends ITithe {
+  id: string;
+}

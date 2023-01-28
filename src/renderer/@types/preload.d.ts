@@ -1,9 +1,10 @@
-import { MemberHandler, TitheHandler } from 'main/preload';
+import { MemberHandler, OfferHandler, TitheHandler } from 'main/preload';
 
 declare global {
   interface Window {
     memberModel: MemberHandler;
     titheModel: TitheHandler;
+    offerModel: OfferHandler;
   }
 }
 

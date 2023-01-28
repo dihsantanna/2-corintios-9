@@ -5,23 +5,22 @@ import { AddForm } from './AddForm';
 import { months } from '../../utils/months';
 import { getYears } from '../../utils/years';
 
-interface Tithe {
+interface Offer {
   memberId: string;
   value: string;
   referenceMonth: number;
   referenceYear: number;
 }
 
-const INITIAL_STATE: Tithe = {
+const INITIAL_STATE: Offer = {
   memberId: '',
   value: '',
   referenceMonth: 0,
   referenceYear: 0,
 };
 
-export function AddTithe() {
-  const [tithe, setTithe] = useState<Tithe>({ ...INITIAL_STATE });
-
+export function AddOffer() {
+  const [tithe, setOffer] = useState<Offer>({ ...INITIAL_STATE });
   const [members, setMembers] = useState<IMemberState[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -43,11 +42,10 @@ export function AddTithe() {
   const formValidate = (
     floatValue: number,
     referenceMonth: number,
-    referenceYear: number,
-    memberId: string
+    referenceYear: number
   ) => {
     if (floatValue <= 0) {
-      toast.warn('Valor do dízimo deve ser maior que 0', {
+      toast.warn('Valor da oferta deve ser maior que 0', {
         progress: undefined,
       });
       return false;
@@ -64,12 +62,6 @@ export function AddTithe() {
       });
       return false;
     }
-    if (memberId === '') {
-      toast.warn('Por favor selecione o membro', {
-        progress: undefined,
-      });
-      return false;
-    }
 
     return true;
   };
@@ -78,35 +70,33 @@ export function AddTithe() {
     event.preventDefault();
     const { memberId, value, referenceMonth, referenceYear } = tithe;
     const floatValue = parseFloat(value);
-
-    if (!formValidate(floatValue, referenceMonth, referenceYear, memberId))
-      return;
+    if (!formValidate(floatValue, referenceMonth, referenceYear)) return;
 
     setLoading(true);
     try {
-      await window.titheModel.create({
-        memberId,
+      await window.offerModel.create({
+        memberId: memberId || null,
         value: floatValue,
         referenceMonth,
         referenceYear,
       });
-      toast.success('Dízimo cadastrado com sucesso!', {
+      toast.success('Oferta cadastrada com sucesso!', {
         progress: undefined,
       });
     } catch (err) {
-      toast.error(`Erro ao cadastrar dízimo: ${(err as Error).message}`, {
+      toast.error(`Erro ao cadastrar oferta: ${(err as Error).message}`, {
         progress: undefined,
       });
     } finally {
       setLoading(false);
-      setTithe({ ...INITIAL_STATE });
+      setOffer({ ...INITIAL_STATE });
     }
   };
 
   const handleSelectChange = ({
     target: { value, name },
   }: React.ChangeEvent<HTMLSelectElement>) => {
-    setTithe({
+    setOffer({
       ...tithe,
       [name]: name === 'memberId' ? value : +value,
     });
@@ -121,7 +111,7 @@ export function AddTithe() {
     const valueEdit = value.match(/\d|\.|,/g) || '';
     const newValue = valueEdit.length ? [...valueEdit].join('') : '';
 
-    setTithe({
+    setOffer({
       ...tithe,
       [name]: newValue.replace(',', '.'),
     });
@@ -132,7 +122,7 @@ export function AddTithe() {
   }: React.FocusEvent<HTMLInputElement>) => {
     const newValue = value ? parseFloat(value).toFixed(2) : '';
 
-    setTithe({
+    setOffer({
       ...tithe,
       [name]: newValue,
     });
@@ -140,7 +130,7 @@ export function AddTithe() {
 
   const handleReset = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setTithe({ ...INITIAL_STATE });
+    setOffer({ ...INITIAL_STATE });
   };
 
   return (
@@ -148,13 +138,12 @@ export function AddTithe() {
       handleSubmit={handleSubmit}
       handleReset={handleReset}
       isLoading={loading}
-      title="Cadastrar Dízimo"
+      title="Cadastrar Oferta"
     >
-      <label className="flex items-center bg-zinc-900 p-2 border-l-4 border-teal-500 rounded-sm w-8/12">
+      <label className="relative flex items-center bg-zinc-900 p-2 border-l-4 border-teal-500 rounded-sm w-8/12">
         <select
-          required
-          title="Selecione o membro"
           name="memberId"
+          title="Selecione o membro caso a oferta seja especial"
           value={tithe.memberId}
           onChange={handleSelectChange}
           className="cursor-pointer bg-zinc-900 font-light block w-full leading-normal"
@@ -163,29 +152,32 @@ export function AddTithe() {
             Selecione o membro
           </option>
           {members.map(({ id, name }) => (
-            <option key={id} value={id}>
+            <option title={name} key={id} value={id}>
               {name}
             </option>
           ))}
         </select>
+        <span className="absolute w-max -bottom-4 text-xs italic text-zinc-900 right-0">
+          * selecione o membro em caso de oferta especial
+        </span>
       </label>
       <label className="flex gap-2 items-center bg-zinc-900 p-2 border-l-4 border-teal-500 rounded-sm w-4/12">
         <span>R$</span>
         <input
           required
-          title="Valor do Dízimo"
+          title="Valor da Oferta"
           className="bg-zinc-900 placeholder:text-zinc-200 font-light block w-full appearance-none leading-normal"
           name="value"
           onChange={handleValueInputChange}
           onBlur={handleValueInputBlur}
           value={tithe.value}
-          placeholder="Valor do Dízimo"
+          placeholder="Valor do Oferta"
         />
       </label>
       <label className="flex items-center bg-zinc-900 p-2 border-l-4 border-teal-500 rounded-sm w-4/12">
         <select
           required
-          title="Selecione o mês do dízimo"
+          title="Selecione o mês da oferta"
           name="referenceMonth"
           value={tithe.referenceMonth}
           onChange={handleSelectChange}
@@ -208,7 +200,7 @@ export function AddTithe() {
       <label className="flex items-center bg-zinc-900 p-2 border-l-4 border-teal-500 rounded-sm w-4/12">
         <select
           required
-          title="Selecione o ano do dízimo"
+          title="Selecione o ano da oferta"
           name="referenceYear"
           value={tithe.referenceYear}
           onChange={handleSelectChange}

@@ -6,7 +6,7 @@ import { Menu } from './components/Menu';
 import type { Screens } from './@types/Screens.type';
 import { AddMember } from './components/Add/AddMember';
 import { AddTithe } from './components/Add/AddTithe';
-// import { AddOffer } from './components/Add/AddOffer';
+import { AddOffer } from './components/Add/AddOffer';
 // import { AddExpenseCategory } from './components/Add/AddExpenseCategory';
 // import { AddExpense } from './components/Add/AddExpense';
 // import { EditMembers } from './components/Edit/EditMembers';
@@ -37,7 +37,7 @@ export function App() {
         {/* Add Screens */}
         {selectedScreen === 'addMember' && <AddMember />}
         {selectedScreen === 'addTithe' && <AddTithe />}
-        {/* {selectedScreen === 'addOffer' && <AddOffer />} */}
+        {selectedScreen === 'addOffer' && <AddOffer />}
         {/* {selectedScreen === 'addExpenseCategory' && <AddExpenseCategory />} */}
         {/* {selectedScreen === 'addExpense' && <AddExpense />} */}
 
