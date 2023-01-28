@@ -8,3 +8,7 @@ export interface IOffer {
 export interface IOfferState extends IOffer {
   id: string;
 }
+
+export interface IOfferStateWithMemberName extends IOfferState {
+  memberName: string | null;
+}

@@ -1,7 +1,7 @@
 import { contextBridge, ipcRenderer } from 'electron';
 import { IMember, IMemberState } from './@types/Member';
 import { ITithe, ITitheState, ITitheStateWithMemberName } from './@types/Tithe';
-import { IOffer } from './@types/Offer';
+import { IOffer, IOfferState, IOfferStateWithMemberName } from './@types/Offer';
 import {
   IExpenseCategory,
   IExpenseCategoryState,
@@ -48,6 +48,22 @@ const titheHandler = {
 const offerHandler = {
   create: async (offer: IOffer) => {
     return ipcRenderer.invoke('offer:create', offer) as Promise<void>;
+  },
+  findAllByReferencesWithMemberName: async (
+    referenceMonth: number,
+    referenceYear: number
+  ) => {
+    return ipcRenderer.invoke(
+      'offer:findAllByReferencesWithMemberName',
+      referenceMonth,
+      referenceYear
+    ) as Promise<IOfferStateWithMemberName[]>;
+  },
+  update: async (offer: IOfferState) => {
+    return ipcRenderer.invoke('offer:update', offer) as Promise<void>;
+  },
+  delete: async (offerId: string) => {
+    return ipcRenderer.invoke('offer:delete', offerId) as Promise<void>;
   },
 };
 
