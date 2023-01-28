@@ -1,7 +1,15 @@
 import { DatabaseConnection } from '../DatabaseConnection';
-import { createQuery, findAllQuery } from './queries/expenseCategory';
+import {
+  createQuery,
+  deleteQuery,
+  findAllQuery,
+  updateQuery,
+} from './queries/expenseCategory';
 import { idGenerator } from '../../helpers/idGenerator';
-import { IExpenseCategory } from '../../@types/ExpenseCategory';
+import {
+  IExpenseCategory,
+  IExpenseCategoryState,
+} from '../../@types/ExpenseCategory';
 
 export class ExpenseCategory {
   private id = idGenerator;
@@ -21,6 +29,30 @@ export class ExpenseCategory {
           reject(err);
         } else {
           resolve(rows as IExpenseCategory[]);
+        }
+      });
+    }).finally(() => this.db.close());
+  };
+
+  update = async ({ id, name }: IExpenseCategoryState) => {
+    return new Promise<void>((resolve, reject) => {
+      this.db.run(updateQuery, [name, id], (err) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve();
+        }
+      });
+    }).finally(() => this.db.close());
+  };
+
+  delete = async (id: string) => {
+    return new Promise<void>((resolve, reject) => {
+      this.db.run(deleteQuery, [id], (err) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve();
         }
       });
     }).finally(() => this.db.close());

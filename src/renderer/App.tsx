@@ -12,7 +12,7 @@ import { AddExpense } from './components/Add/AddExpense';
 import { EditMembers } from './components/Edit/EditMembers';
 import { EditTithes } from './components/Edit/EditTithes';
 import { EditOffers } from './components/Edit/EditOffers';
-// import { EditExpenseCategories } from './components/Edit/EditExpenseCategories';
+import { EditExpenseCategories } from './components/Edit/EditExpenseCategories';
 // import { EditExpenses } from './components/Edit/EditExpenses';
 // import { EntriesReport } from './components/Report/EntriesReport';
 // import { OutputReport } from './components/Report/OutputReport';
@@ -45,7 +45,9 @@ export function App() {
         {selectedScreen === 'editMembers' && <EditMembers />}
         {selectedScreen === 'editTithes' && <EditTithes />}
         {selectedScreen === 'editOffers' && <EditOffers />}
-        {/* {selectedScreen === 'editExpenseCategories' && <EditExpenseCategories />} */}
+        {selectedScreen === 'editExpenseCategories' && (
+          <EditExpenseCategories />
+        )}
         {/* {selectedScreen === 'editExpenses' && <EditExpenses />} */}
 
         {/* Report Screens */}

@@ -79,6 +79,18 @@ const expenseCategoryHandler = {
       IExpenseCategoryState[]
     >;
   },
+  update: async (expenseCategory: IExpenseCategoryState) => {
+    return ipcRenderer.invoke(
+      'expenseCategory:update',
+      expenseCategory
+    ) as Promise<void>;
+  },
+  delete: async (expenseCategoryId: string) => {
+    return ipcRenderer.invoke(
+      'expenseCategory:delete',
+      expenseCategoryId
+    ) as Promise<void>;
+  },
 };
 
 const expenseHandler = {
