@@ -269,13 +269,13 @@
                 <%= name %>
               </span>
               <span class="table-row-right">
-                <%= totalTithes.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) %>
+                <%= (totalTithes || 0).toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) %>
               </span>
             </div>
           <% }) %>
           <div class="sub-total-content">
             <span class="sub-total">
-              Total: <%= totalTithes.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) %>
+              Total: <%= (totalTithes || 0).toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) %>
             </span>
           </div>
         </div>
@@ -293,13 +293,13 @@
                 <%= name %>
               </span>
               <span class="table-row-right">
-                <%= totalOffers.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %>
+                <%= (totalOffers || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %>
               </span>
             </div>
           <% }) %>
           <div class="sub-total-content">
             <span class="sub-total">
-              Total: <%= totalSpecialOffers.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %>
+              Total: <%= (totalSpecialOffers || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %>
             </span>
           </div>
           <div class="table-title">
@@ -307,7 +307,7 @@
           </div>
           <div class="sub-total-content">
             <span class="sub-total">
-              Total: <%= totalLooseOffers.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %>
+              Total: <%= (totalLooseOffers || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %>
             </span>
           </div>
         </div>
@@ -317,7 +317,7 @@
           Total de Entradas
         </span>
         <span>
-          <%= totalEntries.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %>
+          <%= (totalEntries || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %>
         </span>
       </div>
     </div>

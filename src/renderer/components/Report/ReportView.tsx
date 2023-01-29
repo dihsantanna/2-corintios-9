@@ -32,7 +32,7 @@ export function ReportView({
         monthValue={referenceMonth}
         yearValue={referenceYear}
       />
-      <div className="relative w-11/12 h-[90%] flex items-center justify-center rounded-md border border-zinc-200 ">
+      <div className="relative w-11/12 h-[90%] flex items-center justify-center rounded-md border border-zinc-200">
         {pdf ? (
           <>
             <iframe

@@ -12,6 +12,7 @@ export function OutputReport() {
   useEffect(() => {
     const getReport = async () => {
       try {
+        setPdf(null);
         const report = await window.report.output(
           referenceMonth,
           referenceYear

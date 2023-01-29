@@ -52,8 +52,8 @@ SELECT
     FROM
       offers so
     WHERE
-      so.referenceMonth = 1
-      AND so.referenceYear = 2023
+      so.referenceMonth = $referenceMonth
+      AND so.referenceYear = $referenceYear
       AND so.memberId IS NOT NULL
   ) AS totalSpecialOffers,
   (
@@ -62,8 +62,8 @@ SELECT
     FROM
       offers lo
     WHERE
-      lo.referenceMonth = 1
-      AND lo.referenceYear = 2023
+      lo.referenceMonth = $referenceMonth
+      AND lo.referenceYear = $referenceYear
       AND lo.memberId IS NULL
   ) AS totalLooseOffers,
   (
