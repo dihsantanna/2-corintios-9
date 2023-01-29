@@ -89,3 +89,52 @@ SELECT
       ) AS et
   ) AS totalEntries
 `;
+
+export const previousBalanceQuery = `
+SELECT
+  (((
+    SELECT
+      ib.value
+    FROM
+      initialBalance ib
+  ) + totalEntries ) - totalExpenses) AS previousBalance
+FROM
+(
+  SELECT
+    SUM(a.amount) AS totalEntries,
+    SUM(DISTINCT te.amount) AS totalExpenses
+  FROM
+  (
+    SELECT
+      SUM(t.value) AS amount
+    FROM
+      tithes t
+    WHERE
+      CASE
+        WHEN t.referenceYear = $referenceYear THEN t.referenceMonth < $referenceMonth
+        ELSE t.referenceYear < $referenceYear
+      END
+    UNION
+    SELECT
+      SUM(o.value)
+    FROM
+      offers o
+    WHERE
+      CASE
+        WHEN o.referenceYear = $referenceYear THEN o.referenceMonth < $referenceMonth
+        ELSE o.referenceYear < $referenceYear
+      END
+  ) a
+  LEFT JOIN (
+    SELECT
+      SUM(e.value) AS amount
+    FROM
+      expenses e
+    WHERE
+      CASE
+        WHEN e.referenceYear = $referenceYear THEN e.referenceMonth < $referenceMonth
+        ELSE e.referenceYear < $referenceYear
+      END
+  ) te
+) b
+`;

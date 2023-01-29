@@ -1,10 +1,12 @@
 import { DatabaseConnection } from '../DatabaseConnection';
 import {
   IMemberWithTotalOffersAndTotalTithes,
+  IPreviousBalance,
   ITotalEntries,
 } from '../../@types/Report';
 import {
   allMembersWithTithesAndOffersQuery,
+  previousBalanceQuery,
   reportTotalEntriesByReferenceDateQuery,
 } from './queries/report';
 
@@ -49,6 +51,27 @@ export class Report {
     return new Promise<ITotalEntries>((resolve, reject) => {
       this.db.get(
         reportTotalEntriesByReferenceDateQuery,
+        {
+          $referenceMonth: referenceMonth,
+          $referenceYear: referenceYear,
+        },
+        (err, row) => {
+          if (err) {
+            reject(err);
+          }
+          resolve(row);
+        }
+      );
+    });
+  };
+
+  getPreviousBalance = async (
+    referenceMonth: number,
+    referenceYear: number
+  ) => {
+    return new Promise<IPreviousBalance>((resolve, reject) => {
+      this.db.get(
+        previousBalanceQuery,
         {
           $referenceMonth: referenceMonth,
           $referenceYear: referenceYear,

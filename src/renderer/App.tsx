@@ -16,7 +16,7 @@ import { EditExpenseCategories } from './components/Edit/EditExpenseCategories';
 import { EditExpenses } from './components/Edit/EditExpenses';
 import { EntriesReport } from './components/Report/EntriesReport';
 import { OutputReport } from './components/Report/OutputReport';
-// import { GeneralReport } from './components/Report/GeneralReport';
+import { GeneralReport } from './components/Report/GeneralReport';
 import { BalanceConfig } from './components/BalanceConfig';
 import './styles/reactToastify.css';
 
@@ -53,7 +53,7 @@ export function App() {
         {/* Report Screens */}
         {selectedScreen === 'entriesReport' && <EntriesReport />}
         {selectedScreen === 'outputReport' && <OutputReport />}
-        {/* {selectedScreen === 'generalReport' && <GeneralReport />} */}
+        {selectedScreen === 'generalReport' && <GeneralReport />}
 
         <Logo
           className={`${

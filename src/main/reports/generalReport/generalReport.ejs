@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Relatório de Saídas</title>
+    <title>Relatório Geral</title>
   </head>
   <style>
     * {
@@ -24,7 +24,7 @@
       align-items: center;
       display: flex;
       border-radius: 6px;
-      color: <%=twColors.zinc[100] %>;
+      color: <%= twColors.zinc[100] %>;
       flex-direction: column;
       height: 100%;
       width: 800px;
@@ -42,7 +42,7 @@
 
     .logo-content {
       align-items: center;
-      background-color: <%=twColors.white %>;
+      background-color: <%= twColors.white %>;
       border-radius: 6px 0 0 0;
       display: flex;
       height: 64px;
@@ -54,9 +54,9 @@
     }
 
     .title-report {
-      background-color: <%=twColors.yellow[300] %>;
+      background-color: <%= twColors.yellow[300] %>;
       border-radius: 6px 6px 0 0;
-      color: <%=twColors.zinc[900] %>;
+      color: <%= twColors.zinc[900] %>;
       flex: 1 1 0%;
       font-size: 30px;
       font-weight: 700;
@@ -67,8 +67,8 @@
 
     .subtitle-content {
       align-items: center;
-      background-color: <%=twColors.yellow[300] %>;
-      color: <%=twColors.zinc[900] %>;
+      background-color: <%= twColors.yellow[300] %>;
+      color: <%= twColors.zinc[900] %>;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -98,7 +98,7 @@
     .report-date {
       align-items: baseline;
       border-radius: 6px;
-      color: <%=twColors.zinc[900] %>;
+      color: <%= twColors.zinc[900] %>;
       display: flex;
       font-size: 1rem;
       font-style: italic;
@@ -116,16 +116,31 @@
       width: 100%;
     }
 
+    .info {
+      border: 0.5px solid <%= twColors.zinc[200] %>;
+      color: <%= twColors.zinc[900] %>;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding: 12px 4px;
+      page-break-before: avoid;
+      width: 100%;
+    }
+
+    .info-content {
+      page-break-before: avoid;
+    }
+
     .table {
       font-size: small;
       width: 100%;
     }
 
     .table-title {
-      background-color: <%=twColors.blue[600] %>;
-      border: 0.5px solid <%=twColors.zinc[200] %>;
+      background-color: <%= twColors.blue[600] %>;
+      border: 0.5px solid <%= twColors.zinc[200] %>;
       border-collapse: collapse;
-      color: <%=twColors.zinc[100] %>;
+      color: <%= twColors.zinc[100] %>;
       font-size: larger;
       font-weight: 600;
       line-height: 1.75rem;
@@ -136,10 +151,10 @@
 
     .table-header {
       align-items: center;
-      background-color: <%=twColors.zinc[900] %>;
-      border: 0.5px solid <%=twColors.zinc[200] %>;
+      background-color: <%= twColors.zinc[900] %>;
+      border: 0.5px solid <%= twColors.zinc[200] %>;
       border-collapse: collapse;
-      color: <%=twColors.zinc[100] %>;
+      color: <%= twColors.zinc[100] %>;
       display: flex;
       font-weight: 600;
       justify-content: center;
@@ -149,7 +164,7 @@
 
     .table-row-left,
     .table-row-right {
-      border: 0.5px solid <%=twColors.zinc[200] %>;
+      border: 0.5px solid <%= twColors.zinc[200] %>;
       border-collapse: collapse;
       display: flex;
       padding: 4px;
@@ -167,7 +182,7 @@
 
     .table-row-content {
       align-items: center;
-      color: <%=twColors.zinc[900] %>;
+      color: <%= twColors.zinc[900] %>;
       display: flex;
       justify-content: center;
       page-break-before: avoid;
@@ -184,10 +199,10 @@
 
     .sub-total {
       align-items: center;
-      background-color: <%=twColors.zinc[900] %>;
-      border: 0.5px solid <%=twColors.zinc[200] %>;
+      background-color: <%= twColors.zinc[900] %>;
+      border: 0.5px solid <%= twColors.zinc[200] %>;
       border-collapse: collapse;
-      color: <%=twColors.zinc[100] %>;
+      color: <%= twColors.zinc[100] %>;
       display: flex;
       justify-content: flex-end;
       padding: 4px;
@@ -196,10 +211,10 @@
 
     .total-content {
       align-items: center;
-      background-color: <%=twColors.yellow[300] %>;
-      border: 0.5px solid <%=twColors.zinc[200] %>;
+      background-color: <%= twColors.yellow[300] %>;
+      border: 0.5px solid <%= twColors.zinc[200] %>;
       border-collapse: collapse;
-      color: <%=twColors.zinc[900] %>;
+      color: <%= twColors.zinc[900] %>;
       display: flex;
       flex-direction: column;
       font-weight: 600;
@@ -208,8 +223,28 @@
       width: 100%;
     }
 
-    .total-content span {
+    .signature {
+      align-items: flex-end;
+      color: <%= twColors.zinc[900] %>;
+      display: flex;
+      flex-direction: column;
+      justify-self: flex-end;
+      gap: 30px;
+      margin-top: 100px;
+      padding-left: 8px;
       page-break-before: avoid;
+      width: 100%;
+    }
+
+    .signature-content {
+      align-items: center;
+      color: <%= twColors.zinc[900] %>;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding-top: 10px;
+      page-break-before: avoid;
+      width: max-content;
     }
   </style>
   <body>
@@ -241,7 +276,7 @@
           </svg>
         </div>
         <h1 class="title-report">
-          Relatório de Saídas
+          Relatório Geral
         </h1>
       </header>
       <div class="subtitle-content">
@@ -255,6 +290,14 @@
         <%= `Relatório referente ao mês de ${month} de ${year}` %>
       </div>
       <main class="main-content">
+        <div class="info">
+          <span class="info-content">
+            <strong>Saldo do mê anterior:</strong> <%= (previousBalance || 0).toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) %>
+          </span>
+          <span class="info-content">
+            <strong>Total de Entradas:</strong> <%= (totalEntries || 0).toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) %>
+          </span>
+        </div>
         <% expenseCategories.map(({ id: categoryId, name }) => { %>
           <div class="table">
             <div class="table-title">
@@ -295,13 +338,27 @@
           </div>
         <% }) %>
       </main>
-      <div class="total-content">
-        <span>
-          Total de Saídas
+      <div class="info">
+        <span class="info-content">
+          <strong>Total de Saídas:</strong> <%= (totalExpenses || 0).toLocaleString('pt-BR', {style: 'currency' , currency: 'BRL' }) %>
         </span>
-        <span>
-          <%= expenses.reduce((total, {value}) => total + value, 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) %>
+        <span class="info-content">
+          <strong>Saldo para o mês de <%= nextMonth %>:</strong> <%= (balance || 0).toLocaleString('pt-BR', {style: 'currency' , currency: 'BRL' }) %>
         </span>
+      </div>
+    </div>
+    <div class="signature">
+      <div class="signature-content">
+        <span>_________________________________________</span>
+        <span>Tesoureiro(a)</span>
+      </div>
+      <div class="signature-content">
+        <span>_________________________________________</span>
+        <span>Relator(a) da Comissão de Finanças</span>
+      </div>
+      <div class="signature-content">
+        <span>_________________________________________</span>
+        <span>Pastor(a) Presidente</span>
       </div>
     </div>
   </body>

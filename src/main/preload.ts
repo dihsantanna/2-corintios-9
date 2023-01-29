@@ -135,6 +135,13 @@ const reportHandler = {
       referenceYear
     ) as Promise<Buffer>;
   },
+  general: async (referenceMonth: number, referenceYear: number) => {
+    return ipcRenderer.invoke(
+      'report:general',
+      referenceMonth,
+      referenceYear
+    ) as Promise<Buffer>;
+  },
 };
 
 const initialBalance = {

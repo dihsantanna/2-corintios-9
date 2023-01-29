@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import { months } from '../utils/months';
 import { getYears } from '../utils/years';
 
@@ -14,6 +15,21 @@ export function FilterByMonthAndYear({
   monthValue,
   yearValue,
 }: FilterByMonthAndYearProps) {
+  const initialDate = useRef({
+    month: 0,
+    year: 0,
+  });
+  useEffect(() => {
+    const getInitialBalance = async () => {
+      const { referenceMonth, referenceYear } =
+        await window.initialBalance.get();
+      initialDate.current = {
+        month: referenceMonth,
+        year: referenceYear,
+      };
+    };
+    getInitialBalance();
+  }, []);
   return (
     <div className="flex items-center justify-center gap-2 py-2">
       <select
@@ -26,11 +42,19 @@ export function FilterByMonthAndYear({
         <option disabled value={0}>
           Selecione o mês
         </option>
-        {Object.entries(months).map(([key, value]) => (
-          <option title={value} key={key} value={key}>
-            {value}
-          </option>
-        ))}
+        {Object.entries(months).map(([key, value]) => {
+          const { month, year } = initialDate.current;
+          return (
+            <option
+              title={value}
+              key={key}
+              value={key}
+              disabled={year === yearValue && +key <= month}
+            >
+              {value}
+            </option>
+          );
+        })}
       </select>
       <select
         title="Escolha um ano"

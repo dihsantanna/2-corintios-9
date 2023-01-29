@@ -11,3 +11,7 @@ export interface ITotalEntries {
   totalLooseOffers: number;
   totalEntries: number;
 }
+
+export interface IPreviousBalance {
+  previousBalance: number;
+}
