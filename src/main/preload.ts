@@ -11,6 +11,7 @@ import {
   IExpenseState,
   IExpenseStateWithCategoryName,
 } from './@types/Expense';
+import { IBalance } from './@types/Balance';
 
 const memberHandler = {
   create: async (member: IMember) => {
@@ -136,12 +137,25 @@ const reportHandler = {
   },
 };
 
+const initialBalance = {
+  get: async () => {
+    return ipcRenderer.invoke('initialBalance:get') as Promise<IBalance>;
+  },
+  createOrUpdate: async (balance: IBalance) => {
+    return ipcRenderer.invoke(
+      'initialBalance:createOrUpdate',
+      balance
+    ) as Promise<void>;
+  },
+};
+
 contextBridge.exposeInMainWorld('member', memberHandler);
 contextBridge.exposeInMainWorld('tithe', titheHandler);
 contextBridge.exposeInMainWorld('offer', offerHandler);
 contextBridge.exposeInMainWorld('expenseCategory', expenseCategoryHandler);
 contextBridge.exposeInMainWorld('expense', expenseHandler);
 contextBridge.exposeInMainWorld('report', reportHandler);
+contextBridge.exposeInMainWorld('initialBalance', initialBalance);
 
 export type MemberHandler = typeof memberHandler;
 export type TitheHandler = typeof titheHandler;
@@ -149,3 +163,4 @@ export type OfferHandler = typeof offerHandler;
 export type ExpenseCategoryHandler = typeof expenseCategoryHandler;
 export type ExpenseHandler = typeof expenseHandler;
 export type ReportHandler = typeof reportHandler;
+export type InitialBalanceHandler = typeof initialBalance;

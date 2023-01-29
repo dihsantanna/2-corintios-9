@@ -17,7 +17,7 @@ import { EditExpenses } from './components/Edit/EditExpenses';
 import { EntriesReport } from './components/Report/EntriesReport';
 import { OutputReport } from './components/Report/OutputReport';
 // import { GeneralReport } from './components/Report/GeneralReport';
-// import { BalanceConfig } from './components/BalanceConfig';
+import { BalanceConfig } from './components/BalanceConfig';
 import './styles/reactToastify.css';
 
 export function App() {
@@ -32,7 +32,7 @@ export function App() {
         />
       </aside>
       <main className="flex flex-1 justify-center items-center w-5/6">
-        {/* {!selectedScreen && <BalanceConfig />} */}
+        {!selectedScreen && <BalanceConfig />}
 
         {/* Add Screens */}
         {selectedScreen === 'addMember' && <AddMember />}

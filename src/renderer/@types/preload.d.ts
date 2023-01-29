@@ -1,6 +1,7 @@
 import {
   ExpenseCategoryHandler,
   ExpenseHandler,
+  InitialBalanceHandler,
   MemberHandler,
   OfferHandler,
   ReportHandler,
@@ -15,6 +16,7 @@ declare global {
     expenseCategory: ExpenseCategoryHandler;
     expense: ExpenseHandler;
     report: ReportHandler;
+    initialBalance: InitialBalanceHandler;
   }
 }
 

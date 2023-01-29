@@ -1,5 +1,6 @@
 import { expenseCategoryHandlers } from './expenseCategoryHandlers';
 import { expenseHandlers } from './expenseHandlers';
+import { initialBalanceHandler } from './initialBalanceHandler';
 import { memberHandlers } from './memberHandlers';
 import { offerHandlers } from './offerHandlers';
 import { reportHandlers } from './reportHandlers';
@@ -12,4 +13,5 @@ export const createPreloadHandlers = () => {
   expenseCategoryHandlers();
   expenseHandlers();
   reportHandlers();
+  initialBalanceHandler();
 };
