@@ -2,6 +2,7 @@ import { expenseCategoryHandlers } from './expenseCategoryHandlers';
 import { expenseHandlers } from './expenseHandlers';
 import { memberHandlers } from './memberHandlers';
 import { offerHandlers } from './offerHandlers';
+import { reportHandlers } from './reportHandlers';
 import { titheHandlers } from './titheHandlers';
 
 export const createPreloadHandlers = () => {
@@ -10,4 +11,5 @@ export const createPreloadHandlers = () => {
   offerHandlers();
   expenseCategoryHandlers();
   expenseHandlers();
+  reportHandlers();
 };

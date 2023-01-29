@@ -14,7 +14,7 @@ import { EditTithes } from './components/Edit/EditTithes';
 import { EditOffers } from './components/Edit/EditOffers';
 import { EditExpenseCategories } from './components/Edit/EditExpenseCategories';
 import { EditExpenses } from './components/Edit/EditExpenses';
-// import { EntriesReport } from './components/Report/EntriesReport';
+import { EntriesReport } from './components/Report/EntriesReport';
 // import { OutputReport } from './components/Report/OutputReport';
 // import { GeneralReport } from './components/Report/GeneralReport';
 // import { BalanceConfig } from './components/BalanceConfig';
@@ -51,9 +51,9 @@ export function App() {
         {selectedScreen === 'editExpenses' && <EditExpenses />}
 
         {/* Report Screens */}
-        {/* {selectedScreen === 'entriesReport' && <EntriesReport />}
-        {selectedScreen === 'outputReport' && <OutputReport />}
-        {selectedScreen === 'generalReport' && <GeneralReport />} */}
+        {selectedScreen === 'entriesReport' && <EntriesReport />}
+        {/* {selectedScreen === 'outputReport' && <OutputReport />} */}
+        {/* {selectedScreen === 'generalReport' && <GeneralReport />} */}
 
         <Logo
           className={`${

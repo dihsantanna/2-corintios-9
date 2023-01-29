@@ -119,14 +119,26 @@ const expenseHandler = {
   },
 };
 
+const reportHandler = {
+  entries: async (referenceMonth: number, referenceYear: number) => {
+    return ipcRenderer.invoke(
+      'report:entries',
+      referenceMonth,
+      referenceYear
+    ) as Promise<Buffer>;
+  },
+};
+
 contextBridge.exposeInMainWorld('member', memberHandler);
 contextBridge.exposeInMainWorld('tithe', titheHandler);
 contextBridge.exposeInMainWorld('offer', offerHandler);
 contextBridge.exposeInMainWorld('expenseCategory', expenseCategoryHandler);
 contextBridge.exposeInMainWorld('expense', expenseHandler);
+contextBridge.exposeInMainWorld('report', reportHandler);
 
 export type MemberHandler = typeof memberHandler;
 export type TitheHandler = typeof titheHandler;
 export type OfferHandler = typeof offerHandler;
 export type ExpenseCategoryHandler = typeof expenseCategoryHandler;
 export type ExpenseHandler = typeof expenseHandler;
+export type ReportHandler = typeof reportHandler;

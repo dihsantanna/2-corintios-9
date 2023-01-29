@@ -3,6 +3,7 @@ import {
   ExpenseHandler,
   MemberHandler,
   OfferHandler,
+  ReportHandler,
   TitheHandler,
 } from 'main/preload';
 
@@ -13,6 +14,7 @@ declare global {
     offer: OfferHandler;
     expenseCategory: ExpenseCategoryHandler;
     expense: ExpenseHandler;
+    report: ReportHandler;
   }
 }
 
