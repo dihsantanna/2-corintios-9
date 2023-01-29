@@ -14,7 +14,10 @@ export const generalReportGenerate = async (
   let browser: puppeteer.Browser | undefined;
 
   try {
-    const filePath = path.join(__dirname, 'generalReport.ejs');
+    const filePath =
+      process.env.NODE_ENV === 'production'
+        ? path.join(process.resourcesPath, 'reports/generalReport.ejs')
+        : path.join(__dirname, 'generalReport.ejs');
 
     const report = new Report();
 

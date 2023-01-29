@@ -21,7 +21,10 @@ export const entriesReportGenerate = async (
 
     await report.close();
 
-    const filePath = path.join(__dirname, 'entriesReport.ejs');
+    const filePath =
+      process.env.NODE_ENV === 'production'
+        ? path.join(process.resourcesPath, 'reports/entriesReport.ejs')
+        : path.join(__dirname, 'entriesReport.ejs');
 
     const html = await ejs.renderFile(filePath, {
       twColors,

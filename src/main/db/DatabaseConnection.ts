@@ -3,11 +3,16 @@ import sqlite from 'sqlite3';
 import path from 'path';
 import { createTablesQuery } from './createTablesQuery';
 
-const { Database } = sqlite.verbose();
+const { Database } = sqlite;
 
 export class DatabaseConnection extends Database {
   constructor(fileName = path.join(__dirname, '2corintios9.db')) {
-    super(fileName, (err) => {
+    const customFileName =
+      process.env.NODE_ENV === 'production'
+        ? path.join(process.resourcesPath, 'db/2corintios9.sqlite')
+        : fileName;
+
+    super(customFileName, (err) => {
       if (err) {
         console.log('Error opening database: ', err);
       } else {
