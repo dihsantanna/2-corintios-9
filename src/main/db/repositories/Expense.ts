@@ -1,7 +1,7 @@
 import { DatabaseConnection } from '../DatabaseConnection';
 import {
   createQuery,
-  findAllByReferencesWithMemberNameQuery,
+  findAllByReferencesWithCategoryNameQuery,
   updateQuery,
   deleteQuery,
 } from './queries/expense';
@@ -39,13 +39,13 @@ export class Expense {
     }).finally(() => this.db.close());
   };
 
-  findAllByReferencesWithMemberName = async (
+  findAllByReferencesWithCategoryName = async (
     referenceMonth: number,
     referenceYear: number
   ) => {
     return new Promise<IExpenseStateWithCategoryName[]>((resolve, reject) => {
       this.db.all(
-        findAllByReferencesWithMemberNameQuery,
+        findAllByReferencesWithCategoryNameQuery,
         [referenceMonth, referenceYear],
         (err, rows) => {
           if (err) {

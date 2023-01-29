@@ -53,7 +53,7 @@ export function EditExpenses() {
       setLoading(true);
       try {
         const newExpenses =
-          await window.expense.findAllByReferencesWithMemberName(
+          await window.expense.findAllByReferencesWithCategoryName(
             referenceMonth,
             referenceYear
           );

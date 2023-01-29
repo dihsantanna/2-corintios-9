@@ -101,12 +101,12 @@ const expenseHandler = {
   create: async (expense: IExpense) => {
     return ipcRenderer.invoke('expense:create', expense) as Promise<void>;
   },
-  findAllByReferencesWithMemberName: async (
+  findAllByReferencesWithCategoryName: async (
     referenceMonth: number,
     referenceYear: number
   ) => {
     return ipcRenderer.invoke(
-      'expense:findAllByReferencesWithMemberName',
+      'expense:findAllByReferencesWithCategoryName',
       referenceMonth,
       referenceYear
     ) as Promise<IExpenseStateWithCategoryName[]>;
@@ -123,6 +123,13 @@ const reportHandler = {
   entries: async (referenceMonth: number, referenceYear: number) => {
     return ipcRenderer.invoke(
       'report:entries',
+      referenceMonth,
+      referenceYear
+    ) as Promise<Buffer>;
+  },
+  output: async (referenceMonth: number, referenceYear: number) => {
+    return ipcRenderer.invoke(
+      'report:output',
       referenceMonth,
       referenceYear
     ) as Promise<Buffer>;

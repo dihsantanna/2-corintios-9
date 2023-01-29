@@ -9,10 +9,10 @@ export const expenseHandlers = () => {
   });
 
   ipcMain.handle(
-    'expense:findAllByReferencesWithMemberName',
+    'expense:findAllByReferencesWithCategoryName',
     (_event, referenceMonth, referenceYear) => {
       const model = new Expense();
-      return model.findAllByReferencesWithMemberName(
+      return model.findAllByReferencesWithCategoryName(
         referenceMonth as number,
         referenceYear as number
       );

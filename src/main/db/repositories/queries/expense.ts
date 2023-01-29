@@ -3,7 +3,7 @@ INSERT INTO expenses (id, expenseCategoryId, title, value, referenceMonth, refer
 VALUES (?, ?, ?, ?, ?, ?)
 `;
 
-export const findAllByReferencesWithMemberNameQuery = `
+export const findAllByReferencesWithCategoryNameQuery = `
 SELECT
   e.id AS id,
   e.expenseCategoryId AS expenseCategoryId,
