@@ -1,10 +1,10 @@
-export const createTablesQuery = `
-CREATE TABLE "members" (
+export const createTablesQuery = /* sql */ `
+CREATE TABLE IF NOT EXISTS "members" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "name" TEXT NOT NULL,
     "congregated" BOOLEAN NOT NULL DEFAULT false
 );
-CREATE TABLE "tithes" (
+CREATE TABLE IF NOT EXISTS "tithes" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "memberId" TEXT NOT NULL,
     "value" REAL NOT NULL,
@@ -12,7 +12,7 @@ CREATE TABLE "tithes" (
     "referenceYear" INTEGER NOT NULL,
     CONSTRAINT "tithe_memberId_fkey" FOREIGN KEY ("memberId") REFERENCES "members" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
-CREATE TABLE "offers" (
+CREATE TABLE IF NOT EXISTS "offers" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "memberId" TEXT DEFAULT '',
     "value" REAL NOT NULL,
@@ -20,11 +20,11 @@ CREATE TABLE "offers" (
     "referenceYear" INTEGER NOT NULL,
     CONSTRAINT "offer_memberId_fkey" FOREIGN KEY ("memberId") REFERENCES "members" ("id") ON DELETE SET NULL ON UPDATE CASCADE
 );
-CREATE TABLE "expenseCategories" (
+CREATE TABLE IF NOT EXISTS "expenseCategories" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "name" TEXT NOT NULL
 );
-CREATE TABLE "expenses" (
+CREATE TABLE IF NOT EXISTS "expenses" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "expenseCategoryId" TEXT NOT NULL,
     "title" TEXT NOT NULL,
@@ -33,11 +33,17 @@ CREATE TABLE "expenses" (
     "referenceYear" INTEGER NOT NULL,
     CONSTRAINT "expense_expenseCategoryId_fkey" FOREIGN KEY ("expenseCategoryId") REFERENCES "expenseCategories" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
-CREATE TABLE "initialBalance" (
+CREATE TABLE IF NOT EXISTS "initialBalance" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "value" REAL NOT NULL,
     "referenceMonth" INTEGER NOT NULL,
     "referenceYear" INTEGER NOT NULL
 );
-CREATE UNIQUE INDEX "expenseCategory_name_key" ON "expenseCategories"("name");
+CREATE TABLE IF NOT EXISTS "withdrawalsToTheBankAccount" (
+    "id" TEXT NOT NULL PRIMARY KEY,
+    "value" REAL NOT NULL,
+    "referenceMonth" INTEGER NOT NULL,
+    "referenceYear" INTEGER NOT NULL
+);
+CREATE UNIQUE INDEX IF NOT EXISTS "expenseCategory_name_key" ON "expenseCategories"("name");
 `;

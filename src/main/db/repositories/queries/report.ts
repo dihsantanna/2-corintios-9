@@ -1,4 +1,4 @@
-export const allMembersWithTithesAndOffersQuery = `
+export const allMembersWithTithesAndOffersQuery = /* sql */ `
 SELECT
   m.id AS id,
   m.name AS name,
@@ -35,7 +35,7 @@ GROUP BY
   name
 `;
 
-export const reportTotalEntriesByReferenceDateQuery = `
+export const reportTotalEntriesByReferenceDateQuery = /* sql */ `
 SELECT
   (
     SELECT
@@ -90,7 +90,7 @@ SELECT
   ) AS totalEntries
 `;
 
-export const previousBalanceQuery = `
+export const previousBalanceQuery = /* sql */ `
 SELECT
   (((
     SELECT

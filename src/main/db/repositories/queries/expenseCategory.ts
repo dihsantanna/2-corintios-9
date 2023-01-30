@@ -1,11 +1,21 @@
-export const createQuery = `
+export const createQuery = /* sql */ `
 INSERT INTO expenseCategories (id, name)
 VALUES (?, ?)
 `;
 
-export const findAllQuery = 'SELECT * FROM expenseCategories';
+export const findAllQuery = /* sql */ `
+SELECT
+  *
+FROM expenseCategories
+`;
 
-export const updateQuery =
-  'UPDATE expenseCategories SET name = $name WHERE id = $id';
+export const updateQuery = /* sql */ `
+UPDATE expenseCategories
+SET name = $name
+WHERE id = $id
+`;
 
-export const deleteQuery = 'DELETE FROM expenseCategories WHERE id = ?';
+export const deleteQuery = /* sql */ `
+DELETE FROM expenseCategories
+WHERE id = ?
+`;

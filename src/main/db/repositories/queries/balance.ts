@@ -1,4 +1,4 @@
-export const getQuery = `
+export const getQuery = /* sql */ `
 SELECT
   ib.value,
   ib.referenceMonth,
@@ -7,7 +7,7 @@ FROM
   initialBalance ib
 `;
 
-export const createOrUpdateQuery = `
+export const createOrUpdateQuery = /* sql */ `
 INSERT
 OR REPLACE
 INTO initialBalance (id, value, referenceMonth, referenceYear)

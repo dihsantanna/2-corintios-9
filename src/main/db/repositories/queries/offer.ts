@@ -1,9 +1,9 @@
-export const createQuery = `
+export const createQuery = /* sql */ `
 INSERT INTO offers (id, memberId, value, referenceMonth, referenceYear)
 VALUES (?, ?, ?, ?, ?)
 `;
 
-export const findAllByReferencesWithMemberNameQuery = `
+export const findAllByReferencesWithMemberNameQuery = /* sql */ `
 SELECT
   o.id AS id,
   o.memberId AS memberId,
@@ -18,7 +18,7 @@ WHERE
   referenceMonth = ? AND referenceYear = ?
 `;
 
-export const updateQuery = `
+export const updateQuery = /* sql */ `
 UPDATE offers
 SET memberId = $memberId,
   value = $value,
@@ -27,4 +27,7 @@ SET memberId = $memberId,
 WHERE id = $id
 `;
 
-export const deleteQuery = 'DELETE FROM offers WHERE id = ?';
+export const deleteQuery = /* sql */ `
+DELETE FROM offers
+WHERE id = ?
+`;

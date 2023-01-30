@@ -1,9 +1,9 @@
-export const createQuery = `
+export const createQuery = /* sql */ `
 INSERT INTO tithes (id, memberId, value, referenceMonth, referenceYear)
 VALUES (?, ?, ?, ?, ?)
 `;
 
-export const findAllByReferencesWithMemberNameQuery = `
+export const findAllByReferencesWithMemberNameQuery = /* sql */ `
 SELECT
   t.id AS id,
   t.memberId AS memberId,
@@ -18,7 +18,7 @@ WHERE
   referenceMonth = ? AND referenceYear = ?
 `;
 
-export const updateQuery = `
+export const updateQuery = /* sql */ `
 UPDATE tithes
 SET memberId = $memberId,
   value = $value,

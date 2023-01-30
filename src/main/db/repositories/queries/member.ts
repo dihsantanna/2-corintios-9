@@ -1,14 +1,20 @@
-export const createQuery = `
+export const createQuery = /* sql */ `
 INSERT INTO members (id, name, congregated)
 VALUES (?, ? ,?)
 `;
 
-export const findAllQuery = `SELECT * FROM members`;
+export const findAllQuery = /* sql */ `
+SELECT
+  *
+FROM members`;
 
-export const updateQuery = `
-UPDATE members SET name = $name, congregated = $congregated WHERE id = $id
+export const updateQuery = /* sql */ `
+UPDATE members
+SET name = $name,
+congregated = $congregated
+WHERE id = $id
 `;
 
-export const deleteQuery = `
+export const deleteQuery = /* sql */ `
 DELETE FROM members WHERE id = ?
 `;

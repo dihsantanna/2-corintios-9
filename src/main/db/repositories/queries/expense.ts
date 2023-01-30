@@ -1,9 +1,9 @@
-export const createQuery = `
+export const createQuery = /* sql */ `
 INSERT INTO expenses (id, expenseCategoryId, title, value, referenceMonth, referenceYear)
 VALUES (?, ?, ?, ?, ?, ?)
 `;
 
-export const findAllByReferencesWithCategoryNameQuery = `
+export const findAllByReferencesWithCategoryNameQuery = /* sql */ `
 SELECT
   e.id AS id,
   e.expenseCategoryId AS expenseCategoryId,
@@ -20,7 +20,7 @@ WHERE
   referenceMonth = ? AND referenceYear = ?
 `;
 
-export const updateQuery = `
+export const updateQuery = /* sql */ `
 UPDATE expenses
 SET expenseCategoryId = $expenseCategoryId,
   title = $title,
@@ -29,7 +29,7 @@ WHERE
   id = $id
 `;
 
-export const deleteQuery = `
+export const deleteQuery = /* sql */ `
 DELETE FROM expenses
 WHERE id = ?
 `;
