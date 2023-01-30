@@ -27,4 +27,6 @@ SET memberId = $memberId,
 WHERE id = $id
 `;
 
-export const deleteQuery = 'DELETE FROM tithes WHERE id = ?';
+export const deleteQuery = /* sql */ `
+DELETE FROM tithes WHERE id = ?
+`;

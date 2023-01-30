@@ -6,6 +6,7 @@ import {
   OfferHandler,
   ReportHandler,
   TitheHandler,
+  WithdrawalToTheBankAccountHandler,
 } from 'main/preload';
 
 declare global {
@@ -17,6 +18,7 @@ declare global {
     expense: ExpenseHandler;
     report: ReportHandler;
     initialBalance: InitialBalanceHandler;
+    withdrawalToTheBankAccount: WithdrawalToTheBankAccountHandler;
   }
 }
 

@@ -31,7 +31,7 @@
     {
       "previewLimit": 50,
       "driver": "SQLite",
-      "name": "2corintios9",
+      "name": "2Corintios9-dev",
       "database": "${workspaceFolder:2-corintios-9}/src/main/db/2corintios9.db"
     }
   ]

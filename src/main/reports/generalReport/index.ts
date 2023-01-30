@@ -21,10 +21,8 @@ export const generalReportGenerate = async (
 
     const report = new Report();
 
-    const { totalEntries } = await report.getTotalEntries(
-      referenceMonth,
-      referenceYear
-    );
+    const { totalEntries, totalTithes, totalSpecialOffers, totalLooseOffers } =
+      await report.getTotalEntries(referenceMonth, referenceYear);
 
     const { previousBalance } = await report.getPreviousBalance(
       referenceMonth,

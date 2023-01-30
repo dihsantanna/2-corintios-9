@@ -12,6 +12,7 @@ import {
   IExpenseStateWithCategoryName,
 } from './@types/Expense';
 import { IBalance } from './@types/Balance';
+import { IWithdrawalToTheBankAccountState } from './@types/WithdrawalToTheBankAccount';
 
 const memberHandler = {
   create: async (member: IMember) => {
@@ -144,7 +145,7 @@ const reportHandler = {
   },
 };
 
-const initialBalance = {
+const initialBalanceHandler = {
   get: async () => {
     return ipcRenderer.invoke('initialBalance:get') as Promise<IBalance>;
   },
@@ -156,13 +157,52 @@ const initialBalance = {
   },
 };
 
+const withdrawalToTheBankAccountHandler = {
+  create: async (
+    withdrawalToTheBankAccount: IWithdrawalToTheBankAccountState
+  ) => {
+    return ipcRenderer.invoke(
+      'withdrawalToTheBankAccount:create',
+      withdrawalToTheBankAccount
+    ) as Promise<void>;
+  },
+  findAllByReferenceDate: async (
+    referenceMonth: number,
+    referenceYear: number
+  ) => {
+    return ipcRenderer.invoke(
+      'withdrawalToTheBankAccount:findAllByReferenceDate',
+      referenceMonth,
+      referenceYear
+    ) as Promise<IWithdrawalToTheBankAccountState[]>;
+  },
+  update: async (
+    withdrawalToTheBankAccount: IWithdrawalToTheBankAccountState
+  ) => {
+    return ipcRenderer.invoke(
+      'withdrawalToTheBankAccount:update',
+      withdrawalToTheBankAccount
+    ) as Promise<void>;
+  },
+  delete: async (withdrawalToTheBankAccountId: string) => {
+    return ipcRenderer.invoke(
+      'withdrawalToTheBankAccount:delete',
+      withdrawalToTheBankAccountId
+    ) as Promise<void>;
+  },
+};
+
 contextBridge.exposeInMainWorld('member', memberHandler);
 contextBridge.exposeInMainWorld('tithe', titheHandler);
 contextBridge.exposeInMainWorld('offer', offerHandler);
 contextBridge.exposeInMainWorld('expenseCategory', expenseCategoryHandler);
 contextBridge.exposeInMainWorld('expense', expenseHandler);
 contextBridge.exposeInMainWorld('report', reportHandler);
-contextBridge.exposeInMainWorld('initialBalance', initialBalance);
+contextBridge.exposeInMainWorld('initialBalance', initialBalanceHandler);
+contextBridge.exposeInMainWorld(
+  'withdrawalToTheBankAccount',
+  withdrawalToTheBankAccountHandler
+);
 
 export type MemberHandler = typeof memberHandler;
 export type TitheHandler = typeof titheHandler;
@@ -170,4 +210,6 @@ export type OfferHandler = typeof offerHandler;
 export type ExpenseCategoryHandler = typeof expenseCategoryHandler;
 export type ExpenseHandler = typeof expenseHandler;
 export type ReportHandler = typeof reportHandler;
-export type InitialBalanceHandler = typeof initialBalance;
+export type InitialBalanceHandler = typeof initialBalanceHandler;
+export type WithdrawalToTheBankAccountHandler =
+  typeof withdrawalToTheBankAccountHandler;
