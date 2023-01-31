@@ -63,7 +63,12 @@ export const generalReportGenerate = async (
       totalExpenses,
       months,
       month: months[referenceMonth as keyof typeof months],
-      nextMonth: months[(referenceMonth + 1) as keyof typeof months],
+      nextMonth:
+        months[
+          (referenceMonth === 12
+            ? 1
+            : referenceMonth + 1) as keyof typeof months
+        ],
       year: referenceYear,
       balance,
     });
