@@ -46,7 +46,7 @@ SELECT
       t.referenceMonth = $referenceMonth
       AND t.referenceYear = $referenceYear
   ) AS totalTithes,
-    (
+  (
     SELECT
       SUM(so.value)
     FROM
@@ -68,6 +68,15 @@ SELECT
   ) AS totalLooseOffers,
   (
     SELECT
+      SUM(wb.value)
+    FROM
+      withdrawalsToTheBankAccount wb
+    WHERE
+      wb.referenceMonth = $referenceMonth
+      AND wb.referenceYear = $referenceYear
+  ) AS totalWithdrawalsBankAccount,
+  (
+    SELECT
       SUM(et.total)
     FROM
       (
@@ -85,7 +94,15 @@ SELECT
           offers of
         WHERE
           of.referenceMonth = $referenceMonth
-        AND of.referenceYear = $referenceYear
+          AND of.referenceYear = $referenceYear
+        UNION
+        SELECT
+          SUM(wb.value)
+        FROM
+          withdrawalsToTheBankAccount wb
+        WHERE
+          wb.referenceMonth = $referenceMonth
+          AND wb.referenceYear = $referenceYear
       ) AS et
   ) AS totalEntries
 `;
@@ -123,6 +140,16 @@ FROM
       CASE
         WHEN o.referenceYear = $referenceYear THEN o.referenceMonth < $referenceMonth
         ELSE o.referenceYear < $referenceYear
+      END
+    UNION
+    SELECT
+      SUM(wb.value)
+    FROM
+      withdrawalsToTheBankAccount wb
+    WHERE
+      CASE
+        WHEN wb.referenceYear = $referenceYear THEN wb.referenceMonth < $referenceMonth
+        ELSE wb.referenceYear < $referenceYear
       END
   ) a
   LEFT JOIN (

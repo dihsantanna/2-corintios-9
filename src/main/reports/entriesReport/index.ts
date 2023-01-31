@@ -16,8 +16,13 @@ export const entriesReportGenerate = async (
       referenceMonth,
       referenceYear
     );
-    const { totalTithes, totalSpecialOffers, totalLooseOffers, totalEntries } =
-      await report.getTotalEntries(referenceMonth, referenceYear);
+    const {
+      totalTithes,
+      totalSpecialOffers,
+      totalLooseOffers,
+      totalWithdrawalsBankAccount,
+      totalEntries,
+    } = await report.getTotalEntries(referenceMonth, referenceYear);
 
     await report.close();
 
@@ -30,10 +35,13 @@ export const entriesReportGenerate = async (
       twColors,
       month: months[referenceMonth as keyof typeof months],
       year: referenceYear,
-      membersWithTitheAndOffer,
+      membersWithTitheAndOffer: membersWithTitheAndOffer.sort((a, b) =>
+        a.name.localeCompare(b.name)
+      ),
       totalTithes,
       totalSpecialOffers,
       totalLooseOffers,
+      totalWithdrawalsBankAccount,
       totalEntries,
     });
 
@@ -47,9 +55,9 @@ export const entriesReportGenerate = async (
       printBackground: true,
       preferCSSPageSize: true,
       margin: {
-        top: '60px',
+        top: '40px',
         right: '40px',
-        bottom: '80px',
+        bottom: '60px',
         left: '60px',
       },
     });

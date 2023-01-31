@@ -9,6 +9,7 @@ export interface ITotalEntries {
   totalTithes: number;
   totalSpecialOffers: number;
   totalLooseOffers: number;
+  totalWithdrawalsBankAccount: number;
   totalEntries: number;
 }
 

@@ -45,12 +45,12 @@
       background-color: <%= twColors.white %>;
       border-radius: 6px 0 0 0;
       display: flex;
-      height: 64px;
+      height: 80px;
       justify-content: center;
       left: 0;
       position: absolute;
       top: 0;
-      width: 64px;
+      width: 80px;
     }
 
     .title-report {
@@ -108,6 +108,10 @@
       width: 100%;
     }
 
+    .report-date strong {
+      margin-inline: 4px;
+    }
+
     .main-content {
       align-items: center;
       display: flex;
@@ -117,7 +121,6 @@
     }
 
     .info {
-      border: 0.5px solid <%= twColors.zinc[200] %>;
       color: <%= twColors.zinc[900] %>;
       display: flex;
       flex-direction: column;
@@ -128,18 +131,24 @@
     }
 
     .info-content {
+      align-items: center;
+      display: flex;
+      justify-content: space-between;
       page-break-before: avoid;
+      width: 100%;
+    }
+
+    .info-content strong {
+      width: 70%;
     }
 
     .table {
-      font-size: small;
+      font-size: smaller;
       width: 100%;
     }
 
     .table-title {
       background-color: <%= twColors.blue[600] %>;
-      border: 0.5px solid <%= twColors.zinc[200] %>;
-      border-collapse: collapse;
       color: <%= twColors.zinc[100] %>;
       font-size: larger;
       font-weight: 600;
@@ -152,8 +161,6 @@
     .table-header {
       align-items: center;
       background-color: <%= twColors.zinc[900] %>;
-      border: 0.5px solid <%= twColors.zinc[200] %>;
-      border-collapse: collapse;
       color: <%= twColors.zinc[100] %>;
       display: flex;
       font-weight: 600;
@@ -164,8 +171,6 @@
 
     .table-row-left,
     .table-row-right {
-      border: 0.5px solid <%= twColors.zinc[200] %>;
-      border-collapse: collapse;
       display: flex;
       padding: 4px;
       page-break-before: avoid;
@@ -200,8 +205,6 @@
     .sub-total {
       align-items: center;
       background-color: <%= twColors.zinc[900] %>;
-      border: 0.5px solid <%= twColors.zinc[200] %>;
-      border-collapse: collapse;
       color: <%= twColors.zinc[100] %>;
       display: flex;
       justify-content: flex-end;
@@ -209,11 +212,21 @@
       width: 50%;
     }
 
+    .general-balance {
+      background-color: <%= twColors.yellow[300] %>;
+      color: <%= twColors.zinc[900] %>;
+      font-size: larger;
+      font-weight: 600;
+      line-height: 1.75rem;
+      padding: 0 4px 0 4px;
+      page-break-before: avoid;
+      text-align: center;
+      width: 100%;
+    }
+
     .total-content {
       align-items: center;
       background-color: <%= twColors.yellow[300] %>;
-      border: 0.5px solid <%= twColors.zinc[200] %>;
-      border-collapse: collapse;
       color: <%= twColors.zinc[900] %>;
       display: flex;
       flex-direction: column;
@@ -227,11 +240,9 @@
       align-items: flex-end;
       color: <%= twColors.zinc[900] %>;
       display: flex;
-      flex-direction: column;
-      justify-self: flex-end;
+      justify-content: space-evenly;
       gap: 30px;
       margin-top: 100px;
-      padding-left: 8px;
       page-break-before: avoid;
       width: 100%;
     }
@@ -246,12 +257,16 @@
       page-break-before: avoid;
       width: max-content;
     }
+
+    .signature-content span {
+      page-break-before: avoid;
+    }
   </style>
   <body>
     <div class="body-report">
       <header class="header-report">
         <div class="logo-content">
-          <svg width="50px" height="50px" viewBox="0 0 8089 7947" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <svg width="70px" height="70px" viewBox="0 0 8089 7947" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path fill-rule="evenodd" clip-rule="evenodd"
               d="M4510.64 174.712C1839.43 1300.83 1424.01 3844.1 2237.56 6363.51C2033.19 6320.79 1828.09 6261.55 1622.73 6184.8C1170.15 4573.97 1217.68 3002.65 1910.57 1746.67C1275.14 2391.22 895.396 3299.27 845.643 4176.91C806.598 4864.92 963.536 5502.76 1300.71 6050.02C1031.52 5925.2 762.303 5769.43 494.027 5580.46C-54.4863 3940.38 620.826 2041.24 1895.48 1053.59C2305.02 736.227 2784.64 448.062 3536.34 227.614C3694.66 181.195 3864.61 137.232 4038.86 96.1052C4198.65 112.768 4356.11 139.207 4510.64 174.712Z"
               fill="#FBC707" />
@@ -287,31 +302,43 @@
         <h5>CEP: 26.261-170</h5>
       </div>
       <div class="report-date">
-        <%= `Relatório referente ao mês de ${month} de ${year}` %>
+        Relatório referente ao mês de <strong> <%= month %> </strong> de <strong> <%= year %> </strong>
       </div>
       <main class="main-content">
         <div class="info">
           <span class="info-content">
-            <strong>Saldo do mê anterior:</strong> <%= (previousBalance || 0).toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) %>
+            SALDO ANTERIOR: <strong><%= (previousBalance || 0).toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) %></strong>
           </span>
           <span class="info-content">
-            <strong>Total de Entradas:</strong> <%= (totalEntries || 0).toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) %>
+            DÍZIMOS: <strong><%= (totalTithes || 0).toLocaleString('pt-BR', {style: 'currency' , currency: 'BRL' }) %></strong>
+          </span>
+          <span class="info-content">
+            OFERTAS ESPECIAIS: <strong><%= (totalSpecialOffers || 0).toLocaleString('pt-BR', {style: 'currency' , currency: 'BRL' }) %></strong>
+          </span>
+          <span class="info-content">
+            OFERTAS GAZOFILÁCIO: <strong><%= (totalLooseOffers || 0).toLocaleString('pt-BR', {style: 'currency' , currency: 'BRL' }) %></strong>
+          </span>
+          <span class="info-content">
+            SAQUE EM CONTA BANCÁRIA: <strong><%= (totalWithdrawalsBankAccount || 0).toLocaleString('pt-BR', {style: 'currency' , currency: 'BRL' }) %></strong>
+          </span>
+          <span class="info-content">
+            TOTAL DE ENTRADAS: <strong><%= (totalEntries || 0).toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) %></strong>
           </span>
         </div>
         <% expenseCategories.map(({ id: categoryId, name }) => { %>
           <div class="table">
             <div class="table-title">
-              <%= name %>
+              <%= name.toUpperCase() %>
             </div>
             <div class="table-header">
-              <span class="table-row-left">Título</span>
-              <span class="table-row-right">Valor</span>
+              <span class="table-row-left">DISCRIMINAÇÃO</span>
+              <span class="table-row-right">VALOR</span>
             </div>
             <% if (expenses.find(({ expenseCategoryId }) => expenseCategoryId === categoryId)) { %>
               <% expenses.filter(({ expenseCategoryId }) => expenseCategoryId === categoryId).map(({ id, title, value }) => { %>
                 <div class="table-row-content">
                   <span class="table-row-left">
-                    <%= title %>
+                    <%= title.toUpperCase() %>
                   </span>
                   <span class="table-row-right">
                     <%= (value || 0).toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) %>
@@ -330,7 +357,7 @@
             <% } %>
             <div class="sub-total-content">
               <span class="sub-total">
-                Total: <%= expenses.reduce((total, { expenseCategoryId, value }) => (
+                TOTAL: <%= expenses.reduce((total, { expenseCategoryId, value }) => (
                   expenseCategoryId === categoryId ? total + value : total
                   ), 0).toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) %>
               </span>
@@ -339,15 +366,19 @@
         <% }) %>
       </main>
       <div class="info">
+        <div class="general-balance">BALANÇO GERAL</div>
+          <span class="info-content">
+            TOTAL DE ENTRADAS: <strong> <%= (totalEntries || 0).toLocaleString('pt-BR', {style: 'currency' , currency: 'BRL' }) %></strong>
+          </span>
         <span class="info-content">
-          <strong>Total de Saídas:</strong> <%= (totalExpenses || 0).toLocaleString('pt-BR', {style: 'currency' , currency: 'BRL' }) %>
+          TOTAL DE SAÍDAS: <strong><%= (totalExpenses || 0).toLocaleString('pt-BR', {style: 'currency' , currency: 'BRL' }) %></strong>
         </span>
         <span class="info-content">
-          <strong>Saldo para o mês de <%= nextMonth %>:</strong> <%= (balance || 0).toLocaleString('pt-BR', {style: 'currency' , currency: 'BRL' }) %>
+          SALDO P/ O MÊS DE <%= nextMonth.toUpperCase() %>: <strong><%= (balance || 0).toLocaleString('pt-BR', {style: 'currency' , currency: 'BRL' }) %></strong>
         </span>
       </div>
     </div>
-    <div class="signature">
+    <footer class="signature">
       <div class="signature-content">
         <span>_________________________________________</span>
         <span>Tesoureiro(a)</span>
@@ -360,6 +391,6 @@
         <span>_________________________________________</span>
         <span>Pastor(a) Presidente</span>
       </div>
-    </div>
+    </footer>
   </body>
 </html>

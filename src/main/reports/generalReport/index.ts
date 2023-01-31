@@ -21,8 +21,13 @@ export const generalReportGenerate = async (
 
     const report = new Report();
 
-    const { totalEntries, totalTithes, totalSpecialOffers, totalLooseOffers } =
-      await report.getTotalEntries(referenceMonth, referenceYear);
+    const {
+      totalTithes,
+      totalSpecialOffers,
+      totalLooseOffers,
+      totalWithdrawalsBankAccount,
+      totalEntries,
+    } = await report.getTotalEntries(referenceMonth, referenceYear);
 
     const { previousBalance } = await report.getPreviousBalance(
       referenceMonth,
@@ -47,10 +52,14 @@ export const generalReportGenerate = async (
 
     const html = await ejs.renderFile(filePath, {
       previousBalance,
+      totalTithes,
+      totalSpecialOffers,
+      totalLooseOffers,
+      totalWithdrawalsBankAccount,
       totalEntries,
       twColors,
       expenseCategories,
-      expenses,
+      expenses: expenses.sort((a, b) => a.value - b.value),
       totalExpenses,
       months,
       month: months[referenceMonth as keyof typeof months],
@@ -71,9 +80,9 @@ export const generalReportGenerate = async (
       preferCSSPageSize: true,
       format: 'a4',
       margin: {
-        top: '60px',
+        top: '40px',
         right: '40px',
-        bottom: '80px',
+        bottom: '60px',
         left: '60px',
       },
     });
