@@ -16,6 +16,7 @@ import {
   IWithdrawToTheBankAccount,
   IWithdrawToTheBankAccountState,
 } from './@types/WithdrawToTheBankAccount';
+import { IPartialBalance } from './@types/Report';
 
 const memberHandler = {
   create: async (member: IMember) => {
@@ -145,6 +146,13 @@ const reportHandler = {
       referenceMonth,
       referenceYear
     ) as Promise<Buffer>;
+  },
+  partial: async (referenceMonth: number, referenceYear: number) => {
+    return ipcRenderer.invoke(
+      'report:partial',
+      referenceMonth,
+      referenceYear
+    ) as Promise<IPartialBalance>;
   },
 };
 

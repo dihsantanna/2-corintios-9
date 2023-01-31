@@ -16,3 +16,14 @@ export interface ITotalEntries {
 export interface IPreviousBalance {
   previousBalance: number;
 }
+
+export interface IPartialBalance {
+  previousBalance: number;
+  totalTithes: number;
+  totalSpecialOffers: number;
+  totalLooseOffers: number;
+  totalWithdraws: number;
+  totalEntries: number;
+  totalExpenses: number;
+  totalBalance: number;
+}

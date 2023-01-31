@@ -50,12 +50,12 @@ export function EditForm({
               title={`Salvar ${editType}`}
               text="SALVAR"
               isLoading={isLoading}
-              className="w-1/3 h-10"
+              className="w-1/3 h-10 max-w-[100px] max-h-8"
             />
             <ResetButton
               title="Cancelar Edição"
               text="FECHAR"
-              className="w-1/3 h-10"
+              className="w-1/3 h-10 max-w-[100px] max-h-8"
             />
           </>
         ) : (
@@ -63,7 +63,7 @@ export function EditForm({
             <button
               title={`Editar ${editType || 'item'}`}
               onClick={() => setIsEditing(editingId)}
-              className="focus:outline-none focus:bg-teal-500 focus:text-zinc-900 bg-zinc-900 hover:bg-teal-500 hover:text-zinc-900 cursor-pointer w-1/3 h-11 rounded-md font-semibold"
+              className="focus:outline-none focus:bg-teal-500 focus:text-zinc-900 bg-zinc-900 hover:bg-teal-500 hover:text-zinc-900 cursor-pointer w-1/3 h-11 max-w-[100px] max-h-8 rounded-md font-semibold"
               type="button"
             >
               EDITAR
@@ -71,7 +71,7 @@ export function EditForm({
             <button
               title={`Excluir ${editType || 'item'}`}
               onClick={() => setShowDeleteModal(true)}
-              className="focus:outline-none focus:bg-yellow-500 focus:text-zinc-900 bg-red-600 hover:bg-yellow-500 hover:text-zinc-900 cursor-pointer w-1/3 h-11 rounded-md font-semibold"
+              className="focus:outline-none focus:bg-yellow-500 focus:text-zinc-900 bg-red-600 hover:bg-yellow-500 hover:text-zinc-900 cursor-pointer w-1/3 h-11 max-w-[100px] max-h-8 rounded-md font-semibold"
               type="button"
             >
               EXCLUIR

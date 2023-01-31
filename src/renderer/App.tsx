@@ -21,6 +21,7 @@ import { BalanceConfig } from './components/BalanceConfig';
 import './styles/reactToastify.css';
 import { AddWithdrawToTheBankAccount } from './components/Add/AddWithdrawToTheBankAccount';
 import { EditWithdrawToTheBankAccount } from './components/Edit/EditWithdrawToTheBankAccount';
+import { PartialBalance } from './components/PartialBalance';
 
 export function App() {
   const [selectedScreen, setSelectedScreen] = useState<Screens>('' as Screens);
@@ -34,7 +35,22 @@ export function App() {
         />
       </aside>
       <main className="flex flex-1 justify-center items-center w-5/6">
-        {!selectedScreen && <BalanceConfig />}
+        {!selectedScreen && (
+          <>
+            <BalanceConfig />
+            <PartialBalance />
+          </>
+        )}
+        {selectedScreen && (
+          <button
+            tabIndex={0}
+            type="button"
+            className="focus:outline-none focus:text-teal-500 text-zinc-900  hover:text-teal-500 fixed top-2 right-12 cursor-pointer"
+            onClick={() => setSelectedScreen('' as Screens)}
+          >
+            <FaChurch title="Voltar para tela inicial" className="w-14 h-14" />
+          </button>
+        )}
 
         {/* Add Screens */}
         {selectedScreen === 'addMember' && <AddMember />}
@@ -83,16 +99,6 @@ export function App() {
         pauseOnHover
         theme="dark"
       />
-      {selectedScreen && (
-        <button
-          tabIndex={0}
-          type="button"
-          className="focus:outline-none focus:text-teal-500 text-zinc-900  hover:text-teal-500 fixed top-2 right-12 cursor-pointer"
-          onClick={() => setSelectedScreen('' as Screens)}
-        >
-          <FaChurch title="Voltar para tela inicial" className="w-14 h-14" />
-        </button>
-      )}
     </div>
   );
 }
