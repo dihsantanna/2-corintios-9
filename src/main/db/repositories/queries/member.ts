@@ -6,7 +6,8 @@ VALUES (?, ? ,?)
 export const findAllQuery = /* sql */ `
 SELECT
   *
-FROM members`;
+FROM members
+`;
 
 export const updateQuery = /* sql */ `
 UPDATE members

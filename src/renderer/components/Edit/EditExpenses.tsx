@@ -30,6 +30,13 @@ export function EditExpenses() {
   );
   const [referenceYear, setReferenceYear] = useState(new Date().getFullYear());
 
+  const sortExpenses = (expensesArr: ExpensesWithExpenseCategory[]) =>
+    expensesArr.sort((a, b) =>
+      a.expenseCategoryName === b.expenseCategoryName
+        ? a.title.localeCompare(b.title)
+        : a.expenseCategoryName.localeCompare(b.expenseCategoryName)
+    );
+
   useEffect(() => {
     const getExpenseCategories = async () => {
       try {
@@ -57,10 +64,12 @@ export function EditExpenses() {
             referenceMonth,
             referenceYear
           );
-        const toFixedExpenses = newExpenses.map((expense) => ({
-          ...expense,
-          value: (expense.value as number).toFixed(2),
-        }));
+        const toFixedExpenses = sortExpenses(
+          newExpenses.map((expense) => ({
+            ...expense,
+            value: (expense.value as number).toFixed(2),
+          }))
+        );
         setExpenses(toFixedExpenses);
         setDefaultExpenses(toFixedExpenses);
       } catch (err) {
@@ -81,9 +90,12 @@ export function EditExpenses() {
     setEditing('');
   };
 
-  const valueChangeReplace = (value: string, index: number) => {
+  const valueChangeReplace = (
+    value: string,
+    expense: ExpensesWithExpenseCategory
+  ) => {
     const validateValue = /^(\d+)(\.|,)?(\d{0,2}$)/.test(value) || value === '';
-    if (!validateValue) return `${expenses[index].value}`;
+    if (!validateValue) return `${expense.value}`;
 
     return value.replace(',', '.');
   };
@@ -92,32 +104,34 @@ export function EditExpenses() {
     {
       target: { name, value },
     }: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
-    index: number
+    expense: ExpensesWithExpenseCategory
   ) => {
     const key = name as keyof ExpensesWithExpenseCategory;
     const newExpense = {
-      ...expenses[index],
-      [key]: name === 'value' ? valueChangeReplace(value, index) : value,
+      ...expense,
+      [key]: name === 'value' ? valueChangeReplace(value, expense) : value,
     } as ExpensesWithExpenseCategory;
 
-    const newExpenses = [...expenses];
-    newExpenses.splice(index, 1, newExpense);
+    const newExpenses = expenses.map((item) =>
+      item.id === expense.id ? newExpense : item
+    );
 
     setExpenses(newExpenses);
   };
 
   const handleValueInputBlur = (
     { target: { value } }: React.FocusEvent<HTMLInputElement>,
-    index: number
+    expense: ExpensesWithExpenseCategory
   ) => {
     const newValue = value ? parseFloat(value).toFixed(2) : '';
     const newExpense = {
-      ...expenses[index],
+      ...expense,
       value: newValue,
     };
 
-    const newExpenses = [...expenses];
-    newExpenses.splice(index, 1, newExpense);
+    const newExpenses = expenses.map((item) =>
+      item.id === expense.id ? newExpense : item
+    );
 
     setExpenses(newExpenses);
   };
@@ -129,11 +143,15 @@ export function EditExpenses() {
 
   const handleEdit = async (
     event: React.FormEvent<HTMLFormElement>,
-    index: number
+    id: string
   ) => {
     event.preventDefault();
-    const editedExpense = expenses[index];
-    if (editedExpense === defaultExpenses[index]) {
+    const editedExpense = expenses.find(
+      (expense) => expense.id === id
+    ) as ExpensesWithExpenseCategory;
+    if (
+      editedExpense === defaultExpenses.find((expense) => expense.id === id)
+    ) {
       toast.warn('Faça alguma modificação ou clique em fechar para cancelar', {
         progress: undefined,
       });
@@ -180,12 +198,11 @@ export function EditExpenses() {
     }
   };
 
-  const handleDelete = async (id: string, index: number) => {
+  const handleDelete = async (id: string) => {
     try {
       await window.expense.delete(id);
 
-      const newExpenses = [...expenses];
-      newExpenses.splice(index, 1);
+      const newExpenses = expenses.filter((expense) => expense.id !== id);
       setExpenses(newExpenses);
       setDefaultExpenses(newExpenses);
 
@@ -199,28 +216,14 @@ export function EditExpenses() {
     }
   };
 
-  const handleFilter = () => {
-    if (categorySelected === 'all') {
-      return expenses.sort((a, b) =>
-        a.expenseCategoryName.localeCompare(b.expenseCategoryName)
-      );
-    }
-    return expenses.filter(
-      (expense) => expense.expenseCategoryId === categorySelected
-    );
-  };
+  const handleFilter = () =>
+    categorySelected === 'all'
+      ? expenses
+      : expenses.filter(
+          (expense) => expense.expenseCategoryId === categorySelected
+        );
 
   const filteredExpenses = handleFilter();
-
-  const orderedExpenses = filteredExpenses.sort((a, b) => {
-    if (
-      a.expenseCategoryName.toLocaleLowerCase() >
-      b.expenseCategoryName.toLocaleLowerCase()
-    )
-      return 1;
-    if (a.title.localeCompare(b.title) < 0) return -1;
-    return 0;
-  });
 
   return (
     <div className="flex flex-col items-center w-full h-full">
@@ -247,11 +250,13 @@ export function EditExpenses() {
             <option title="Todas" value="all">
               Todas as Despesas
             </option>
-            {expenseCategories.map(({ id, name }) => (
-              <option title={name} key={id} value={id}>
-                {name}
-              </option>
-            ))}
+            {expenseCategories
+              .sort((a, b) => a.name.localeCompare(b.name))
+              .map(({ id, name }) => (
+                <option title={name} key={id} value={id}>
+                  {name}
+                </option>
+              ))}
           </select>
         </div>
       </div>
@@ -266,23 +271,34 @@ export function EditExpenses() {
         <span className="w-2/6 flex items-center justify-center">Editar</span>
       </div>
       <div className="w-full h-full flex flex-col overflow-auto scrollbar-thin scrollbar-thumb-zinc-900 scrollbar-track-zinc-300">
-        {!orderedExpenses.length ? (
+        {!filteredExpenses.length ? (
           <span className="m-auto text-zinc-500">
             Não há Despesas cadastradas para o mês e ano selecionados!
           </span>
         ) : (
-          orderedExpenses.map(
-            ({ id, expenseCategoryId, title, value }, index) => (
+          filteredExpenses.map(
+            (
+              {
+                id,
+                expenseCategoryId,
+                title,
+                value,
+                expenseCategoryName,
+                referenceMonth: month,
+                referenceYear: year,
+              },
+              index
+            ) => (
               <EditForm
                 key={id}
-                handleSubmit={(event) => handleEdit(event, index)}
+                handleSubmit={(event) => handleEdit(event, id)}
                 handleReset={handleReset}
                 isLoading={loading}
                 editingId={id}
                 isEditing={editing === id}
                 setIsEditing={handleSetEditing}
                 className={index % 2 === 0 ? 'bg-zinc-100' : ''}
-                onDelete={() => handleDelete(id, index)}
+                onDelete={() => handleDelete(id)}
                 deleteMessage={`Tem certeza que deseja excluir esta despesa, no valor de "R$ ${value}"? Esta ação não poderá ser desfeita. Clique em "SIM" para confirmar.`}
                 deleteTitle="Excluir Despesa"
                 editType="despesa"
@@ -292,7 +308,17 @@ export function EditExpenses() {
                     title="Selecione uma categoria de despesa"
                     value={expenseCategoryId}
                     name="expenseCategoryId"
-                    onChange={(event) => handleChange(event, index)}
+                    onChange={(event) =>
+                      handleChange(event, {
+                        id,
+                        expenseCategoryId,
+                        title,
+                        value,
+                        expenseCategoryName,
+                        referenceMonth: month,
+                        referenceYear: year,
+                      })
+                    }
                     className="text-center text-zinc-200 bg-zinc-900 disabled:p-0 disabled:text-zinc-900 disabled:bg-transparent font-light disabled:font-normal block w-11/12 h-full disabled:appearance-none leading-normal rounded-sm"
                     disabled={editing !== id}
                   >
@@ -318,7 +344,17 @@ export function EditExpenses() {
                     title="Título da Despesa"
                     name="title"
                     value={title}
-                    onChange={(event) => handleChange(event, index)}
+                    onChange={(event) =>
+                      handleChange(event, {
+                        id,
+                        expenseCategoryId,
+                        title,
+                        value,
+                        expenseCategoryName,
+                        referenceMonth: month,
+                        referenceYear: year,
+                      })
+                    }
                     className="text-center text-zinc-200 bg-zinc-900 disabled:p-0 disabled:text-zinc-900 disabled:bg-transparent font-light disabled:font-normal block w-11/12 h-full disabled:appearance-none leading-normal rounded-sm"
                     disabled={editing !== id}
                   />
@@ -329,8 +365,28 @@ export function EditExpenses() {
                     title="Valor da Despesa"
                     name="value"
                     value={value}
-                    onChange={(event) => handleChange(event, index)}
-                    onBlur={(event) => handleValueInputBlur(event, index)}
+                    onChange={(event) =>
+                      handleChange(event, {
+                        id,
+                        expenseCategoryId,
+                        title,
+                        value,
+                        expenseCategoryName,
+                        referenceMonth: month,
+                        referenceYear: year,
+                      })
+                    }
+                    onBlur={(event) =>
+                      handleValueInputBlur(event, {
+                        id,
+                        expenseCategoryId,
+                        title,
+                        value,
+                        expenseCategoryName,
+                        referenceMonth: month,
+                        referenceYear: year,
+                      })
+                    }
                     className="text-center text-zinc-200 bg-zinc-900 disabled:p-0 disabled:text-zinc-900 disabled:bg-transparent font-light disabled:font-normal block w-11/12 h-full disabled:appearance-none leading-normal rounded-sm"
                     disabled={editing !== id}
                   />

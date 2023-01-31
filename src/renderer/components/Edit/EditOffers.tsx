@@ -69,9 +69,9 @@ export function EditOffers() {
     setEditing('');
   };
 
-  const valueChangeReplace = (value: string, index: number) => {
+  const valueChangeReplace = (value: string, offer: OfferWithMemberName) => {
     const validateValue = /^(\d+)(\.|,)?(\d{0,2}$)/.test(value) || value === '';
-    if (!validateValue) return `${offers[index].value}`;
+    if (!validateValue) return `${offer.value}`;
 
     return value.replace(',', '.');
   };
@@ -80,32 +80,34 @@ export function EditOffers() {
     {
       target: { name, value },
     }: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
-    index: number
+    offer: OfferWithMemberName
   ) => {
     const key = name as keyof OfferWithMemberName;
     const newOffer = {
-      ...offers[index],
-      [key]: name === 'value' ? valueChangeReplace(value, index) : value,
+      ...offer,
+      [key]: name === 'value' ? valueChangeReplace(value, offer) : value,
     } as OfferWithMemberName;
 
-    const newOffers = [...offers];
-    newOffers.splice(index, 1, newOffer);
+    const newOffers = offers.map((item) =>
+      item.id === offer.id ? newOffer : item
+    );
 
     setOffers(newOffers);
   };
 
   const handleValueInputBlur = (
     { target: { value } }: React.FocusEvent<HTMLInputElement>,
-    index: number
+    offer: OfferWithMemberName
   ) => {
     const newValue = value ? parseFloat(value).toFixed(2) : '';
     const newOffer = {
-      ...offers[index],
+      ...offer,
       value: newValue,
     };
 
-    const newOffers = [...offers];
-    newOffers.splice(index, 1, newOffer);
+    const newOffers = offers.map((item) =>
+      item.id === offer.id ? newOffer : item
+    );
 
     setOffers(newOffers);
   };
@@ -117,11 +119,15 @@ export function EditOffers() {
 
   const handleEdit = async (
     event: React.FormEvent<HTMLFormElement>,
-    index: number
+    id: string
   ) => {
     event.preventDefault();
-    const editedOffer = offers[index];
-    if (editedOffer === defaultOffers[index]) {
+    const editedOffer = offers.find(
+      ({ id: offerId }) => offerId === id
+    ) as OfferWithMemberName;
+    if (
+      editedOffer === defaultOffers.find(({ id: offerId }) => offerId === id)
+    ) {
       toast.warn('Faça alguma modificação ou clique em fechar para cancelar', {
         progress: undefined,
       });
@@ -160,12 +166,11 @@ export function EditOffers() {
     }
   };
 
-  const handleDelete = async (id: string, index: number) => {
+  const handleDelete = async (id: string) => {
     try {
       await window.offer.delete(id);
 
-      const newOffers = [...offers];
-      newOffers.splice(index, 1);
+      const newOffers = offers.filter(({ id: offerId }) => offerId !== id);
       setOffers(newOffers);
       setDefaultOffers(newOffers);
 
@@ -179,9 +184,7 @@ export function EditOffers() {
     }
   };
 
-  const filtered = filterOfferByType(offers);
-
-  const orderedOffers = filtered.sort((a, b) =>
+  const orderedOffers = filterOfferByType(offers).sort((a, b) =>
     a.memberName && b.memberName
       ? (a.memberName as string).localeCompare(b.memberName as string)
       : 0
@@ -236,46 +239,76 @@ export function EditOffers() {
             Não há ofertas cadastrados para o mês e ano selecionados!
           </span>
         ) : (
-          orderedOffers.map(({ id, value, memberName }, index) => (
-            <EditForm
-              key={id}
-              handleSubmit={(event) => handleEdit(event, index)}
-              handleReset={handleReset}
-              isLoading={loading}
-              editingId={id}
-              isEditing={editing === id}
-              setIsEditing={handleSetEditing}
-              className={index % 2 === 0 ? 'bg-zinc-100' : ''}
-              onDelete={() => handleDelete(id, index)}
-              deleteMessage={`Tem certeza que deseja excluir esta oferta, no valor de "R$ ${value}"? Esta ação não poderá ser desfeita. Clique em "SIM" para confirmar.`}
-              deleteTitle="Excluir Oferta"
-              editType="oferta"
-            >
-              <label className="w-6/12 flex items-center justify-center text-zinc-900">
-                {memberName && (
+          orderedOffers.map(
+            (
+              {
+                id,
+                value,
+                memberName,
+                memberId,
+                referenceMonth: month,
+                referenceYear: year,
+              },
+              index
+            ) => (
+              <EditForm
+                key={id}
+                handleSubmit={(event) => handleEdit(event, id)}
+                handleReset={handleReset}
+                isLoading={loading}
+                editingId={id}
+                isEditing={editing === id}
+                setIsEditing={handleSetEditing}
+                className={index % 2 === 0 ? 'bg-zinc-100' : ''}
+                onDelete={() => handleDelete(id)}
+                deleteMessage={`Tem certeza que deseja excluir esta oferta, no valor de "R$ ${value}"? Esta ação não poderá ser desfeita. Clique em "SIM" para confirmar.`}
+                deleteTitle="Excluir Oferta"
+                editType="oferta"
+              >
+                <label className="w-6/12 flex items-center justify-center text-zinc-900">
+                  {memberName && (
+                    <input
+                      title="Nome do membro"
+                      value={memberName}
+                      readOnly
+                      name="memberId"
+                      className="cursor-default text-center p-0 text-zinc-900 bg-transparent font-normal block w-full h-full appearance-none leading-normal rounded-sm"
+                    />
+                  )}
+                </label>
+                <label className="w-1/12 flex items-center justify-center text-zinc-900">
                   <input
-                    title="Nome do membro"
-                    value={memberName}
-                    readOnly
-                    name="memberId"
-                    className="cursor-default text-center p-0 text-zinc-900 bg-transparent font-normal block w-full h-full appearance-none leading-normal rounded-sm"
+                    required
+                    title="Valor da oferta"
+                    name="value"
+                    value={value}
+                    onChange={(event) =>
+                      handleChange(event, {
+                        id,
+                        value,
+                        memberName,
+                        memberId,
+                        referenceMonth: month,
+                        referenceYear: year,
+                      })
+                    }
+                    onBlur={(event) =>
+                      handleValueInputBlur(event, {
+                        id,
+                        value,
+                        memberName,
+                        memberId,
+                        referenceMonth: month,
+                        referenceYear: year,
+                      })
+                    }
+                    className="text-center text-zinc-200 bg-zinc-900 disabled:p-0 disabled:text-zinc-900 disabled:bg-transparent font-light disabled:font-normal block w-11/12 h-full disabled:appearance-none leading-normal rounded-sm"
+                    disabled={editing !== id}
                   />
-                )}
-              </label>
-              <label className="w-1/12 flex items-center justify-center text-zinc-900">
-                <input
-                  required
-                  title="Valor da oferta"
-                  name="value"
-                  value={value}
-                  onChange={(event) => handleChange(event, index)}
-                  onBlur={(event) => handleValueInputBlur(event, index)}
-                  className="text-center text-zinc-200 bg-zinc-900 disabled:p-0 disabled:text-zinc-900 disabled:bg-transparent font-light disabled:font-normal block w-11/12 h-full disabled:appearance-none leading-normal rounded-sm"
-                  disabled={editing !== id}
-                />
-              </label>
-            </EditForm>
-          ))
+                </label>
+              </EditForm>
+            )
+          )
         )}
       </div>
     </div>

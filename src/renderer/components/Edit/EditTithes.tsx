@@ -24,6 +24,9 @@ export function EditTithes() {
   );
   const [referenceYear, setReferenceYear] = useState(new Date().getFullYear());
 
+  const sortTithes = (tithesArr: TitheStateWithMemberName[]) =>
+    tithesArr.sort((a, b) => a.memberName.localeCompare(b.memberName));
+
   useEffect(() => {
     const getTithes = async () => {
       try {
@@ -32,10 +35,12 @@ export function EditTithes() {
           referenceMonth,
           referenceYear
         );
-        const toFixedTithes = newTithes.map((tithe) => ({
-          ...tithe,
-          value: tithe.value.toFixed(2),
-        }));
+        const toFixedTithes = sortTithes(
+          newTithes.map((tithe) => ({
+            ...tithe,
+            value: tithe.value.toFixed(2),
+          }))
+        );
         setTithes(toFixedTithes);
         setDefaultTithes(toFixedTithes);
       } catch (err) {
@@ -166,10 +171,6 @@ export function EditTithes() {
     }
   };
 
-  const orderedTithes = tithes.sort((a, b) =>
-    a.memberName.localeCompare(b.memberName)
-  );
-
   return (
     <div className="flex flex-col items-center w-full h-full">
       <h1 className="flex items-center font-semibold text-2xl text-zinc-900 h-20">
@@ -189,12 +190,12 @@ export function EditTithes() {
         <span className="w-2/6 flex items-center justify-center">Editar</span>
       </div>
       <div className="w-full h-full flex flex-col overflow-auto scrollbar-thin scrollbar-thumb-zinc-900 scrollbar-track-zinc-300">
-        {!orderedTithes.length ? (
+        {!tithes.length ? (
           <span className="m-auto text-zinc-500">
             Não há dízimos cadastrados para o mês e ano selecionados!
           </span>
         ) : (
-          orderedTithes.map(({ id, value, memberName }, index) => (
+          tithes.map(({ id, value, memberName }, index) => (
             <EditForm
               key={id}
               handleSubmit={(event) => handleEdit(event, index)}

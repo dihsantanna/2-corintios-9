@@ -13,10 +13,15 @@ export function EditExpenseCategories() {
   const [editing, setEditing] = useState('');
   const [loading, setLoading] = useState(false);
 
+  const sortExpenseCategories = (expenseCategoryArr: IExpenseCategoryState[]) =>
+    expenseCategoryArr.sort((a, b) => a.name.localeCompare(b.name));
+
   useEffect(() => {
     const getExpenseCategories = async () => {
       try {
-        const newExpenseCategories = await window.expenseCategory.findAll();
+        const newExpenseCategories = sortExpenseCategories(
+          await window.expenseCategory.findAll()
+        );
         setExpenseCategories(newExpenseCategories);
         setDefaultExpenseCategories(newExpenseCategories);
       } catch (err) {
