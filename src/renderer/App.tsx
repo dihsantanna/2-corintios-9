@@ -20,6 +20,7 @@ import { GeneralReport } from './components/Report/GeneralReport';
 import { BalanceConfig } from './components/BalanceConfig';
 import './styles/reactToastify.css';
 import { AddWithdrawToTheBankAccount } from './components/Add/AddWithdrawToTheBankAccount';
+import { EditWithdrawToTheBankAccount } from './components/Edit/EditWithdrawToTheBankAccount';
 
 export function App() {
   const [selectedScreen, setSelectedScreen] = useState<Screens>('' as Screens);
@@ -53,6 +54,9 @@ export function App() {
           <EditExpenseCategories />
         )}
         {selectedScreen === 'editExpenses' && <EditExpenses />}
+        {selectedScreen === 'editWithdrawToAccount' && (
+          <EditWithdrawToTheBankAccount />
+        )}
 
         {/* Report Screens */}
         {selectedScreen === 'entriesReport' && <EntriesReport />}

@@ -16,7 +16,7 @@ export const updateQuery = /* sql */ `
 UPDATE withdrawalsToTheBankAccount
 SET value = $value,
     referenceMonth = $referenceMonth,
-    referenceYear = $referenceYear,
+    referenceYear = $referenceYear
 WHERE
   id = $id
 `;
