@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { toast } from 'react-toastify';
 import { ReportView } from './ReportView';
 
@@ -7,27 +7,45 @@ export function OutputReport() {
     new Date().getMonth() + 1
   );
   const [referenceYear, setReferenceYear] = useState(new Date().getFullYear());
-  const [pdf, setPdf] = useState<Buffer | null>(null);
+  const [monthAndYear, setMonthAndYear] = useState({
+    month: referenceMonth,
+    year: referenceYear,
+  });
+  const [pdf, setPdf] = useState<string>('');
 
-  useEffect(() => {
-    const getReport = async () => {
+  const mounted = useRef(false);
+
+  const getReport = useCallback(async () => {
+    if (referenceMonth && referenceYear) {
       try {
-        setPdf(null);
+        setPdf('');
         const report = await window.report.output(
           referenceMonth,
           referenceYear
         );
-        setPdf(report);
+        setMonthAndYear({ month: referenceMonth, year: referenceYear });
+        const blob = URL.createObjectURL(
+          new Blob([report as Buffer], { type: 'application/pdf' })
+        );
+        setPdf(blob);
       } catch (err) {
         toast.error((err as Error).message);
       }
-    };
-    if (referenceMonth !== 0 && referenceYear !== 0) getReport();
+    }
   }, [referenceMonth, referenceYear]);
+
+  useEffect(() => {
+    if (!mounted.current) {
+      getReport();
+      mounted.current = true;
+    }
+  }, [getReport]);
 
   return (
     <ReportView
       title="Relatório de Saídas"
+      monthAndYear={monthAndYear}
+      getReport={getReport}
       referenceMonth={referenceMonth}
       referenceYear={referenceYear}
       setReferenceMonth={setReferenceMonth}

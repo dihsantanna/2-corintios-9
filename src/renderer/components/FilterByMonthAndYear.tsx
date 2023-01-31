@@ -68,7 +68,16 @@ export function FilterByMonthAndYear({
           Selecione o ano
         </option>
         {getYears().map((year) => (
-          <option title={year.toString()} key={year} value={year}>
+          <option
+            title={year.toString()}
+            key={year}
+            value={year}
+            disabled={
+              initialDate.current.month < monthValue
+                ? year < initialDate.current.year
+                : true
+            }
+          >
             {year}
           </option>
         ))}
