@@ -10,7 +10,7 @@ export const memberHandlers = () => {
 
   ipcMain.handle('member:findAll', async () => {
     const model = new Member();
-    return model.findAll();
+    return (await model.findAll()).sort((a, b) => a.name.localeCompare(b.name));
   });
 
   ipcMain.handle('member:update', (_event, member) => {
