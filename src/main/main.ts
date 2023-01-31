@@ -9,6 +9,7 @@
  * `./src/main.js` using webpack. This gives us some performance wins.
  */
 import path from 'path';
+import fs from 'fs';
 import { app, BrowserWindow, Menu, shell } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
@@ -25,8 +26,9 @@ class AppUpdater {
   }
 }
 
-const db = new DatabaseConnection();
-db.createTables();
+if (process.env.NODE_ENV === 'development') {
+  new DatabaseConnection().createTables();
+}
 
 let mainWindow: BrowserWindow | null = null;
 
@@ -35,6 +37,18 @@ createPreloadHandlers();
 if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');
   sourceMapSupport.install();
+}
+
+const createProductionDB = () => {
+  const dbFolder = path.join(process.resourcesPath, 'db');
+  if (!fs.existsSync(dbFolder)) {
+    fs.mkdirSync(dbFolder);
+  }
+  new DatabaseConnection().createTables();
+};
+
+if (app.isPackaged) {
+  createProductionDB();
 }
 
 // const isDebug =
