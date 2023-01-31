@@ -12,7 +12,10 @@ import {
   IExpenseStateWithCategoryName,
 } from './@types/Expense';
 import { IBalance } from './@types/Balance';
-import { IWithdrawToTheBankAccountState } from './@types/WithdrawToTheBankAccount';
+import {
+  IWithdrawToTheBankAccount,
+  IWithdrawToTheBankAccountState,
+} from './@types/WithdrawToTheBankAccount';
 
 const memberHandler = {
   create: async (member: IMember) => {
@@ -158,7 +161,7 @@ const initialBalanceHandler = {
 };
 
 const withdrawToTheBankAccountHandler = {
-  create: async (withdrawToTheBankAccount: IWithdrawToTheBankAccountState) => {
+  create: async (withdrawToTheBankAccount: IWithdrawToTheBankAccount) => {
     return ipcRenderer.invoke(
       'withdrawToTheBankAccount:create',
       withdrawToTheBankAccount

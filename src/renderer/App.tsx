@@ -19,6 +19,7 @@ import { OutputReport } from './components/Report/OutputReport';
 import { GeneralReport } from './components/Report/GeneralReport';
 import { BalanceConfig } from './components/BalanceConfig';
 import './styles/reactToastify.css';
+import { AddWithdrawToTheBankAccount } from './components/Add/AddWithdrawToTheBankAccount';
 
 export function App() {
   const [selectedScreen, setSelectedScreen] = useState<Screens>('' as Screens);
@@ -40,6 +41,9 @@ export function App() {
         {selectedScreen === 'addOffer' && <AddOffer />}
         {selectedScreen === 'addExpenseCategory' && <AddExpenseCategory />}
         {selectedScreen === 'addExpense' && <AddExpense />}
+        {selectedScreen === 'addWithdrawToAccount' && (
+          <AddWithdrawToTheBankAccount />
+        )}
 
         {/* Edit Screens */}
         {selectedScreen === 'editMembers' && <EditMembers />}

@@ -7,6 +7,7 @@ export const menuParams = {
       { label: 'Adicionar Oferta', id: 'addOffer' },
       { label: 'Adicionar Categoria de Despesa', id: 'addExpenseCategory' },
       { label: 'Adicionar Despesa', id: 'addExpense' },
+      { label: 'Adicionar Saques em Conta', id: 'addWithdrawToAccount' },
     ],
   },
   edit: {
@@ -17,6 +18,7 @@ export const menuParams = {
       { label: 'Editar Ofertas', id: 'editOffers' },
       { label: 'Editar Categorias de Despesa', id: 'editExpenseCategories' },
       { label: 'Editar Despesas', id: 'editExpenses' },
+      { label: 'Editar Saques em Conta', id: 'editWithdrawToAccount' },
     ],
   },
   reports: {

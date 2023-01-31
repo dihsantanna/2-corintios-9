@@ -1,43 +1,25 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { toast } from 'react-toastify';
-import { IMemberState } from 'main/@types/Member';
 import { AddForm } from './AddForm';
 import { months } from '../../utils/months';
 import { getYears } from '../../utils/years';
 
-interface Offer {
-  memberId: string;
+interface WithdrawToTheBankAccount {
   value: string;
   referenceMonth: number;
   referenceYear: number;
 }
 
-const INITIAL_STATE: Offer = {
-  memberId: '',
+const INITIAL_STATE: WithdrawToTheBankAccount = {
   value: '',
   referenceMonth: 0,
   referenceYear: 0,
 };
 
-export function AddOffer() {
-  const [tithe, setOffer] = useState<Offer>({ ...INITIAL_STATE });
-  const [members, setMembers] = useState<IMemberState[]>([]);
+export function AddWithdrawToTheBankAccount() {
+  const [withdrawToTheBankAccount, setWithdrawToTheBankAccount] =
+    useState<WithdrawToTheBankAccount>({ ...INITIAL_STATE });
   const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    const getMembers = async () => {
-      try {
-        const newMembers = await window.member.findAll();
-        setMembers(newMembers);
-      } catch (err) {
-        toast.error(`Erro ao carregar membros: ${(err as Error).message}`, {
-          progress: undefined,
-        });
-      }
-    };
-
-    getMembers();
-  }, []);
 
   const formValidate = (
     floatValue: number,
@@ -45,7 +27,7 @@ export function AddOffer() {
     referenceYear: number
   ) => {
     if (floatValue <= 0) {
-      toast.warn('Valor da oferta deve ser maior que 0', {
+      toast.warn('Valor do saque deve ser maior que 0', {
         progress: undefined,
       });
       return false;
@@ -68,37 +50,36 @@ export function AddOffer() {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const { memberId, value, referenceMonth, referenceYear } = tithe;
+    const { value, referenceMonth, referenceYear } = withdrawToTheBankAccount;
     const floatValue = parseFloat(value);
     if (!formValidate(floatValue, referenceMonth, referenceYear)) return;
 
     setLoading(true);
     try {
-      await window.offer.create({
-        memberId: memberId || null,
+      await window.withdrawToTheBankAccount.create({
         value: floatValue,
         referenceMonth,
         referenceYear,
       });
-      toast.success('Oferta cadastrada com sucesso!', {
+      toast.success('Saque cadastrado com sucesso!', {
         progress: undefined,
       });
     } catch (err) {
-      toast.error(`Erro ao cadastrar oferta: ${(err as Error).message}`, {
+      toast.error(`Erro ao cadastrar saque: ${(err as Error).message}`, {
         progress: undefined,
       });
     } finally {
       setLoading(false);
-      setOffer({ ...INITIAL_STATE });
+      setWithdrawToTheBankAccount({ ...INITIAL_STATE });
     }
   };
 
   const handleSelectChange = ({
     target: { value, name },
   }: React.ChangeEvent<HTMLSelectElement>) => {
-    setOffer({
-      ...tithe,
-      [name]: name === 'memberId' ? value : +value,
+    setWithdrawToTheBankAccount({
+      ...withdrawToTheBankAccount,
+      [name]: +value,
     });
   };
 
@@ -111,8 +92,8 @@ export function AddOffer() {
     const valueEdit = value.match(/\d|\.|,/g) || '';
     const newValue = valueEdit.length ? [...valueEdit].join('') : '';
 
-    setOffer({
-      ...tithe,
+    setWithdrawToTheBankAccount({
+      ...withdrawToTheBankAccount,
       [name]: newValue.replace(',', '.'),
     });
   };
@@ -122,15 +103,15 @@ export function AddOffer() {
   }: React.FocusEvent<HTMLInputElement>) => {
     const newValue = value ? parseFloat(value).toFixed(2) : '';
 
-    setOffer({
-      ...tithe,
+    setWithdrawToTheBankAccount({
+      ...withdrawToTheBankAccount,
       [name]: newValue,
     });
   };
 
   const handleReset = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setOffer({ ...INITIAL_STATE });
+    setWithdrawToTheBankAccount({ ...INITIAL_STATE });
   };
 
   return (
@@ -138,48 +119,27 @@ export function AddOffer() {
       handleSubmit={handleSubmit}
       handleReset={handleReset}
       isLoading={loading}
-      title="Cadastrar Oferta"
+      title="Cadastrar Saques em Conta Bancária"
     >
-      <label className="relative flex items-center bg-zinc-900 p-2 border-l-4 border-teal-500 rounded-sm w-8/12">
-        <select
-          name="memberId"
-          title="Selecione o membro caso a oferta seja especial"
-          value={tithe.memberId}
-          onChange={handleSelectChange}
-          className="cursor-pointer bg-zinc-900 font-light block w-full leading-normal"
-        >
-          <option disabled value="">
-            Selecione o membro
-          </option>
-          {members.map(({ id, name }) => (
-            <option title={name} key={id} value={id}>
-              {name}
-            </option>
-          ))}
-        </select>
-        <span className="absolute w-max -bottom-4 text-xs italic text-zinc-900 right-0">
-          * selecione o membro em caso de oferta especial
-        </span>
-      </label>
       <label className="flex gap-2 items-center bg-zinc-900 p-2 border-l-4 border-teal-500 rounded-sm w-4/12">
         <span>R$</span>
         <input
           required
-          title="Valor da Oferta"
+          title="Valor do Saque"
           className="bg-zinc-900 placeholder:text-zinc-200 font-light block w-full appearance-none leading-normal"
           name="value"
           onChange={handleValueInputChange}
           onBlur={handleValueInputBlur}
-          value={tithe.value}
-          placeholder="Valor da Oferta"
+          value={withdrawToTheBankAccount.value}
+          placeholder="Valor do Saque"
         />
       </label>
       <label className="flex items-center bg-zinc-900 p-2 border-l-4 border-teal-500 rounded-sm w-4/12">
         <select
           required
-          title="Selecione o mês da oferta"
+          title="Selecione o mês do saque"
           name="referenceMonth"
-          value={tithe.referenceMonth}
+          value={withdrawToTheBankAccount.referenceMonth}
           onChange={handleSelectChange}
           className="cursor-pointer bg-zinc-900 font-light block w-full leading-normal"
         >
@@ -200,9 +160,9 @@ export function AddOffer() {
       <label className="flex items-center bg-zinc-900 p-2 border-l-4 border-teal-500 rounded-sm w-4/12">
         <select
           required
-          title="Selecione o ano da oferta"
+          title="Selecione o ano do saque"
           name="referenceYear"
-          value={tithe.referenceYear}
+          value={withdrawToTheBankAccount.referenceYear}
           onChange={handleSelectChange}
           className="cursor-pointer bg-zinc-900 font-light block w-full leading-normal"
         >

@@ -4,11 +4,13 @@ export type Screens =
   | 'addOffer'
   | 'addExpenseCategory'
   | 'addExpense'
+  | 'addWithdrawToAccount'
   | 'editMembers'
   | 'editTithes'
   | 'editOffers'
   | 'editExpenseCategories'
   | 'editExpenses'
+  | 'editWithdrawToAccount'
   | 'entriesReport'
   | 'outputReport'
   | 'generalReport';
