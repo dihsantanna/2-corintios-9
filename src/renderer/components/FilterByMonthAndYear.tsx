@@ -21,12 +21,13 @@ export function FilterByMonthAndYear({
   });
   useEffect(() => {
     const getInitialBalance = async () => {
-      const { referenceMonth, referenceYear } =
-        await window.initialBalance.get();
-      initialDate.current = {
-        month: referenceMonth,
-        year: referenceYear,
-      };
+      const initialBalance = await window.initialBalance.get();
+      if (initialBalance) {
+        initialDate.current = {
+          month: initialBalance.referenceMonth,
+          year: initialBalance.referenceYear,
+        };
+      }
     };
     getInitialBalance();
   }, []);

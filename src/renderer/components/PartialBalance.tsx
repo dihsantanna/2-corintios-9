@@ -2,6 +2,11 @@ import { useEffect, useState } from 'react';
 import { IPartialBalance } from 'main/@types/Report';
 import { months } from '../utils/months';
 
+interface PartialBalanceProps {
+  refresh: boolean;
+  refreshed: () => void;
+}
+
 const INITIAL_STATE: IPartialBalance = {
   previousBalance: 0.0,
   totalTithes: 0.0,
@@ -13,21 +18,30 @@ const INITIAL_STATE: IPartialBalance = {
   totalBalance: 0.0,
 };
 
-export function PartialBalance() {
+export function PartialBalance({ refresh, refreshed }: PartialBalanceProps) {
   const [partialBalance, setPartialBalance] = useState<IPartialBalance>({
     ...INITIAL_STATE,
   });
-  useEffect(() => {
-    const getPartialBalance = async () => {
-      const date = new Date();
-      const month = date.getMonth() + 1;
-      const year = date.getFullYear();
-      const response = await window.report.partial(month, year);
 
-      setPartialBalance(response);
-    };
+  const getPartialBalance = async () => {
+    const date = new Date();
+    const month = date.getMonth() + 1;
+    const year = date.getFullYear();
+    const response = await window.report.partial(month, year);
+
+    setPartialBalance(response);
+  };
+
+  useEffect(() => {
     getPartialBalance();
   }, []);
+
+  useEffect(() => {
+    if (refresh) {
+      getPartialBalance();
+      refreshed();
+    }
+  }, [refresh, refreshed]);
 
   const {
     previousBalance,

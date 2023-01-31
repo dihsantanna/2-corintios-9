@@ -307,22 +307,22 @@
       <main class="main-content">
         <div class="info">
           <span class="info-content">
-            SALDO ANTERIOR: <strong><%= (previousBalance || 0).toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) %></strong>
+            SALDO ANTERIOR: <strong><%= (previousBalance).toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) %></strong>
           </span>
           <span class="info-content">
-            DÍZIMOS: <strong><%= (totalTithes || 0).toLocaleString('pt-BR', {style: 'currency' , currency: 'BRL' }) %></strong>
+            DÍZIMOS: <strong><%= (totalTithes).toLocaleString('pt-BR', {style: 'currency' , currency: 'BRL' }) %></strong>
           </span>
           <span class="info-content">
-            OFERTAS ESPECIAIS: <strong><%= (totalSpecialOffers || 0).toLocaleString('pt-BR', {style: 'currency' , currency: 'BRL' }) %></strong>
+            OFERTAS ESPECIAIS: <strong><%= (totalSpecialOffers).toLocaleString('pt-BR', {style: 'currency' , currency: 'BRL' }) %></strong>
           </span>
           <span class="info-content">
-            OFERTAS GAZOFILÁCIO: <strong><%= (totalLooseOffers || 0).toLocaleString('pt-BR', {style: 'currency' , currency: 'BRL' }) %></strong>
+            OFERTAS GAZOFILÁCIO: <strong><%= (totalLooseOffers).toLocaleString('pt-BR', {style: 'currency' , currency: 'BRL' }) %></strong>
           </span>
           <span class="info-content">
-            SAQUE EM CONTA BANCÁRIA: <strong><%= (totalWithdrawalsBankAccount || 0).toLocaleString('pt-BR', {style: 'currency' , currency: 'BRL' }) %></strong>
+            SAQUE EM CONTA BANCÁRIA: <strong><%= (totalWithdrawalsBankAccount).toLocaleString('pt-BR', {style: 'currency' , currency: 'BRL' }) %></strong>
           </span>
           <span class="info-content">
-            TOTAL DE ENTRADAS: <strong><%= (totalEntries || 0).toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) %></strong>
+            TOTAL DE ENTRADAS: <strong><%= (totalEntries).toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) %></strong>
           </span>
         </div>
         <% expenseCategories.map(({ id: categoryId, name }) => { %>
@@ -341,7 +341,7 @@
                     <%= title.toUpperCase() %>
                   </span>
                   <span class="table-row-right">
-                    <%= (value || 0).toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) %>
+                    <%= (value).toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) %>
                   </span>
                 </div>
               <% }) %>
@@ -368,13 +368,13 @@
       <div class="info">
         <div class="general-balance">BALANÇO GERAL</div>
           <span class="info-content">
-            TOTAL DE ENTRADAS: <strong> <%= (totalEntries || 0).toLocaleString('pt-BR', {style: 'currency' , currency: 'BRL' }) %></strong>
+            TOTAL DE ENTRADAS: <strong> <%= (totalEntries).toLocaleString('pt-BR', {style: 'currency' , currency: 'BRL' }) %></strong>
           </span>
         <span class="info-content">
-          TOTAL DE SAÍDAS: <strong><%= (totalExpenses || 0).toLocaleString('pt-BR', {style: 'currency' , currency: 'BRL' }) %></strong>
+          TOTAL DE SAÍDAS: <strong><%= (totalExpenses).toLocaleString('pt-BR', {style: 'currency' , currency: 'BRL' }) %></strong>
         </span>
         <span class="info-content">
-          SALDO P/ O MÊS DE <%= nextMonth.toUpperCase() %>: <strong><%= (balance || 0).toLocaleString('pt-BR', {style: 'currency' , currency: 'BRL' }) %></strong>
+          SALDO P/ O MÊS DE <%= nextMonth.toUpperCase() %>: <strong><%= (balance).toLocaleString('pt-BR', {style: 'currency' , currency: 'BRL' }) %></strong>
         </span>
       </div>
     </div>

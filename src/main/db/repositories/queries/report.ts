@@ -4,10 +4,7 @@ SELECT
   m.name AS name,
   (
     SELECT
-      CASE
-        WHEN SUM(t.value) IS NULL THEN 0
-        ELSE SUM(t.value)
-      END
+      IFNULL(SUM(t.value), 0)
     FROM
       tithes t
     WHERE
@@ -17,10 +14,7 @@ SELECT
   ) AS totalTithes,
   (
     SELECT
-      CASE
-        WHEN SUM(o.value) IS NULL THEN 0
-        ELSE SUM(o.value)
-      END
+      IFNULL(SUM(o.value), 0)
     FROM
       offers o
     WHERE
@@ -39,7 +33,7 @@ export const reportTotalEntriesByReferenceDateQuery = /* sql */ `
 SELECT
   (
     SELECT
-      SUM(t.value)
+      IFNULL(SUM(t.value), 0)
     FROM
       tithes t
     WHERE
@@ -48,7 +42,7 @@ SELECT
   ) AS totalTithes,
   (
     SELECT
-      SUM(so.value)
+      IFNULL(SUM(so.value), 0)
     FROM
       offers so
     WHERE
@@ -58,7 +52,7 @@ SELECT
   ) AS totalSpecialOffers,
   (
     SELECT
-      SUM(lo.value)
+      IFNULL(SUM(lo.value), 0)
     FROM
       offers lo
     WHERE
@@ -68,7 +62,7 @@ SELECT
   ) AS totalLooseOffers,
   (
     SELECT
-      SUM(wb.value)
+      IFNULL(SUM(wb.value), 0)
     FROM
       withdrawalsToTheBankAccount wb
     WHERE
@@ -77,7 +71,7 @@ SELECT
   ) AS totalWithdrawalsBankAccount,
   (
     SELECT
-      SUM(et.total)
+      IFNULL(SUM(et.total), 0)
     FROM
       (
         SELECT
@@ -111,10 +105,10 @@ export const previousBalanceQuery = /* sql */ `
 SELECT
   (((
     SELECT
-      ib.value
+      IFNULL(ib.value, 0)
     FROM
       initialBalance ib
-  ) + totalEntries ) - totalExpenses) AS previousBalance
+  ) + IFNULL(totalEntries, 0) ) - IFNULL(totalExpenses, 0)) AS previousBalance
 FROM
 (
   SELECT

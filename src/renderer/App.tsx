@@ -4,27 +4,28 @@ import { FaChurch } from 'react-icons/fa';
 import { ReactComponent as Logo } from './assets/logo.svg';
 import { Menu } from './components/Menu';
 import type { Screens } from './@types/Screens.type';
+import { PartialBalance } from './components/PartialBalance';
 import { AddMember } from './components/Add/AddMember';
 import { AddTithe } from './components/Add/AddTithe';
 import { AddOffer } from './components/Add/AddOffer';
 import { AddExpenseCategory } from './components/Add/AddExpenseCategory';
 import { AddExpense } from './components/Add/AddExpense';
+import { AddWithdrawToTheBankAccount } from './components/Add/AddWithdrawToTheBankAccount';
 import { EditMembers } from './components/Edit/EditMembers';
 import { EditTithes } from './components/Edit/EditTithes';
 import { EditOffers } from './components/Edit/EditOffers';
 import { EditExpenseCategories } from './components/Edit/EditExpenseCategories';
 import { EditExpenses } from './components/Edit/EditExpenses';
+import { EditWithdrawToTheBankAccount } from './components/Edit/EditWithdrawToTheBankAccount';
 import { EntriesReport } from './components/Report/EntriesReport';
 import { OutputReport } from './components/Report/OutputReport';
 import { GeneralReport } from './components/Report/GeneralReport';
 import { BalanceConfig } from './components/BalanceConfig';
 import './styles/reactToastify.css';
-import { AddWithdrawToTheBankAccount } from './components/Add/AddWithdrawToTheBankAccount';
-import { EditWithdrawToTheBankAccount } from './components/Edit/EditWithdrawToTheBankAccount';
-import { PartialBalance } from './components/PartialBalance';
 
 export function App() {
   const [selectedScreen, setSelectedScreen] = useState<Screens>('' as Screens);
+  const [refreshPartialBalance, setRefreshPartialBalance] = useState(false);
 
   return (
     <div className="flex w-screen h-screen">
@@ -37,15 +38,20 @@ export function App() {
       <main className="flex flex-1 justify-center items-center w-5/6">
         {!selectedScreen && (
           <>
-            <BalanceConfig />
-            <PartialBalance />
+            <BalanceConfig
+              refreshPartialBalance={() => setRefreshPartialBalance(true)}
+            />
+            <PartialBalance
+              refresh={refreshPartialBalance}
+              refreshed={() => setRefreshPartialBalance(false)}
+            />
           </>
         )}
         {selectedScreen && (
           <button
             tabIndex={0}
             type="button"
-            className="focus:outline-none focus:text-teal-500 text-zinc-900  hover:text-teal-500 fixed top-2 right-12 cursor-pointer"
+            className="z-40 focus:outline-none focus:text-teal-500 text-zinc-900  hover:text-teal-500 fixed top-2 right-12 cursor-pointer"
             onClick={() => setSelectedScreen('' as Screens)}
           >
             <FaChurch title="Voltar para tela inicial" className="w-14 h-14" />

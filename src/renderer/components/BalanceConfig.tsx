@@ -7,14 +7,18 @@ import { FilterByMonthAndYear } from './FilterByMonthAndYear';
 import { SubmitButton } from './SubmitButton';
 import { ResetButton } from './ResetButton';
 
-export function BalanceConfig() {
+interface BalanceConfigProps {
+  refreshPartialBalance: () => void;
+}
+
+export function BalanceConfig({ refreshPartialBalance }: BalanceConfigProps) {
   const [show, setShow] = useState(false);
   const [referenceMonth, setReferenceMonth] = useState(
     new Date().getMonth() + 1
   );
   const [referenceYear, setReferenceYear] = useState(new Date().getFullYear());
   const [defaultBalance, setDefaultBalance] = useState({
-    value: 0,
+    value: '0.0',
     referenceMonth: new Date().getMonth() + 1,
     referenceYear: new Date().getFullYear(),
   });
@@ -26,7 +30,10 @@ export function BalanceConfig() {
       try {
         const initialBalance = await window.initialBalance.get();
         if (initialBalance) {
-          setDefaultBalance(initialBalance);
+          setDefaultBalance({
+            ...initialBalance,
+            value: initialBalance.value.toFixed(2),
+          });
           setBalance(initialBalance.value.toFixed(2));
           setReferenceMonth(initialBalance.referenceMonth);
           setReferenceYear(initialBalance.referenceYear);
@@ -100,6 +107,7 @@ export function BalanceConfig() {
       toast.success('Saldo inicial configurado com sucesso!', {
         progress: undefined,
       });
+      refreshPartialBalance();
     } catch (err) {
       toast.error(
         `Erro ao configurar saldo inicial: ${(err as Error).message}`,
@@ -109,7 +117,7 @@ export function BalanceConfig() {
       );
     } finally {
       setDefaultBalance({
-        value: floatValue,
+        value: floatValue.toString(),
         referenceMonth,
         referenceYear,
       });
@@ -119,7 +127,7 @@ export function BalanceConfig() {
   };
 
   const handleReset = () => {
-    setBalance(defaultBalance.value.toFixed(2));
+    setBalance(defaultBalance.value);
     setReferenceMonth(defaultBalance.referenceMonth);
     setReferenceYear(defaultBalance.referenceYear);
     setShow(false);
