@@ -12,7 +12,7 @@ import {
   IExpenseStateWithCategoryName,
 } from './@types/Expense';
 import { IBalance } from './@types/Balance';
-import { IWithdrawalToTheBankAccountState } from './@types/WithdrawalToTheBankAccount';
+import { IWithdrawToTheBankAccountState } from './@types/WithdrawToTheBankAccount';
 
 const memberHandler = {
   create: async (member: IMember) => {
@@ -157,13 +157,11 @@ const initialBalanceHandler = {
   },
 };
 
-const withdrawalToTheBankAccountHandler = {
-  create: async (
-    withdrawalToTheBankAccount: IWithdrawalToTheBankAccountState
-  ) => {
+const withdrawToTheBankAccountHandler = {
+  create: async (withdrawToTheBankAccount: IWithdrawToTheBankAccountState) => {
     return ipcRenderer.invoke(
-      'withdrawalToTheBankAccount:create',
-      withdrawalToTheBankAccount
+      'withdrawToTheBankAccount:create',
+      withdrawToTheBankAccount
     ) as Promise<void>;
   },
   findAllByReferenceDate: async (
@@ -171,23 +169,21 @@ const withdrawalToTheBankAccountHandler = {
     referenceYear: number
   ) => {
     return ipcRenderer.invoke(
-      'withdrawalToTheBankAccount:findAllByReferenceDate',
+      'withdrawToTheBankAccount:findAllByReferenceDate',
       referenceMonth,
       referenceYear
-    ) as Promise<IWithdrawalToTheBankAccountState[]>;
+    ) as Promise<IWithdrawToTheBankAccountState[]>;
   },
-  update: async (
-    withdrawalToTheBankAccount: IWithdrawalToTheBankAccountState
-  ) => {
+  update: async (withdrawToTheBankAccount: IWithdrawToTheBankAccountState) => {
     return ipcRenderer.invoke(
-      'withdrawalToTheBankAccount:update',
-      withdrawalToTheBankAccount
+      'withdrawToTheBankAccount:update',
+      withdrawToTheBankAccount
     ) as Promise<void>;
   },
-  delete: async (withdrawalToTheBankAccountId: string) => {
+  delete: async (withdrawToTheBankAccountId: string) => {
     return ipcRenderer.invoke(
-      'withdrawalToTheBankAccount:delete',
-      withdrawalToTheBankAccountId
+      'withdrawToTheBankAccount:delete',
+      withdrawToTheBankAccountId
     ) as Promise<void>;
   },
 };
@@ -200,8 +196,8 @@ contextBridge.exposeInMainWorld('expense', expenseHandler);
 contextBridge.exposeInMainWorld('report', reportHandler);
 contextBridge.exposeInMainWorld('initialBalance', initialBalanceHandler);
 contextBridge.exposeInMainWorld(
-  'withdrawalToTheBankAccount',
-  withdrawalToTheBankAccountHandler
+  'withdrawToTheBankAccount',
+  withdrawToTheBankAccountHandler
 );
 
 export type MemberHandler = typeof memberHandler;
@@ -211,5 +207,5 @@ export type ExpenseCategoryHandler = typeof expenseCategoryHandler;
 export type ExpenseHandler = typeof expenseHandler;
 export type ReportHandler = typeof reportHandler;
 export type InitialBalanceHandler = typeof initialBalanceHandler;
-export type WithdrawalToTheBankAccountHandler =
-  typeof withdrawalToTheBankAccountHandler;
+export type WithdrawToTheBankAccountHandler =
+  typeof withdrawToTheBankAccountHandler;

@@ -5,7 +5,7 @@ import { memberHandlers } from './memberHandlers';
 import { offerHandlers } from './offerHandlers';
 import { reportHandlers } from './reportHandlers';
 import { titheHandlers } from './titheHandlers';
-import { withdrawalsToTheBankAccountHandlers } from './withdrawalToTheBankAccountHandlers';
+import { withdrawsToTheBankAccountHandlers } from './withdrawToTheBankAccountHandlers';
 
 export const createPreloadHandlers = () => {
   memberHandlers();
@@ -15,5 +15,5 @@ export const createPreloadHandlers = () => {
   expenseHandlers();
   reportHandlers();
   initialBalanceHandler();
-  withdrawalsToTheBankAccountHandlers();
+  withdrawsToTheBankAccountHandlers();
 };

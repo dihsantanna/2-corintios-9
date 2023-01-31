@@ -1,7 +1,7 @@
 import {
-  IWithdrawalToTheBankAccount,
-  IWithdrawalToTheBankAccountState,
-} from '../../@types/WithdrawalToTheBankAccount';
+  IWithdrawToTheBankAccount,
+  IWithdrawToTheBankAccountState,
+} from '../../@types/WithdrawToTheBankAccount';
 import { idGenerator } from '../../helpers/idGenerator';
 import { DatabaseConnection } from '../DatabaseConnection';
 import {
@@ -9,9 +9,9 @@ import {
   deleteQuery,
   findAllByReferenceDateQuery,
   updateQuery,
-} from './queries/withdrawalsToTheBankAccount';
+} from './queries/withdrawToTheBankAccount';
 
-export class WithdrawalToTheBankAccount {
+export class WithdrawToTheBankAccount {
   private id = idGenerator;
 
   constructor(private db = new DatabaseConnection()) {}
@@ -20,7 +20,7 @@ export class WithdrawalToTheBankAccount {
     value,
     referenceMonth,
     referenceYear,
-  }: IWithdrawalToTheBankAccount) => {
+  }: IWithdrawToTheBankAccount) => {
     return new Promise<void>((resolve, reject) => {
       const id = this.id();
       this.db.run(
@@ -43,21 +43,19 @@ export class WithdrawalToTheBankAccount {
     referenceMonth: number,
     referenceYear: number
   ) => {
-    return new Promise<IWithdrawalToTheBankAccountState[]>(
-      (resolve, reject) => {
-        this.db.all(
-          findAllByReferenceDateQuery,
-          {
-            $referenceMonth: referenceMonth,
-            $referenceYear: referenceYear,
-          },
-          (err, rows) => {
-            if (err) reject(err);
-            resolve(rows);
-          }
-        );
-      }
-    );
+    return new Promise<IWithdrawToTheBankAccountState[]>((resolve, reject) => {
+      this.db.all(
+        findAllByReferenceDateQuery,
+        {
+          $referenceMonth: referenceMonth,
+          $referenceYear: referenceYear,
+        },
+        (err, rows) => {
+          if (err) reject(err);
+          resolve(rows);
+        }
+      );
+    });
   };
 
   update = async ({
@@ -65,7 +63,7 @@ export class WithdrawalToTheBankAccount {
     value,
     referenceMonth,
     referenceYear,
-  }: IWithdrawalToTheBankAccountState) => {
+  }: IWithdrawToTheBankAccountState) => {
     return new Promise<void>((resolve, reject) => {
       this.db.run(
         updateQuery,
