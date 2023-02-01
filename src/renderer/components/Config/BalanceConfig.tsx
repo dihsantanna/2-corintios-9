@@ -5,8 +5,8 @@ import { FcDataConfiguration } from 'react-icons/fc';
 import { IoCloseSharp } from 'react-icons/io5';
 import { months } from 'renderer/utils/months';
 import { getYears } from 'renderer/utils/years';
-import { SubmitButton } from './SubmitButton';
-import { ResetButton } from './ResetButton';
+import { SubmitButton } from '../SubmitButton';
+import { ResetButton } from '../ResetButton';
 
 interface BalanceConfigProps {
   refreshPartialBalance: () => void;

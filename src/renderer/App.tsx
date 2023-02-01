@@ -20,7 +20,7 @@ import { EditWithdrawToTheBankAccount } from './components/Edit/EditWithdrawToTh
 import { EntriesReport } from './components/Report/EntriesReport';
 import { OutputReport } from './components/Report/OutputReport';
 import { GeneralReport } from './components/Report/GeneralReport';
-import { BalanceConfig } from './components/BalanceConfig';
+import { BalanceConfig } from './components/Config/BalanceConfig';
 import './styles/reactToastify.css';
 
 export function App() {
