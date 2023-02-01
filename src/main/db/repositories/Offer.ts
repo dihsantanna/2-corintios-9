@@ -41,7 +41,11 @@ export class Offer {
           if (err) {
             reject(err);
           } else {
-            resolve(rows);
+            resolve(
+              rows.sort((a, b) =>
+                (a.memberName || '').localeCompare(b.memberName || '')
+              )
+            );
           }
         }
       );

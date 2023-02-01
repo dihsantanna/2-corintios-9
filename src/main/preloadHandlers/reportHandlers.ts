@@ -42,6 +42,8 @@ export const reportHandlers = () => {
         referenceYear
       );
 
+      model.close();
+
       const totalExpenses = expenses.reduce(
         (total, { value }) => total + value,
         0

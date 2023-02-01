@@ -24,9 +24,6 @@ export function EditTithes() {
   );
   const [referenceYear, setReferenceYear] = useState(new Date().getFullYear());
 
-  const sortTithes = (tithesArr: TitheStateWithMemberName[]) =>
-    tithesArr.sort((a, b) => a.memberName.localeCompare(b.memberName));
-
   useEffect(() => {
     const getTithes = async () => {
       try {
@@ -35,12 +32,10 @@ export function EditTithes() {
           referenceMonth,
           referenceYear
         );
-        const toFixedTithes = sortTithes(
-          newTithes.map((tithe) => ({
-            ...tithe,
-            value: tithe.value.toFixed(2),
-          }))
-        );
+        const toFixedTithes = newTithes.map((tithe) => ({
+          ...tithe,
+          value: tithe.value.toFixed(2),
+        }));
         setTithes(toFixedTithes);
         setDefaultTithes(toFixedTithes);
       } catch (err) {

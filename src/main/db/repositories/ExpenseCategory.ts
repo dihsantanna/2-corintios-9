@@ -35,7 +35,11 @@ export class ExpenseCategory {
         if (err) {
           reject(err);
         } else {
-          resolve(rows as IExpenseCategory[]);
+          resolve(
+            rows.sort((a, b) =>
+              a.name.localeCompare(b.name)
+            ) as IExpenseCategory[]
+          );
         }
       });
     }).finally(() => this.db.close());

@@ -51,7 +51,19 @@ export class Expense {
           if (err) {
             reject(err);
           }
-          resolve(rows as IExpenseStateWithCategoryName[]);
+          resolve(
+            rows.sort((a, b) => {
+              if (a.expenseCategoryName !== b.expenseCategoryName) {
+                return a.expenseCategoryName.localeCompare(
+                  b.expenseCategoryName
+                );
+              }
+              if (a.title !== b.title) {
+                return a.title.localeCompare(b.title);
+              }
+              return a.value - b.value;
+            }) as IExpenseStateWithCategoryName[]
+          );
         }
       );
     }).finally(() => this.db.close());

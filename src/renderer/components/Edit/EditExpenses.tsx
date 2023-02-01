@@ -30,13 +30,6 @@ export function EditExpenses() {
   );
   const [referenceYear, setReferenceYear] = useState(new Date().getFullYear());
 
-  const sortExpenses = (expensesArr: ExpensesWithExpenseCategory[]) =>
-    expensesArr.sort((a, b) =>
-      a.expenseCategoryName === b.expenseCategoryName
-        ? a.title.localeCompare(b.title)
-        : a.expenseCategoryName.localeCompare(b.expenseCategoryName)
-    );
-
   useEffect(() => {
     const getExpenseCategories = async () => {
       try {
@@ -64,12 +57,10 @@ export function EditExpenses() {
             referenceMonth,
             referenceYear
           );
-        const toFixedExpenses = sortExpenses(
-          newExpenses.map((expense) => ({
-            ...expense,
-            value: (expense.value as number).toFixed(2),
-          }))
-        );
+        const toFixedExpenses = newExpenses.map((expense) => ({
+          ...expense,
+          value: (expense.value as number).toFixed(2),
+        }));
         setExpenses(toFixedExpenses);
         setDefaultExpenses(toFixedExpenses);
       } catch (err) {

@@ -59,7 +59,7 @@ export const generalReportGenerate = async (
       totalEntries,
       twColors,
       expenseCategories,
-      expenses: expenses.sort((a, b) => a.value - b.value),
+      expenses,
       totalExpenses,
       months,
       month: months[referenceMonth as keyof typeof months],

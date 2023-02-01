@@ -184,11 +184,7 @@ export function EditOffers() {
     }
   };
 
-  const orderedOffers = filterOfferByType(offers).sort((a, b) =>
-    a.memberName && b.memberName
-      ? (a.memberName as string).localeCompare(b.memberName as string)
-      : 0
-  );
+  const filteredExpenses = filterOfferByType(offers);
 
   return (
     <div className="flex flex-col items-center w-full h-full">
@@ -234,12 +230,12 @@ export function EditOffers() {
         <span className="w-2/6 flex items-center justify-center">Editar</span>
       </div>
       <div className="w-full h-full flex flex-col overflow-auto scrollbar-thin scrollbar-thumb-zinc-900 scrollbar-track-zinc-300">
-        {!orderedOffers.length ? (
+        {!filteredExpenses.length ? (
           <span className="m-auto text-zinc-500">
             Não há ofertas cadastrados para o mês e ano selecionados!
           </span>
         ) : (
-          orderedOffers.map(
+          filteredExpenses.map(
             (
               {
                 id,

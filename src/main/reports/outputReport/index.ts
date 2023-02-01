@@ -31,7 +31,7 @@ export const outputReportGenerate = async (
       month: months[referenceMonth as keyof typeof months],
       year: referenceYear,
       expenseCategories,
-      expenses: expenses.sort((a, b) => a.value - b.value),
+      expenses,
     });
 
     browser = await puppeteer.launch();

@@ -40,7 +40,7 @@ export class Report {
             if (err) {
               reject(err);
             }
-            resolve(rows);
+            resolve(rows.sort((a, b) => a.name.localeCompare(b.name)));
           }
         );
       }

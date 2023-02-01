@@ -35,9 +35,7 @@ export const entriesReportGenerate = async (
       twColors,
       month: months[referenceMonth as keyof typeof months],
       year: referenceYear,
-      membersWithTitheAndOffer: membersWithTitheAndOffer.sort((a, b) =>
-        a.name.localeCompare(b.name)
-      ),
+      membersWithTitheAndOffer,
       totalTithes,
       totalSpecialOffers,
       totalLooseOffers,

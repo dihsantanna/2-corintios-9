@@ -32,7 +32,9 @@ export class Member {
         if (err) {
           reject(err);
         } else {
-          resolve(rows as IMemberState[]);
+          resolve(
+            rows.sort((a, b) => a.name.localeCompare(b.name)) as IMemberState[]
+          );
         }
       });
     }).finally(() => this.db.close());
