@@ -1,12 +1,12 @@
 {
-  "name": "electron-react-boilerplate",
-  "version": "4.6.0",
-  "description": "A foundation for scalable desktop apps",
+  "name": "2-corintios-9",
+  "version": "0.0.1",
+  "description": "A Solução para a tesouraria de sua igreja",
   "license": "MIT",
   "author": {
-    "name": "Electron React Boilerplate Maintainers",
-    "email": "electronreactboilerplate@gmail.com",
-    "url": "https://github.com/electron-react-boilerplate"
+    "name": "Diogo Sant'Anna",
+    "email": "diogosantanna08@gmail.com",
+    "url": "https://github.com/dihsantanna"
   },
   "main": "./dist/main/main.js",
   "scripts": {

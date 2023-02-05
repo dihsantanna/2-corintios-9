@@ -5,6 +5,9 @@ import twColors from 'tailwindcss/colors';
 import { ExpenseCategory } from '../../db/repositories/ExpenseCategory';
 import { months } from '../../utils/months';
 import { Expense } from '../../db/repositories/Expense';
+import { DataOfChurch } from '../../db/repositories/DataOfChurch';
+
+type MonthKey = keyof typeof months;
 
 export const outputReportGenerate = async (
   referenceMonth: number,
@@ -21,6 +24,26 @@ export const outputReportGenerate = async (
       referenceYear
     );
 
+    const dataOfChurch = new DataOfChurch();
+
+    const {
+      logoSrc,
+      name,
+      foundationDate,
+      cnpj,
+      street,
+      number,
+      district,
+      city,
+      state,
+      cep,
+    } = await dataOfChurch.get();
+
+    const [day, month, year] = new Date(foundationDate)
+      .toLocaleString('pt-BR')
+      .split(' ')[0]
+      .split('/');
+
     const filePath =
       process.env.NODE_ENV === 'production'
         ? path.join(process.resourcesPath, 'reports/outputReport.ejs')
@@ -32,6 +55,14 @@ export const outputReportGenerate = async (
       year: referenceYear,
       expenseCategories,
       expenses,
+      logoSrc,
+      name,
+      foundationDate: `Organizada em ${day} de ${
+        months[+month as MonthKey]
+      } de ${year}`,
+      cnpj: `CNPJ - ${cnpj}`,
+      address: `${street}, ${number} - ${district} - ${city} - ${state}`,
+      cep: `CEP - ${cep}`,
     });
 
     browser = await puppeteer.launch();

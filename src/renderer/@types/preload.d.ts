@@ -1,4 +1,5 @@
 import {
+  DataOfChurchHandler,
   ExpenseCategoryHandler,
   ExpenseHandler,
   InitialBalanceHandler,
@@ -19,6 +20,7 @@ declare global {
     report: ReportHandler;
     initialBalance: InitialBalanceHandler;
     withdrawToTheBankAccount: WithdrawToTheBankAccountHandler;
+    dataOfChurch: DataOfChurchHandler;
   }
 }
 

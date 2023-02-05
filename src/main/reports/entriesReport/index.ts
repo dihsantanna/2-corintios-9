@@ -4,6 +4,9 @@ import * as ejs from 'ejs';
 import twColors from 'tailwindcss/colors';
 import { Report } from '../../db/repositories/Report';
 import { months } from '../../utils/months';
+import { DataOfChurch } from '../../db/repositories/DataOfChurch';
+
+type MonthKey = keyof typeof months;
 
 export const entriesReportGenerate = async (
   referenceMonth: number,
@@ -26,6 +29,26 @@ export const entriesReportGenerate = async (
 
     await report.close();
 
+    const dataOfChurch = new DataOfChurch();
+
+    const {
+      logoSrc,
+      name,
+      foundationDate,
+      cnpj,
+      street,
+      number,
+      district,
+      city,
+      state,
+      cep,
+    } = await dataOfChurch.get();
+
+    const [day, month, year] = new Date(foundationDate)
+      .toLocaleString('pt-BR')
+      .split(' ')[0]
+      .split('/');
+
     const filePath =
       process.env.NODE_ENV === 'production'
         ? path.join(process.resourcesPath, 'reports/entriesReport.ejs')
@@ -33,7 +56,7 @@ export const entriesReportGenerate = async (
 
     const html = await ejs.renderFile(filePath, {
       twColors,
-      month: months[referenceMonth as keyof typeof months],
+      month: months[referenceMonth as MonthKey],
       year: referenceYear,
       membersWithTitheAndOffer,
       totalTithes,
@@ -41,6 +64,14 @@ export const entriesReportGenerate = async (
       totalLooseOffers,
       totalWithdrawalsBankAccount,
       totalEntries,
+      logoSrc,
+      name,
+      foundationDate: `Organizada em ${day} de ${
+        months[+month as MonthKey]
+      } de ${year}`,
+      cnpj: `CNPJ - ${cnpj}`,
+      address: `${street}, ${number} - ${district} - ${city} - ${state}`,
+      cep: `CEP - ${cep}`,
     });
 
     browser = await puppeteer.launch();

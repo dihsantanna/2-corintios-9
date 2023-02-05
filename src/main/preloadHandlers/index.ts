@@ -1,3 +1,4 @@
+import { dataOfChurchHandler } from './dataOfChurchHandler';
 import { expenseCategoryHandlers } from './expenseCategoryHandlers';
 import { expenseHandlers } from './expenseHandlers';
 import { initialBalanceHandler } from './initialBalanceHandler';
@@ -16,4 +17,5 @@ export const createPreloadHandlers = () => {
   reportHandlers();
   initialBalanceHandler();
   withdrawsToTheBankAccountHandlers();
+  dataOfChurchHandler();
 };

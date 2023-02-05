@@ -17,6 +17,7 @@ import {
   IWithdrawToTheBankAccountState,
 } from './@types/WithdrawToTheBankAccount';
 import { IPartialBalance } from './@types/Report';
+import { IDataOfChurch } from './@types/DataOfChurch';
 
 const memberHandler = {
   create: async (member: IMember) => {
@@ -199,6 +200,18 @@ const withdrawToTheBankAccountHandler = {
   },
 };
 
+const dataOfChurchHandler = {
+  createOrUpdate: async (dataOfChurch: IDataOfChurch) => {
+    return ipcRenderer.invoke(
+      'dataOfChurch:createOrUpdate',
+      dataOfChurch
+    ) as Promise<void>;
+  },
+  get: async () => {
+    return ipcRenderer.invoke('dataOfChurch:get') as Promise<IDataOfChurch>;
+  },
+};
+
 contextBridge.exposeInMainWorld('member', memberHandler);
 contextBridge.exposeInMainWorld('tithe', titheHandler);
 contextBridge.exposeInMainWorld('offer', offerHandler);
@@ -210,6 +223,7 @@ contextBridge.exposeInMainWorld(
   'withdrawToTheBankAccount',
   withdrawToTheBankAccountHandler
 );
+contextBridge.exposeInMainWorld('dataOfChurch', dataOfChurchHandler);
 
 export type MemberHandler = typeof memberHandler;
 export type TitheHandler = typeof titheHandler;
@@ -220,3 +234,4 @@ export type ReportHandler = typeof reportHandler;
 export type InitialBalanceHandler = typeof initialBalanceHandler;
 export type WithdrawToTheBankAccountHandler =
   typeof withdrawToTheBankAccountHandler;
+export type DataOfChurchHandler = typeof dataOfChurchHandler;

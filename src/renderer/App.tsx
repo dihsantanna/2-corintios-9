@@ -1,9 +1,11 @@
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { ToastContainer } from 'react-toastify';
 import { FaChurch } from 'react-icons/fa';
+import { IPartialBalance } from 'main/@types/Report';
 import { ReactComponent as Logo } from './assets/logo.svg';
 import { Menu } from './components/Menu';
 import type { Screens } from './@types/Screens.type';
+import { InitialConfig } from './components/Config/InitialConfig';
 import { PartialBalance } from './components/PartialBalance';
 import { AddMember } from './components/Add/AddMember';
 import { AddTithe } from './components/Add/AddTithe';
@@ -22,10 +24,54 @@ import { OutputReport } from './components/Report/OutputReport';
 import { GeneralReport } from './components/Report/GeneralReport';
 import { BalanceConfig } from './components/Config/BalanceConfig';
 import './styles/reactToastify.css';
+import { DataOfChurchConfig } from './components/Config/DataOfChurchConfig';
+
+const INITIAL_STATE: IPartialBalance = {
+  previousBalance: 0.0,
+  totalTithes: 0.0,
+  totalSpecialOffers: 0.0,
+  totalLooseOffers: 0.0,
+  totalWithdraws: 0.0,
+  totalEntries: 0.0,
+  totalExpenses: 0.0,
+  totalBalance: 0.0,
+};
 
 export function App() {
   const [selectedScreen, setSelectedScreen] = useState<Screens>('' as Screens);
-  const [refreshPartialBalance, setRefreshPartialBalance] = useState(false);
+  const [partialBalance, setPartialBalance] = useState<IPartialBalance>({
+    ...INITIAL_STATE,
+  });
+  const [showInitialConfig, setShowInitialConfig] = useState(false);
+  const [logo, setLogo] = useState('');
+  const [refresh, setRefresh] = useState(false);
+
+  const setInitialConfig = useCallback(async () => {
+    const date = new Date();
+    const month = date.getMonth() + 1;
+    const year = date.getFullYear();
+
+    const dataOfChurch = await window.dataOfChurch.get();
+    const balance = await window.report.partial(month, year);
+
+    if (!dataOfChurch) {
+      setShowInitialConfig(true);
+      return;
+    }
+    setLogo(dataOfChurch.logoSrc);
+    setPartialBalance(balance);
+  }, []);
+
+  useEffect(() => {
+    setInitialConfig();
+  }, [setInitialConfig]);
+
+  useEffect(() => {
+    if (refresh) {
+      setInitialConfig();
+      setRefresh(false);
+    }
+  }, [refresh, setInitialConfig]);
 
   return (
     <div className="flex w-screen h-screen">
@@ -38,13 +84,11 @@ export function App() {
       <main className="flex flex-1 justify-center items-center w-5/6">
         {!selectedScreen && (
           <>
-            <BalanceConfig
-              refreshPartialBalance={() => setRefreshPartialBalance(true)}
-            />
-            <PartialBalance
-              refresh={refreshPartialBalance}
-              refreshed={() => setRefreshPartialBalance(false)}
-            />
+            <div className="fixed top-4 right-4 flex items-center gap-6">
+              <DataOfChurchConfig refreshData={() => setRefresh(true)} />
+              <BalanceConfig refreshPartialBalance={() => setRefresh(true)} />
+            </div>
+            <PartialBalance partialBalance={partialBalance} />
           </>
         )}
         {selectedScreen && (
@@ -56,6 +100,16 @@ export function App() {
           >
             <FaChurch title="Voltar para tela inicial" className="w-14 h-14" />
           </button>
+        )}
+
+        {/* Initial Config */}
+        {showInitialConfig && (
+          <InitialConfig
+            refreshPartialBalance={() => {
+              setShowInitialConfig(false);
+              setRefresh(true);
+            }}
+          />
         )}
 
         {/* Add Screens */}
@@ -85,13 +139,26 @@ export function App() {
         {selectedScreen === 'outputReport' && <OutputReport />}
         {selectedScreen === 'generalReport' && <GeneralReport />}
 
-        <Logo
-          className={`${
-            selectedScreen
-              ? 'w-10 h-10 fixed bottom-4 right-4 opacity-80'
-              : 'w-48 h-48'
-          } transition-all duration-500 ease-in-out`}
-        />
+        {/* Logo */}
+        {logo ? (
+          <img
+            src={logo}
+            alt="Logo"
+            className={`${
+              selectedScreen
+                ? 'w-12 fixed bottom-4 right-4 opacity-80'
+                : 'w-[200px]'
+            } transition-all duration-500 ease-in-out`}
+          />
+        ) : (
+          <Logo
+            className={`${
+              selectedScreen
+                ? 'w-12 fixed bottom-4 right-4 opacity-80'
+                : 'w-[200px]'
+            } transition-all duration-500 ease-in-out`}
+          />
+        )}
       </main>
       <ToastContainer
         position="bottom-right"

@@ -45,5 +45,18 @@ CREATE TABLE IF NOT EXISTS "withdrawalsToTheBankAccount" (
     "referenceMonth" INTEGER NOT NULL,
     "referenceYear" INTEGER NOT NULL
 );
+CREATE TABLE IF NOT EXISTS "dataOfChurch" (
+    "id" TEXT NOT NULL PRIMARY KEY,
+    "logoSrc" TEXT DEFAULT '',
+    "name" TEXT NOT NULL,
+    "foundationDate" NUMERIC NOT NULL,
+    "cnpj" TEXT NOT NULL,
+    "street" TEXT NOT NULL,
+    "number" TEXT NOT NULL,
+    "district" TEXT NOT NULL,
+    "city" TEXT NOT NULL,
+    "state" TEXT NOT NULL,
+    "cep" TEXT NOT NULL
+);
 CREATE UNIQUE INDEX IF NOT EXISTS "expenseCategory_name_key" ON "expenseCategories"("name");
 `;

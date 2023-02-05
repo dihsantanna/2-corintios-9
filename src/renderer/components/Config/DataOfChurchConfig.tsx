@@ -1,17 +1,17 @@
 import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, useState } from 'react';
-import { MdAccountBalance } from 'react-icons/md';
-import { BalanceConfigForm } from './BalanceConfigForm';
+import { FcDataConfiguration } from 'react-icons/fc';
+import { DataOfChurchForm } from './DataOfChurchForm';
 
-interface BalanceConfigProps {
-  refreshPartialBalance: () => void;
+interface DataOfChurchConfigProps {
+  refreshData: () => void;
 }
 
-export function BalanceConfig({ refreshPartialBalance }: BalanceConfigProps) {
+export function DataOfChurchConfig({ refreshData }: DataOfChurchConfigProps) {
   const [show, setShow] = useState(false);
 
   const afterSubmit = () => {
-    refreshPartialBalance();
+    refreshData();
   };
 
   return (
@@ -23,8 +23,8 @@ export function BalanceConfig({ refreshPartialBalance }: BalanceConfigProps) {
         px-2 py-1 hover:text-zinc-900 hover:bg-teal-500 gap-2"
         onClick={() => setShow(true)}
       >
-        Configurar Saldo Inicial
-        <MdAccountBalance className="w-8 h-8" />
+        Configurar Dados da Igreja
+        <FcDataConfiguration className="w-8 h-8" />
       </button>
       <Transition.Root show={show} as={Fragment}>
         <Dialog
@@ -55,20 +55,20 @@ export function BalanceConfig({ refreshPartialBalance }: BalanceConfigProps) {
                 leaveFrom="opacity-100 translate-y-0 sm:scale-100"
                 leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
               >
-                <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
+                <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-4xl">
                   <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                     <div className="flex flex-col items-center justify-center ">
-                      <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                      <div className="w-full mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
                         <Dialog.Title
                           as="h3"
                           className="text-lg font-medium leading-6 text-gray-900"
                         >
-                          Configurar Saldo Inicial
+                          Configurar Dados da Igreja
                         </Dialog.Title>
-                        <div className="mt-2 flex flex-col items-center justify-center">
-                          <BalanceConfigForm
-                            afterSubmit={afterSubmit}
+                        <div className="w-full mt-2 flex flex-col items-center justify-center">
+                          <DataOfChurchForm
                             setShow={setShow}
+                            afterSubmit={afterSubmit}
                           />
                         </div>
                       </div>
