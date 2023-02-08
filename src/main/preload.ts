@@ -16,7 +16,7 @@ import {
   IWithdrawToTheBankAccount,
   IWithdrawToTheBankAccountState,
 } from './@types/WithdrawToTheBankAccount';
-import { IPartialBalance } from './@types/Report';
+import { IEntriesState, IPartialBalance } from './@types/Report';
 import { IDataOfChurch } from './@types/DataOfChurch';
 
 const memberHandler = {
@@ -132,7 +132,7 @@ const reportHandler = {
       'report:entries',
       referenceMonth,
       referenceYear
-    ) as Promise<Buffer>;
+    ) as Promise<IEntriesState>;
   },
   output: async (referenceMonth: number, referenceYear: number) => {
     return ipcRenderer.invoke(

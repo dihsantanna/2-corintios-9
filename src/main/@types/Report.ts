@@ -27,3 +27,8 @@ export interface IPartialBalance {
   totalExpenses: number;
   totalBalance: number;
 }
+
+export interface IEntriesState {
+  tithesAndSpecialOffers: IMemberWithTotalOffersAndTotalTithes[];
+  totalEntries: ITotalEntries;
+}

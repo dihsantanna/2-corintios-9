@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { ToastContainer } from 'react-toastify';
 import { FaChurch } from 'react-icons/fa';
 import { IPartialBalance } from 'main/@types/Report';
+import { IDataOfChurch } from 'main/@types/DataOfChurch';
 import { ReactComponent as Logo } from './assets/logo.svg';
 import { Menu } from './components/Menu';
 import type { Screens } from './@types/Screens.type';
@@ -20,11 +21,11 @@ import { EditExpenseCategories } from './components/Edit/EditExpenseCategories';
 import { EditExpenses } from './components/Edit/EditExpenses';
 import { EditWithdrawToTheBankAccount } from './components/Edit/EditWithdrawToTheBankAccount';
 import { EntriesReport } from './components/Report/EntriesReport';
-import { OutputReport } from './components/Report/OutputReport';
-import { GeneralReport } from './components/Report/GeneralReport';
+// import { OutputReport } from './components/Report/OutputReport';
+// import { GeneralReport } from './components/Report/GeneralReport';
 import { BalanceConfig } from './components/Config/BalanceConfig';
-import './styles/reactToastify.css';
 import { DataOfChurchConfig } from './components/Config/DataOfChurchConfig';
+import './styles/reactToastify.css';
 
 const INITIAL_STATE: IPartialBalance = {
   previousBalance: 0.0,
@@ -38,12 +39,14 @@ const INITIAL_STATE: IPartialBalance = {
 };
 
 export function App() {
-  const [selectedScreen, setSelectedScreen] = useState<Screens>('' as Screens);
+  const [selectedScreen, setSelectedScreen] = useState<Screens>(
+    'entriesReport' as Screens
+  );
   const [partialBalance, setPartialBalance] = useState<IPartialBalance>({
     ...INITIAL_STATE,
   });
   const [showInitialConfig, setShowInitialConfig] = useState(false);
-  const [logo, setLogo] = useState('');
+  const [dataOfChurch, setDataOfChurch] = useState({} as IDataOfChurch);
   const [refresh, setRefresh] = useState(false);
 
   const setInitialConfig = useCallback(async () => {
@@ -51,14 +54,14 @@ export function App() {
     const month = date.getMonth() + 1;
     const year = date.getFullYear();
 
-    const dataOfChurch = await window.dataOfChurch.get();
+    const churchData = await window.dataOfChurch.get();
     const balance = await window.report.partial(month, year);
 
-    if (!dataOfChurch) {
+    if (!churchData) {
       setShowInitialConfig(true);
       return;
     }
-    setLogo(dataOfChurch.logoSrc);
+    setDataOfChurch(churchData);
     setPartialBalance(balance);
   }, []);
 
@@ -135,14 +138,16 @@ export function App() {
         )}
 
         {/* Report Screens */}
-        {selectedScreen === 'entriesReport' && <EntriesReport />}
-        {selectedScreen === 'outputReport' && <OutputReport />}
-        {selectedScreen === 'generalReport' && <GeneralReport />}
+        {selectedScreen === 'entriesReport' && (
+          <EntriesReport dataOfChurch={dataOfChurch} />
+        )}
+        {/* {selectedScreen === 'outputReport' && <OutputReport />} */}
+        {/* {selectedScreen === 'generalReport' && <GeneralReport />} */}
 
         {/* Logo */}
-        {logo ? (
+        {dataOfChurch.logoSrc ? (
           <img
-            src={logo}
+            src={dataOfChurch.logoSrc}
             alt="Logo"
             className={`${
               selectedScreen

@@ -8,6 +8,7 @@ module.exports = {
       colors: {
         sky: colors.sky,
         cyan: colors.cyan,
+        redOrange: '#f14f1b',
       },
     },
   },

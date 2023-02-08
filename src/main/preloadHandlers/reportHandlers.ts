@@ -2,14 +2,31 @@ import { ipcMain } from 'electron';
 import { IPartialBalance } from '../@types/Report';
 import { Report } from '../db/repositories/Report';
 import { Expense } from '../db/repositories/Expense';
-import { entriesReportGenerate } from '../reports/entriesReport';
 import { outputReportGenerate } from '../reports/outputReport';
 import { generalReportGenerate } from '../reports/generalReport';
 
 export const reportHandlers = () => {
-  ipcMain.handle('report:entries', (_event, referenceMonth, referenceYear) => {
-    return entriesReportGenerate(referenceMonth, referenceYear);
-  });
+  ipcMain.handle(
+    'report:entries',
+    async (_event, referenceMonth, referenceYear) => {
+      const report = new Report();
+      const totalEntries = await report.getTotalEntries(
+        referenceMonth,
+        referenceYear
+      );
+
+      const tithesAndSpecialOffers = await report.getOffersAndTithesFromMembers(
+        referenceMonth,
+        referenceYear
+      );
+
+      await report.close();
+      return {
+        tithesAndSpecialOffers,
+        totalEntries,
+      };
+    }
+  );
 
   ipcMain.handle('report:output', (_event, referenceMonth, referenceYear) => {
     return outputReportGenerate(referenceMonth, referenceYear);
