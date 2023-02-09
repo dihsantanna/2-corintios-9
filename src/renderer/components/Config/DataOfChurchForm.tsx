@@ -5,25 +5,14 @@ import { ResetButton } from '../ResetButton';
 import { SubmitButton } from '../SubmitButton';
 import logoEmptySrc from '../../assets/logo-empty.png';
 import { states } from '../../utils/states';
+import type { ChurchData } from '../../App';
 
 interface DataOfChurchFormProps {
   afterSubmit?: () => void;
   isInitialConfig?: boolean;
   setShow?: Dispatch<React.SetStateAction<boolean>>;
   setToBalanceConfig?: Dispatch<React.SetStateAction<boolean>>;
-}
-
-export interface DataOfChurch {
-  logoSrc: string;
-  name: string;
-  foundationDate: string;
-  cnpj: string;
-  street: string;
-  number: string;
-  district: string;
-  city: string;
-  state: string;
-  cep: string;
+  churchData?: ChurchData;
 }
 
 const INITIAL_PREVIEW_IMAGE = {
@@ -31,7 +20,7 @@ const INITIAL_PREVIEW_IMAGE = {
   src: logoEmptySrc,
 };
 
-const INITIAL_STATE: DataOfChurch = {
+const INITIAL_STATE: ChurchData = {
   logoSrc: '',
   name: '',
   foundationDate: '',
@@ -49,6 +38,7 @@ export function DataOfChurchForm({
   setShow,
   setToBalanceConfig,
   afterSubmit,
+  churchData,
 }: DataOfChurchFormProps) {
   const [data, setData] = useState({ ...INITIAL_STATE });
   const [previewImage, setPreviewImage] = useState({
@@ -60,16 +50,11 @@ export function DataOfChurchForm({
   useEffect(() => {
     const getDataOfChurch = async () => {
       try {
-        const dataOfChurch = await window.dataOfChurch.get();
-        if (dataOfChurch) {
-          const date = new Date(dataOfChurch.foundationDate);
-          setData({
-            ...dataOfChurch,
-            foundationDate: date.toLocaleDateString('pt-br'),
-          });
+        if (churchData) {
+          setData(churchData);
           setPreviewImage({
-            filename: dataOfChurch.logoSrc,
-            src: dataOfChurch.logoSrc,
+            filename: churchData.logoSrc,
+            src: churchData.logoSrc,
           });
         }
       } catch (err) {
@@ -77,7 +62,7 @@ export function DataOfChurchForm({
       }
     };
     if (!isInitialConfig) getDataOfChurch();
-  }, [isInitialConfig]);
+  }, [churchData, isInitialConfig]);
 
   const imageValidate = (files: FileList | null) => {
     if (!files || files.length === 0) {

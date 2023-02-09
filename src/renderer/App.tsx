@@ -2,7 +2,6 @@ import { useCallback, useEffect, useState } from 'react';
 import { ToastContainer } from 'react-toastify';
 import { FaChurch } from 'react-icons/fa';
 import { IPartialBalance } from 'main/@types/Report';
-import { IDataOfChurch } from 'main/@types/DataOfChurch';
 import { ReactComponent as Logo } from './assets/logo.svg';
 import { Menu } from './components/Menu';
 import type { Screens } from './@types/Screens.type';
@@ -21,7 +20,7 @@ import { EditExpenseCategories } from './components/Edit/EditExpenseCategories';
 import { EditExpenses } from './components/Edit/EditExpenses';
 import { EditWithdrawToTheBankAccount } from './components/Edit/EditWithdrawToTheBankAccount';
 import { EntriesReport } from './components/Report/EntriesReport';
-// import { OutputReport } from './components/Report/OutputReport';
+import { OutputReport } from './components/Report/OutputReport';
 // import { GeneralReport } from './components/Report/GeneralReport';
 import { BalanceConfig } from './components/Config/BalanceConfig';
 import { DataOfChurchConfig } from './components/Config/DataOfChurchConfig';
@@ -38,15 +37,28 @@ const INITIAL_STATE: IPartialBalance = {
   totalBalance: 0.0,
 };
 
+export interface ChurchData {
+  logoSrc: string;
+  name: string;
+  foundationDate: string;
+  cnpj: string;
+  street: string;
+  number: string;
+  district: string;
+  city: string;
+  state: string;
+  cep: string;
+}
+
 export function App() {
   const [selectedScreen, setSelectedScreen] = useState<Screens>(
-    'entriesReport' as Screens
+    'outputReport' as Screens
   );
   const [partialBalance, setPartialBalance] = useState<IPartialBalance>({
     ...INITIAL_STATE,
   });
   const [showInitialConfig, setShowInitialConfig] = useState(false);
-  const [dataOfChurch, setDataOfChurch] = useState({} as IDataOfChurch);
+  const [dataOfChurch, setDataOfChurch] = useState({} as ChurchData);
   const [refresh, setRefresh] = useState(false);
 
   const setInitialConfig = useCallback(async () => {
@@ -61,7 +73,14 @@ export function App() {
       setShowInitialConfig(true);
       return;
     }
-    setDataOfChurch(churchData);
+    setDataOfChurch({
+      ...churchData,
+      foundationDate: new Date(churchData.foundationDate)
+        .toLocaleString('pt-BR')
+        .split(' ')[0]
+        .split('/')
+        .join('/'),
+    });
     setPartialBalance(balance);
   }, []);
 
@@ -88,7 +107,10 @@ export function App() {
         {!selectedScreen && (
           <>
             <div className="fixed top-4 right-4 flex items-center gap-6">
-              <DataOfChurchConfig refreshData={() => setRefresh(true)} />
+              <DataOfChurchConfig
+                churchData={dataOfChurch}
+                refreshData={() => setRefresh(true)}
+              />
               <BalanceConfig refreshPartialBalance={() => setRefresh(true)} />
             </div>
             <PartialBalance partialBalance={partialBalance} />
@@ -141,7 +163,9 @@ export function App() {
         {selectedScreen === 'entriesReport' && (
           <EntriesReport dataOfChurch={dataOfChurch} />
         )}
-        {/* {selectedScreen === 'outputReport' && <OutputReport />} */}
+        {selectedScreen === 'outputReport' && (
+          <OutputReport dataOfChurch={dataOfChurch} />
+        )}
         {/* {selectedScreen === 'generalReport' && <GeneralReport />} */}
 
         {/* Logo */}

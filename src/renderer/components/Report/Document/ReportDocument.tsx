@@ -1,11 +1,11 @@
-import { IDataOfChurch } from 'main/@types/DataOfChurch';
 import { Document, Page, View, Image, Text } from '@react-pdf/renderer';
 import { months } from '../../../utils/months';
 import { reportStyles } from './reportStyles';
+import type { ChurchData } from '../../../App';
 
 interface IReportDocumentProps {
   children: React.ReactNode;
-  dataOfChurch: IDataOfChurch;
+  dataOfChurch: ChurchData;
   title: string;
   referenceMonth: number;
   referenceYear: number;
@@ -23,7 +23,7 @@ export function ReportDocument({
   const {
     logoSrc,
     name,
-    foundationDate: date,
+    foundationDate,
     cnpj,
     street,
     number,
@@ -33,10 +33,9 @@ export function ReportDocument({
     cep,
   } = dataOfChurch;
 
-  const [day, month, year] = new Date(date)
-    .toLocaleString('pt-BR')
-    .split(' ')[0]
-    .split('/');
+  const [day, month, year] = foundationDate
+    .split('/')
+    .map((item) => +item.replace(/^0/, ''));
 
   return (
     <Document
@@ -44,7 +43,7 @@ export function ReportDocument({
       creator="Diogo Sant'Anna"
       language="pt-BR"
       title={title}
-      subject={`${title} referente ao mês de ${month} de ${year}`}
+      subject={`${title} referente ao mês de ${referenceMonth} de ${referenceYear}`}
     >
       <Page size="A4" style={reportStyles.page}>
         {Object.keys(dataOfChurch).length ? (
@@ -61,7 +60,7 @@ export function ReportDocument({
               <Text style={reportStyles.subtitleH2}>{name}</Text>
               <Text style={reportStyles.subtitleH3}>
                 {`Organizada em ${day} de ${
-                  months[+month as MonthKey]
+                  months[month as MonthKey]
                 } de ${year}`}
               </Text>
               <Text style={reportStyles.subtitleH5}>{`CNPJ: ${cnpj}`}</Text>

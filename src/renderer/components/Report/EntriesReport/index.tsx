@@ -1,15 +1,15 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { toast } from 'react-toastify';
-import { IDataOfChurch } from 'main/@types/DataOfChurch';
 import { IEntriesState } from 'main/@types/Report';
 import { ReportView } from '../ReportView';
 import { EntriesReportDocument } from '../Document/EntriesReportDocument';
 import { months } from '../../../utils/months';
 import { Info } from '../Info';
 import { Table } from '../Table';
+import type { ChurchData } from '../../../App';
 
 interface EntriesReportProps {
-  dataOfChurch: IDataOfChurch;
+  dataOfChurch: ChurchData;
 }
 
 type MonthKey = keyof typeof months;
@@ -86,7 +86,7 @@ export function EntriesReport({ dataOfChurch }: EntriesReportProps) {
     <ReportView
       fileName={`Relatorio-de-entradas-${months[
         monthAndYear.month as MonthKey
-      ].toLowerCase()}-${monthAndYear.year}`}
+      ].toLowerCase()}-${monthAndYear.year}.pdf`}
       getReport={getReport}
       referenceMonth={referenceMonth}
       referenceYear={referenceYear}

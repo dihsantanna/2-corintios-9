@@ -1,16 +1,16 @@
-import { IDataOfChurch } from 'main/@types/DataOfChurch';
 import {
   IMemberWithTotalOffersAndTotalTithes,
   ITotalEntries,
 } from 'main/@types/Report';
 import { View, Text } from '@react-pdf/renderer';
+import type { ChurchData } from '../../../App';
 import { ReportDocument } from './ReportDocument';
 import { reportStyles } from './reportStyles';
 import { Table } from './components/Table';
 import { Infos } from './components/Infos';
 
-export interface IEntriesReportDocumentProps {
-  dataOfChurch: IDataOfChurch;
+export interface EntriesReportDocumentProps {
+  dataOfChurch: ChurchData;
   referenceMonth: number;
   referenceYear: number;
   tithesAndSpecialOffers: IMemberWithTotalOffersAndTotalTithes[];
@@ -28,7 +28,7 @@ export function EntriesReportDocument({
   tithesAndSpecialOffers,
   totalEntriesReport,
   infos,
-}: IEntriesReportDocumentProps) {
+}: EntriesReportDocumentProps) {
   const { totalSpecialOffers, totalTithes, totalEntries } = totalEntriesReport;
 
   return (

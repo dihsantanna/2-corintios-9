@@ -155,6 +155,9 @@ export const reportStyles = StyleSheet.create({
   },
   rowRight: {
     display: 'flex',
+    borderLeftColor: colors.zinc[300],
+    borderLeftStyle: 'solid',
+    borderLeftWidth: 1,
     flexDirection: 'row',
     fontFamily: 'Helvetica-Bold',
     justifyContent: 'flex-end',

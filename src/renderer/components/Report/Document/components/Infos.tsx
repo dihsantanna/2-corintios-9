@@ -11,8 +11,11 @@ interface InfoProps {
 export function Infos({ infos }: InfoProps) {
   return (
     <View style={reportStyles.info} wrap={false}>
-      {infos.map(({ title, amount }) => (
-        <View style={reportStyles.infoContent}>
+      {infos.map(({ title, amount }, index) => (
+        <View
+          style={reportStyles.infoContent}
+          key={`${title}-${amount}-${index + 1}`}
+        >
           <Text>{title}:</Text>
           <Text style={reportStyles.infoAmount}>
             {amount.toLocaleString('pt-BR', {

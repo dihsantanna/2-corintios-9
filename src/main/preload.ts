@@ -134,13 +134,6 @@ const reportHandler = {
       referenceYear
     ) as Promise<IEntriesState>;
   },
-  output: async (referenceMonth: number, referenceYear: number) => {
-    return ipcRenderer.invoke(
-      'report:output',
-      referenceMonth,
-      referenceYear
-    ) as Promise<Buffer>;
-  },
   general: async (referenceMonth: number, referenceYear: number) => {
     return ipcRenderer.invoke(
       'report:general',

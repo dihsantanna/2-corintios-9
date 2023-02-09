@@ -2,7 +2,6 @@ import { ipcMain } from 'electron';
 import { IPartialBalance } from '../@types/Report';
 import { Report } from '../db/repositories/Report';
 import { Expense } from '../db/repositories/Expense';
-import { outputReportGenerate } from '../reports/outputReport';
 import { generalReportGenerate } from '../reports/generalReport';
 
 export const reportHandlers = () => {
@@ -27,10 +26,6 @@ export const reportHandlers = () => {
       };
     }
   );
-
-  ipcMain.handle('report:output', (_event, referenceMonth, referenceYear) => {
-    return outputReportGenerate(referenceMonth, referenceYear);
-  });
 
   ipcMain.handle('report:general', (_event, referenceMonth, referenceYear) => {
     return generalReportGenerate(referenceMonth, referenceYear);

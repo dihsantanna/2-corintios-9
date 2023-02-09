@@ -2,12 +2,17 @@ import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, useState } from 'react';
 import { FcDataConfiguration } from 'react-icons/fc';
 import { DataOfChurchForm } from './DataOfChurchForm';
+import type { ChurchData } from '../../App';
 
 interface DataOfChurchConfigProps {
   refreshData: () => void;
+  churchData: ChurchData;
 }
 
-export function DataOfChurchConfig({ refreshData }: DataOfChurchConfigProps) {
+export function DataOfChurchConfig({
+  refreshData,
+  churchData,
+}: DataOfChurchConfigProps) {
   const [show, setShow] = useState(false);
 
   const afterSubmit = () => {
@@ -69,6 +74,7 @@ export function DataOfChurchConfig({ refreshData }: DataOfChurchConfigProps) {
                           <DataOfChurchForm
                             setShow={setShow}
                             afterSubmit={afterSubmit}
+                            churchData={churchData}
                           />
                         </div>
                       </div>
