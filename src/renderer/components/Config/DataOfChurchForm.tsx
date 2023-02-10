@@ -53,7 +53,7 @@ export function DataOfChurchForm({
         if (churchData) {
           setData(churchData);
           setPreviewImage({
-            filename: churchData.logoSrc,
+            filename: 'logo-da-igreja',
             src: churchData.logoSrc,
           });
         }
@@ -99,7 +99,7 @@ export function DataOfChurchForm({
       reader.onload = () => {
         resolve(reader.result as string);
       };
-      reader.onerror = (_err) => {
+      reader.onerror = () => {
         toast.error('Erro ao carregar imagem', {
           progress: undefined,
         });
