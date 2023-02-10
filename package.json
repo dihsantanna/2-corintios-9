@@ -262,28 +262,7 @@
       "output": "release/build"
     },
     "extraResources": [
-      "./assets/**",
-      {
-        "from": "./src/main/reports/entriesReport/entriesReport.ejs",
-        "to": "reports/entriesReport.ejs",
-        "filter": [
-          "**/*"
-        ]
-      },
-      {
-        "from": "./src/main/reports/outputReport/outputReport.ejs",
-        "to": "reports/outputReport.ejs",
-        "filter": [
-          "**/*"
-        ]
-      },
-      {
-        "from": "./src/main/reports/generalReport/generalReport.ejs",
-        "to": "reports/generalReport.ejs",
-        "filter": [
-          "**/*"
-        ]
-      }
+      "./assets/**"
     ],
     "publish": {
       "provider": "github",

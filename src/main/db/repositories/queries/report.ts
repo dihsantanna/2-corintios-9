@@ -98,64 +98,63 @@ SELECT
           wb.referenceMonth = $referenceMonth
           AND wb.referenceYear = $referenceYear
       ) AS et
-  ) AS totalEntries
-`;
-
-export const previousBalanceQuery = /* sql */ `
-SELECT
-  (((
-    SELECT
-      IFNULL(ib.value, 0)
-    FROM
-      initialBalance ib
-  ) + IFNULL(totalEntries, 0) ) - IFNULL(totalExpenses, 0)) AS previousBalance
-FROM
-(
-  SELECT
-    SUM(a.amount) AS totalEntries,
-    SUM(DISTINCT te.amount) AS totalExpenses
-  FROM
+  ) AS totalEntries,
   (
     SELECT
-      SUM(t.value) AS amount
+    (((
+      SELECT
+        IFNULL(ib.value, 0)
+      FROM
+        initialBalance ib
+      ) + IFNULL(totalEntries, 0) ) - IFNULL(totalExpenses, 0))
     FROM
-      tithes t
-    WHERE
-      CASE
-        WHEN t.referenceYear = $referenceYear THEN t.referenceMonth < $referenceMonth
-        ELSE t.referenceYear < $referenceYear
-      END
-    UNION
-    SELECT
-      SUM(o.value)
-    FROM
-      offers o
-    WHERE
-      CASE
-        WHEN o.referenceYear = $referenceYear THEN o.referenceMonth < $referenceMonth
-        ELSE o.referenceYear < $referenceYear
-      END
-    UNION
-    SELECT
-      SUM(wb.value)
-    FROM
-      withdrawalsToTheBankAccount wb
-    WHERE
-      CASE
-        WHEN wb.referenceYear = $referenceYear THEN wb.referenceMonth < $referenceMonth
-        ELSE wb.referenceYear < $referenceYear
-      END
-  ) a
-  LEFT JOIN (
-    SELECT
-      SUM(e.value) AS amount
-    FROM
-      expenses e
-    WHERE
-      CASE
-        WHEN e.referenceYear = $referenceYear THEN e.referenceMonth < $referenceMonth
-        ELSE e.referenceYear < $referenceYear
-      END
-  ) te
-) b
+      (
+      SELECT
+        SUM(a.amount) AS totalEntries,
+        SUM(DISTINCT te.amount) AS totalExpenses
+      FROM
+      (
+        SELECT
+          SUM(t.value) AS amount
+        FROM
+          tithes t
+        WHERE
+          CASE
+            WHEN t.referenceYear = $referenceYear THEN t.referenceMonth < $referenceMonth
+            ELSE t.referenceYear < $referenceYear
+          END
+        UNION
+        SELECT
+          SUM(o.value)
+        FROM
+          offers o
+        WHERE
+          CASE
+            WHEN o.referenceYear = $referenceYear THEN o.referenceMonth < $referenceMonth
+            ELSE o.referenceYear < $referenceYear
+          END
+        UNION
+        SELECT
+          SUM(wb.value)
+        FROM
+          withdrawalsToTheBankAccount wb
+        WHERE
+          CASE
+            WHEN wb.referenceYear = $referenceYear THEN wb.referenceMonth < $referenceMonth
+            ELSE wb.referenceYear < $referenceYear
+          END
+      ) a
+      LEFT JOIN (
+        SELECT
+        SUM(e.value) AS amount
+        FROM
+          expenses e
+        WHERE
+          CASE
+            WHEN e.referenceYear = $referenceYear THEN e.referenceMonth < $referenceMonth
+            ELSE e.referenceYear < $referenceYear
+          END
+      ) te
+    )
+  ) AS previousBalance
 `;

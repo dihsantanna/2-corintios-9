@@ -58,7 +58,7 @@ export function Table({
       ))}
       <View style={reportStyles.subTotalContent}>
         <View style={reportStyles.subTotal}>
-          <Text>TOTAL:</Text>
+          <Text>TOTAL</Text>
           <Text>
             {subTotal.toLocaleString('pt-BR', {
               style: 'currency',

@@ -6,15 +6,12 @@ export interface IMemberWithTotalOffersAndTotalTithes {
 }
 
 export interface ITotalEntries {
+  previousBalance: number;
   totalTithes: number;
   totalSpecialOffers: number;
   totalLooseOffers: number;
   totalWithdrawalsBankAccount: number;
   totalEntries: number;
-}
-
-export interface IPreviousBalance {
-  previousBalance: number;
 }
 
 export interface IPartialBalance {

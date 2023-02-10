@@ -7,7 +7,7 @@ interface InfoProps {
   }[];
 }
 
-export function Info({ infos }: InfoProps) {
+export function Infos({ infos }: InfoProps) {
   return (
     <div className="w-full gap-2 p-1 text-zinc-900">
       {infos.map(({ title, amount }) => (

@@ -7,7 +7,7 @@ import type { ChurchData } from '../../../App';
 import { ReportDocument } from './ReportDocument';
 import { reportStyles } from './reportStyles';
 import { Table } from './components/Table';
-import { Infos } from './components/Infos';
+import { Info, Infos } from './components/Infos';
 
 export interface EntriesReportDocumentProps {
   dataOfChurch: ChurchData;
@@ -15,10 +15,7 @@ export interface EntriesReportDocumentProps {
   referenceYear: number;
   tithesAndSpecialOffers: IMemberWithTotalOffersAndTotalTithes[];
   totalEntriesReport: ITotalEntries;
-  infos: {
-    title: string;
-    amount: number;
-  }[];
+  infos: Info[];
 }
 
 export function EntriesReportDocument({

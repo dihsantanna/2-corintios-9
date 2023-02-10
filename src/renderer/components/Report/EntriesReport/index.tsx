@@ -4,7 +4,7 @@ import { IEntriesState } from 'main/@types/Report';
 import { ReportView } from '../ReportView';
 import { EntriesReportDocument } from '../Document/EntriesReportDocument';
 import { months } from '../../../utils/months';
-import { Info } from '../Info';
+import { Infos } from '../Infos';
 import { Table } from '../Table';
 import type { ChurchData } from '../../../App';
 
@@ -22,6 +22,7 @@ const INITIAL_STATE: IEntriesState = {
     totalTithes: 0,
     totalWithdrawalsBankAccount: 0,
     totalEntries: 0,
+    previousBalance: 0,
   },
 };
 
@@ -105,7 +106,7 @@ export function EntriesReport({ dataOfChurch }: EntriesReportProps) {
       }
     >
       <>
-        <Info infos={infos} />
+        <Infos infos={infos} />
         <Table
           title="REGISTRO MENSAL DE DIZIMISTAS"
           firstColName="NOME"

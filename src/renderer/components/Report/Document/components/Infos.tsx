@@ -1,11 +1,13 @@
 import { Text, View } from '@react-pdf/renderer';
 import { reportStyles } from '../reportStyles';
 
+export interface Info {
+  title: string;
+  amount: number;
+}
+
 interface InfoProps {
-  infos: {
-    title: string;
-    amount: number;
-  }[];
+  infos: Info[];
 }
 
 export function Infos({ infos }: InfoProps) {

@@ -2,7 +2,6 @@ import { ipcMain } from 'electron';
 import { IPartialBalance } from '../@types/Report';
 import { Report } from '../db/repositories/Report';
 import { Expense } from '../db/repositories/Expense';
-import { generalReportGenerate } from '../reports/generalReport';
 
 export const reportHandlers = () => {
   ipcMain.handle(
@@ -27,10 +26,6 @@ export const reportHandlers = () => {
     }
   );
 
-  ipcMain.handle('report:general', (_event, referenceMonth, referenceYear) => {
-    return generalReportGenerate(referenceMonth, referenceYear);
-  });
-
   ipcMain.handle(
     'report:partial',
     async (_event, referenceMonth, referenceYear) => {
@@ -41,12 +36,8 @@ export const reportHandlers = () => {
         totalSpecialOffers,
         totalTithes,
         totalWithdrawalsBankAccount,
+        previousBalance,
       } = await model.getTotalEntries(referenceMonth, referenceYear);
-
-      const { previousBalance } = await model.getPreviousBalance(
-        referenceMonth,
-        referenceYear
-      );
 
       const expenseModel = new Expense();
       const expenses = await expenseModel.findAllByReferencesWithCategoryName(

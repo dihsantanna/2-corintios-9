@@ -21,7 +21,7 @@ import { EditExpenses } from './components/Edit/EditExpenses';
 import { EditWithdrawToTheBankAccount } from './components/Edit/EditWithdrawToTheBankAccount';
 import { EntriesReport } from './components/Report/EntriesReport';
 import { OutputReport } from './components/Report/OutputReport';
-// import { GeneralReport } from './components/Report/GeneralReport';
+import { GeneralReport } from './components/Report/GeneralReport';
 import { BalanceConfig } from './components/Config/BalanceConfig';
 import { DataOfChurchConfig } from './components/Config/DataOfChurchConfig';
 import './styles/reactToastify.css';
@@ -51,9 +51,7 @@ export interface ChurchData {
 }
 
 export function App() {
-  const [selectedScreen, setSelectedScreen] = useState<Screens>(
-    'outputReport' as Screens
-  );
+  const [selectedScreen, setSelectedScreen] = useState<Screens>('' as Screens);
   const [partialBalance, setPartialBalance] = useState<IPartialBalance>({
     ...INITIAL_STATE,
   });
@@ -166,7 +164,9 @@ export function App() {
         {selectedScreen === 'outputReport' && (
           <OutputReport dataOfChurch={dataOfChurch} />
         )}
-        {/* {selectedScreen === 'generalReport' && <GeneralReport />} */}
+        {selectedScreen === 'generalReport' && (
+          <GeneralReport dataOfChurch={dataOfChurch} />
+        )}
 
         {/* Logo */}
         {dataOfChurch.logoSrc ? (

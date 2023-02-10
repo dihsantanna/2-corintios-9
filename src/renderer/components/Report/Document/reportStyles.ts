@@ -203,4 +203,23 @@ export const reportStyles = StyleSheet.create({
     padding: 3,
     width: '100%',
   },
+  signature: {
+    alignItems: 'flex-end',
+    color: colors.zinc[900],
+    display: 'flex',
+    flexDirection: 'row',
+    fontSize: 9,
+    justifyContent: 'space-evenly',
+    gap: 22.5,
+    marginTop: 75,
+    width: '100%',
+  },
+  signatureContent: {
+    alignItems: 'center',
+    color: colors.zinc[900],
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    paddingTop: 7.5,
+  },
 });
