@@ -1,6 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React from 'react';
-
 interface ITableProps {
   title: string;
   firstColName: string;

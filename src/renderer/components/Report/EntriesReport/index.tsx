@@ -6,7 +6,7 @@ import { EntriesReportDocument } from '../Document/EntriesReportDocument';
 import { months } from '../../../utils/months';
 import { Infos } from '../Infos';
 import { Table } from '../Table';
-import type { ChurchData } from '../../../App';
+import type { ChurchData } from '../../../@types/ChurchData.type';
 
 interface EntriesReportProps {
   dataOfChurch: ChurchData;

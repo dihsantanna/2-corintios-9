@@ -5,7 +5,7 @@ import { IExpenseCategoryState } from 'main/@types/ExpenseCategory';
 import { ReportView } from '../ReportView';
 import { months } from '../../../utils/months';
 import { OutputReportDocument } from '../Document/OutputReportDocument';
-import type { ChurchData } from '../../../App';
+import type { ChurchData } from '../../../@types/ChurchData.type';
 import { Table } from '../Table';
 
 interface OutputReportProps {

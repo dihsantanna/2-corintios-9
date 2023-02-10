@@ -1,18 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { toast } from 'react-toastify';
 import { months } from 'renderer/utils/months';
 import { getYears } from 'renderer/utils/years';
+import { GlobalContext } from 'renderer/context/GlobalContext';
 import { SubmitButton } from '../SubmitButton';
 import { ResetButton } from '../ResetButton';
 
 interface BalanceConfigProps {
-  afterSubmit: () => void;
-  setShow?: (bool: boolean) => void;
+  setShow: (bool: boolean) => void;
   isInitialConfig?: boolean;
 }
 
 export function BalanceConfigForm({
-  afterSubmit,
   setShow,
   isInitialConfig,
 }: BalanceConfigProps) {
@@ -27,6 +26,8 @@ export function BalanceConfigForm({
   });
   const [balance, setBalance] = useState('');
   const [loading, setLoading] = useState(false);
+  const { setRefreshPartialBalance, setShowInitialConfig } =
+    useContext(GlobalContext);
 
   useEffect(() => {
     const getInitialBalance = async () => {
@@ -110,7 +111,7 @@ export function BalanceConfigForm({
       toast.success('Saldo inicial configurado com sucesso!', {
         progress: undefined,
       });
-      afterSubmit();
+      setRefreshPartialBalance(true);
     } catch (err) {
       toast.error(
         `Erro ao configurar saldo inicial: ${(err as Error).message}`,
@@ -125,8 +126,9 @@ export function BalanceConfigForm({
         referenceYear,
       });
       setLoading(false);
-      if (!isInitialConfig) {
-        (setShow as (bool: boolean) => void)(false);
+      setShow(false);
+      if (isInitialConfig) {
+        setShowInitialConfig(false);
       }
     }
   };

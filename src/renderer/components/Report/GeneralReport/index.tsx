@@ -6,7 +6,7 @@ import { ITotalEntries } from 'main/@types/Report';
 import { ReportView } from '../ReportView';
 import { months } from '../../../utils/months';
 import { GeneralReportDocument } from '../Document/GeneralReportDocument';
-import type { ChurchData } from '../../../App';
+import type { ChurchData } from '../../../@types/ChurchData.type';
 import { Table } from '../Table';
 import { Infos } from '../Infos';
 

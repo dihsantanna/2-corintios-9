@@ -1,7 +1,7 @@
 import { Document, Page, View, Image, Text } from '@react-pdf/renderer';
 import { months } from '../../../utils/months';
 import { reportStyles } from './reportStyles';
-import type { ChurchData } from '../../../App';
+import type { ChurchData } from '../../../@types/ChurchData.type';
 
 interface IReportDocumentProps {
   children: React.ReactNode;

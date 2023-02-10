@@ -1,18 +1,24 @@
-import { Dispatch, useState, ChangeEvent, FormEvent, useEffect } from 'react';
+import {
+  Dispatch,
+  useState,
+  ChangeEvent,
+  FormEvent,
+  useEffect,
+  useContext,
+} from 'react';
 import { toast } from 'react-toastify';
 import { ImSpinner2 } from 'react-icons/im';
+import { GlobalContext } from 'renderer/context/GlobalContext';
 import { ResetButton } from '../ResetButton';
 import { SubmitButton } from '../SubmitButton';
 import logoEmptySrc from '../../assets/logo-empty.png';
 import { states } from '../../utils/states';
-import type { ChurchData } from '../../App';
+import type { ChurchData } from '../../@types/ChurchData.type';
 
 interface DataOfChurchFormProps {
-  afterSubmit?: () => void;
   isInitialConfig?: boolean;
   setShow?: Dispatch<React.SetStateAction<boolean>>;
   setToBalanceConfig?: Dispatch<React.SetStateAction<boolean>>;
-  churchData?: ChurchData;
 }
 
 const INITIAL_PREVIEW_IMAGE = {
@@ -37,8 +43,6 @@ export function DataOfChurchForm({
   isInitialConfig,
   setShow,
   setToBalanceConfig,
-  afterSubmit,
-  churchData,
 }: DataOfChurchFormProps) {
   const [data, setData] = useState({ ...INITIAL_STATE });
   const [previewImage, setPreviewImage] = useState({
@@ -46,6 +50,7 @@ export function DataOfChurchForm({
   });
   const [loading, setLoading] = useState(false);
   const [loadPreviewImage, setLoadPreviewImage] = useState(false);
+  const { setRefreshPartialBalance, churchData } = useContext(GlobalContext);
 
   useEffect(() => {
     const getDataOfChurch = async () => {
@@ -195,7 +200,7 @@ export function DataOfChurchForm({
       }
       if (!isInitialConfig) {
         (setShow as Dispatch<React.SetStateAction<boolean>>)(false);
-        (afterSubmit as () => void)();
+        setRefreshPartialBalance(true);
       }
     } catch (err) {
       toast.error(

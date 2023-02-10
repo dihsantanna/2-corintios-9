@@ -2,22 +2,9 @@ import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, useState } from 'react';
 import { FcDataConfiguration } from 'react-icons/fc';
 import { DataOfChurchForm } from './DataOfChurchForm';
-import type { ChurchData } from '../../App';
 
-interface DataOfChurchConfigProps {
-  refreshData: () => void;
-  churchData: ChurchData;
-}
-
-export function DataOfChurchConfig({
-  refreshData,
-  churchData,
-}: DataOfChurchConfigProps) {
+export function DataOfChurchConfig() {
   const [show, setShow] = useState(false);
-
-  const afterSubmit = () => {
-    refreshData();
-  };
 
   return (
     <>
@@ -71,11 +58,7 @@ export function DataOfChurchConfig({
                           Configurar Dados da Igreja
                         </Dialog.Title>
                         <div className="w-full mt-2 flex flex-col items-center justify-center">
-                          <DataOfChurchForm
-                            setShow={setShow}
-                            afterSubmit={afterSubmit}
-                            churchData={churchData}
-                          />
+                          <DataOfChurchForm setShow={setShow} />
                         </div>
                       </div>
                     </div>
