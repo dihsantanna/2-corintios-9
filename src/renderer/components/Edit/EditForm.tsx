@@ -38,9 +38,9 @@ export function EditForm({
     <form
       onSubmit={handleSubmit}
       onReset={handleReset}
-      className={
-        `flex w-full h-20 items-center justify-between ${className}` || ''
-      }
+      className={`flex w-full h-16 min-h-[64px] items-center justify-between ${
+        className || ''
+      }`}
     >
       {children}
       <div className="flex items-center justify-center w-2/6 gap-2">

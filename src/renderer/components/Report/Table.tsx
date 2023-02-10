@@ -51,7 +51,7 @@ export function Table({
       ))}
       <div className="flex justify-end font-semibold">
         <span className="w-1/2 bg-redOrange text-zinc-100 flex items-center justify-between p-1">
-          <span>TOTAL:</span>
+          <span>TOTAL</span>
           <span>
             {subTotal.toLocaleString('pt-BR', {
               style: 'currency',
