@@ -1,18 +1,14 @@
-import { useEffect, useState, useCallback, useRef } from 'react';
+import { useEffect, useContext, useState, useCallback, useRef } from 'react';
 import { toast } from 'react-toastify';
 import { IExpenseState } from 'main/@types/Expense';
 import { IExpenseCategoryState } from 'main/@types/ExpenseCategory';
 import { ITotalEntries } from 'main/@types/Report';
+import { GlobalContext } from '../../../context/GlobalContext';
 import { ReportView } from '../ReportView';
 import { months } from '../../../utils/months';
 import { GeneralReportDocument } from '../Document/GeneralReportDocument';
-import type { ChurchData } from '../../../@types/ChurchData.type';
 import { Table } from '../Table';
 import { Infos } from '../Infos';
-
-interface GeneralReportProps {
-  dataOfChurch: ChurchData;
-}
 
 type MonthKey = keyof typeof months;
 
@@ -25,7 +21,7 @@ const INITIAL_STATE: ITotalEntries = {
   previousBalance: 0,
 };
 
-export function GeneralReport({ dataOfChurch }: GeneralReportProps) {
+export function GeneralReport() {
   const [referenceMonth, setReferenceMonth] = useState(
     new Date().getMonth() + 1
   );
@@ -40,6 +36,7 @@ export function GeneralReport({ dataOfChurch }: GeneralReportProps) {
     ...INITIAL_STATE,
   } as ITotalEntries);
   const [loading, setLoading] = useState(false);
+  const { churchData } = useContext(GlobalContext);
 
   const mounted = useRef(false);
 
@@ -147,7 +144,7 @@ export function GeneralReport({ dataOfChurch }: GeneralReportProps) {
       isLoading={loading}
       document={
         <GeneralReportDocument
-          dataOfChurch={dataOfChurch}
+          dataOfChurch={churchData}
           expenseCategories={categories}
           expenses={expenses}
           referenceMonth={monthAndYear.month}

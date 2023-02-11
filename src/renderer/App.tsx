@@ -28,7 +28,7 @@ import './styles/reactToastify.css';
 
 export function App() {
   const [selectedScreen, setSelectedScreen] = useState<Screens>('' as Screens);
-  const { churchData, logoSrc, showInitialConfig } = useContext(GlobalContext);
+  const { logoSrc, showInitialConfig } = useContext(GlobalContext);
 
   return (
     <div className="flex w-screen h-screen">
@@ -85,15 +85,9 @@ export function App() {
         )}
 
         {/* Report Screens */}
-        {selectedScreen === 'entriesReport' && (
-          <EntriesReport dataOfChurch={churchData} />
-        )}
-        {selectedScreen === 'outputReport' && (
-          <OutputReport dataOfChurch={churchData} />
-        )}
-        {selectedScreen === 'generalReport' && (
-          <GeneralReport dataOfChurch={churchData} />
-        )}
+        {selectedScreen === 'entriesReport' && <EntriesReport />}
+        {selectedScreen === 'outputReport' && <OutputReport />}
+        {selectedScreen === 'generalReport' && <GeneralReport />}
 
         {/* Logo */}
         {logoSrc ? (
