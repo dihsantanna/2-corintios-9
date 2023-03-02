@@ -3,16 +3,8 @@ import { Fragment, useState } from 'react';
 import { MdAccountBalance } from 'react-icons/md';
 import { BalanceConfigForm } from './BalanceConfigForm';
 
-interface BalanceConfigProps {
-  refreshPartialBalance: () => void;
-}
-
-export function BalanceConfig({ refreshPartialBalance }: BalanceConfigProps) {
+export function BalanceConfig() {
   const [show, setShow] = useState(false);
-
-  const afterSubmit = () => {
-    refreshPartialBalance();
-  };
 
   return (
     <>
@@ -66,10 +58,7 @@ export function BalanceConfig({ refreshPartialBalance }: BalanceConfigProps) {
                           Configurar Saldo Inicial
                         </Dialog.Title>
                         <div className="mt-2 flex flex-col items-center justify-center">
-                          <BalanceConfigForm
-                            afterSubmit={afterSubmit}
-                            setShow={setShow}
-                          />
+                          <BalanceConfigForm setShow={setShow} />
                         </div>
                       </div>
                     </div>

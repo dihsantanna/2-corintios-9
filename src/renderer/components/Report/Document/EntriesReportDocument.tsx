@@ -3,7 +3,7 @@ import {
   ITotalEntries,
 } from 'main/@types/Report';
 import { View, Text } from '@react-pdf/renderer';
-import type { ChurchData } from '../../../App';
+import type { ChurchData } from '../../../@types/ChurchData.type';
 import { ReportDocument } from './ReportDocument';
 import { reportStyles } from './reportStyles';
 import { Table } from './components/Table';

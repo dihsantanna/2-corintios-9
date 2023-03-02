@@ -1,7 +1,6 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 import { ToastContainer } from 'react-toastify';
 import { FaChurch } from 'react-icons/fa';
-import { IPartialBalance } from 'main/@types/Report';
 import { ReactComponent as Logo } from './assets/logo.svg';
 import { Menu } from './components/Menu';
 import type { Screens } from './@types/Screens.type';
@@ -24,74 +23,12 @@ import { OutputReport } from './components/Report/OutputReport';
 import { GeneralReport } from './components/Report/GeneralReport';
 import { BalanceConfig } from './components/Config/BalanceConfig';
 import { DataOfChurchConfig } from './components/Config/DataOfChurchConfig';
+import { GlobalContext } from './context/GlobalContext';
 import './styles/reactToastify.css';
-
-const INITIAL_STATE: IPartialBalance = {
-  previousBalance: 0.0,
-  totalTithes: 0.0,
-  totalSpecialOffers: 0.0,
-  totalLooseOffers: 0.0,
-  totalWithdraws: 0.0,
-  totalEntries: 0.0,
-  totalExpenses: 0.0,
-  totalBalance: 0.0,
-};
-
-export interface ChurchData {
-  logoSrc: string;
-  name: string;
-  foundationDate: string;
-  cnpj: string;
-  street: string;
-  number: string;
-  district: string;
-  city: string;
-  state: string;
-  cep: string;
-}
 
 export function App() {
   const [selectedScreen, setSelectedScreen] = useState<Screens>('' as Screens);
-  const [partialBalance, setPartialBalance] = useState<IPartialBalance>({
-    ...INITIAL_STATE,
-  });
-  const [showInitialConfig, setShowInitialConfig] = useState(false);
-  const [dataOfChurch, setDataOfChurch] = useState({} as ChurchData);
-  const [refresh, setRefresh] = useState(false);
-
-  const setInitialConfig = useCallback(async () => {
-    const date = new Date();
-    const month = date.getMonth() + 1;
-    const year = date.getFullYear();
-
-    const churchData = await window.dataOfChurch.get();
-    const balance = await window.report.partial(month, year);
-
-    if (!churchData) {
-      setShowInitialConfig(true);
-      return;
-    }
-    setDataOfChurch({
-      ...churchData,
-      foundationDate: new Date(churchData.foundationDate)
-        .toLocaleString('pt-BR')
-        .split(' ')[0]
-        .split('/')
-        .join('/'),
-    });
-    setPartialBalance(balance);
-  }, []);
-
-  useEffect(() => {
-    setInitialConfig();
-  }, [setInitialConfig]);
-
-  useEffect(() => {
-    if (refresh) {
-      setInitialConfig();
-      setRefresh(false);
-    }
-  }, [refresh, setInitialConfig]);
+  const { logoSrc, showInitialConfig } = useContext(GlobalContext);
 
   return (
     <div className="flex w-screen h-screen">
@@ -105,13 +42,10 @@ export function App() {
         {!selectedScreen && (
           <>
             <div className="fixed top-4 right-4 flex items-center gap-6">
-              <DataOfChurchConfig
-                churchData={dataOfChurch}
-                refreshData={() => setRefresh(true)}
-              />
-              <BalanceConfig refreshPartialBalance={() => setRefresh(true)} />
+              <DataOfChurchConfig />
+              <BalanceConfig />
             </div>
-            <PartialBalance partialBalance={partialBalance} />
+            <PartialBalance />
           </>
         )}
         {selectedScreen && (
@@ -126,14 +60,7 @@ export function App() {
         )}
 
         {/* Initial Config */}
-        {showInitialConfig && (
-          <InitialConfig
-            refreshPartialBalance={() => {
-              setShowInitialConfig(false);
-              setRefresh(true);
-            }}
-          />
-        )}
+        {showInitialConfig && <InitialConfig />}
 
         {/* Add Screens */}
         {selectedScreen === 'addMember' && <AddMember />}
@@ -158,20 +85,14 @@ export function App() {
         )}
 
         {/* Report Screens */}
-        {selectedScreen === 'entriesReport' && (
-          <EntriesReport dataOfChurch={dataOfChurch} />
-        )}
-        {selectedScreen === 'outputReport' && (
-          <OutputReport dataOfChurch={dataOfChurch} />
-        )}
-        {selectedScreen === 'generalReport' && (
-          <GeneralReport dataOfChurch={dataOfChurch} />
-        )}
+        {selectedScreen === 'entriesReport' && <EntriesReport />}
+        {selectedScreen === 'outputReport' && <OutputReport />}
+        {selectedScreen === 'generalReport' && <GeneralReport />}
 
         {/* Logo */}
-        {dataOfChurch.logoSrc ? (
+        {logoSrc ? (
           <img
-            src={dataOfChurch.logoSrc}
+            src={logoSrc}
             alt="Logo"
             className={`${
               selectedScreen

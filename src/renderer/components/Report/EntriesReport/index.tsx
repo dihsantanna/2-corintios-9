@@ -1,16 +1,12 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { toast } from 'react-toastify';
 import { IEntriesState } from 'main/@types/Report';
+import { GlobalContext } from '../../../context/GlobalContext';
 import { ReportView } from '../ReportView';
 import { EntriesReportDocument } from '../Document/EntriesReportDocument';
 import { months } from '../../../utils/months';
 import { Infos } from '../Infos';
 import { Table } from '../Table';
-import type { ChurchData } from '../../../App';
-
-interface EntriesReportProps {
-  dataOfChurch: ChurchData;
-}
 
 type MonthKey = keyof typeof months;
 
@@ -26,7 +22,7 @@ const INITIAL_STATE: IEntriesState = {
   },
 };
 
-export function EntriesReport({ dataOfChurch }: EntriesReportProps) {
+export function EntriesReport() {
   const [referenceMonth, setReferenceMonth] = useState(
     new Date().getMonth() + 1
   );
@@ -37,6 +33,7 @@ export function EntriesReport({ dataOfChurch }: EntriesReportProps) {
   });
   const [entries, setEntries] = useState<IEntriesState>({ ...INITIAL_STATE });
   const [loading, setLoading] = useState(false);
+  const { churchData } = useContext(GlobalContext);
 
   const mounted = useRef(false);
 
@@ -96,9 +93,9 @@ export function EntriesReport({ dataOfChurch }: EntriesReportProps) {
       isLoading={loading}
       document={
         <EntriesReportDocument
+          dataOfChurch={churchData}
           referenceMonth={monthAndYear.month}
           referenceYear={monthAndYear.year}
-          dataOfChurch={dataOfChurch}
           tithesAndSpecialOffers={tithesAndSpecialOffers}
           totalEntriesReport={totalEntries}
           infos={infos}

@@ -1,20 +1,16 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { toast } from 'react-toastify';
 import { IExpenseState } from 'main/@types/Expense';
 import { IExpenseCategoryState } from 'main/@types/ExpenseCategory';
+import { GlobalContext } from '../../../context/GlobalContext';
 import { ReportView } from '../ReportView';
 import { months } from '../../../utils/months';
 import { OutputReportDocument } from '../Document/OutputReportDocument';
-import type { ChurchData } from '../../../App';
 import { Table } from '../Table';
-
-interface OutputReportProps {
-  dataOfChurch: ChurchData;
-}
 
 type MonthKey = keyof typeof months;
 
-export function OutputReport({ dataOfChurch }: OutputReportProps) {
+export function OutputReport() {
   const [referenceMonth, setReferenceMonth] = useState(
     new Date().getMonth() + 1
   );
@@ -26,6 +22,7 @@ export function OutputReport({ dataOfChurch }: OutputReportProps) {
   const [expenses, setExpenses] = useState<IExpenseState[]>([]);
   const [categories, setCategories] = useState<IExpenseCategoryState[]>([]);
   const [loading, setLoading] = useState(false);
+  const { churchData } = useContext(GlobalContext);
 
   const mounted = useRef(false);
 
@@ -85,7 +82,7 @@ export function OutputReport({ dataOfChurch }: OutputReportProps) {
       isLoading={loading}
       document={
         <OutputReportDocument
-          dataOfChurch={dataOfChurch}
+          dataOfChurch={churchData}
           expenseCategories={categories}
           expenses={expenses}
           totalExpenses={totalExpenses}

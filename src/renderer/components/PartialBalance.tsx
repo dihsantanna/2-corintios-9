@@ -1,12 +1,10 @@
-import { useEffect } from 'react';
-import { IPartialBalance } from 'main/@types/Report';
+import { useContext } from 'react';
+import { GlobalContext } from 'renderer/context/GlobalContext';
 import { months } from '../utils/months';
 
-interface PartialBalanceProps {
-  partialBalance: IPartialBalance;
-}
+export function PartialBalance() {
+  const { partialBalance } = useContext(GlobalContext);
 
-export function PartialBalance({ partialBalance }: PartialBalanceProps) {
   const {
     previousBalance,
     totalTithes,
@@ -17,6 +15,7 @@ export function PartialBalance({ partialBalance }: PartialBalanceProps) {
     totalExpenses,
     totalBalance,
   } = partialBalance;
+
   return (
     <div className="fixed flex flex-col justify-between bottom-3 right-3 w-[420px] h-60 gap-2 p-2 text-zinc-900 border rounded-md">
       <h1 className="w-full text-center text-lg font-bold">

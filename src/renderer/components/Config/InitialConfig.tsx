@@ -3,18 +3,9 @@ import { Fragment, useState } from 'react';
 import { DataOfChurchForm } from './DataOfChurchForm';
 import { BalanceConfigForm } from './BalanceConfigForm';
 
-interface InitialConfigProps {
-  refreshPartialBalance: () => void;
-}
-
-export function InitialConfig({ refreshPartialBalance }: InitialConfigProps) {
+export function InitialConfig() {
   const [show, setShow] = useState(true);
   const [toBalanceConfig, setToBalanceConfig] = useState(false);
-
-  const afterLastSubmit = () => {
-    setShow(false);
-    refreshPartialBalance();
-  };
 
   return (
     <Transition.Root show={show} as={Fragment}>
@@ -61,7 +52,7 @@ export function InitialConfig({ refreshPartialBalance }: InitialConfigProps) {
                       <div className="w-full mt-2 flex flex-col items-center justify-center">
                         {toBalanceConfig ? (
                           <BalanceConfigForm
-                            afterSubmit={afterLastSubmit}
+                            setShow={setShow}
                             isInitialConfig
                           />
                         ) : (

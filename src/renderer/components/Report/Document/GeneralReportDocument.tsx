@@ -2,7 +2,7 @@ import { IExpenseCategoryState } from 'main/@types/ExpenseCategory';
 import { IExpenseState } from 'main/@types/Expense';
 import { Text, View } from '@react-pdf/renderer';
 import { ReportDocument } from './ReportDocument';
-import type { ChurchData } from '../../../App';
+import type { ChurchData } from '../../../@types/ChurchData.type';
 import { reportStyles } from './reportStyles';
 import { Table } from './components/Table';
 import { Info, Infos } from './components/Infos';
