@@ -63,11 +63,9 @@ export function GlobalContextProvider({
     setPartialBalance(balance);
     setChurchData({
       ...dataOfChurch,
-      foundationDate: new Date(dataOfChurch.foundationDate)
-        .toLocaleString('pt-BR')
-        .split(' ')[0]
-        .split('/')
-        .join('/'),
+      foundationDate: new Intl.DateTimeFormat('pt-BR').format(
+        dataOfChurch.foundationDate
+      ),
     });
   }, []);
 
