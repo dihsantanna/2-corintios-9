@@ -1,5 +1,5 @@
 import { createRoot } from 'react-dom/client';
-import { GlobalContextProvider } from './context/GlobalContext/GlobalContextProvider';
+import { HashRouter } from 'react-router-dom';
 import { App } from './App';
 import './styles/global.css';
 
@@ -7,7 +7,7 @@ import './styles/global.css';
 const container = document.getElementById('root')!;
 const root = createRoot(container);
 root.render(
-  <GlobalContextProvider>
+  <HashRouter>
     <App />
-  </GlobalContextProvider>
+  </HashRouter>
 );
