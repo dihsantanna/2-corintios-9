@@ -122,7 +122,7 @@ export function GeneralReport() {
     },
     {
       title: `SALDO P/ O MÊS DE ${months[
-        monthAndYear.month as MonthKey
+        (monthAndYear.month + 1) as MonthKey
       ].toLocaleUpperCase()}`,
       amount:
         totalEntries.previousBalance +
