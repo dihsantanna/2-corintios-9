@@ -115,6 +115,11 @@ export function GeneralReport() {
       });
     }
 
+    info.push({
+      title: 'TOTAL DE ENTRADAS',
+      amount: totalEntries.totalEntries,
+    });
+
     return info;
   }, [totalEntries]);
 
@@ -122,8 +127,8 @@ export function GeneralReport() {
 
   const infoBottom = [
     {
-      title: 'TOTAL DE ENTRADAS',
-      amount: totalEntries.totalEntries,
+      title: 'TOTAL GERAL DE ENTRADAS',
+      amount: totalEntries.totalEntries + totalEntries.previousBalance,
     },
     {
       title: 'TOTAL DE SAÍDAS',
@@ -164,7 +169,7 @@ export function GeneralReport() {
       }
     >
       <>
-        <Infos infos={infoTop} />
+        <Infos infos={infoTop} isTop />
         {categories.map(({ id, name }) => {
           const filteredExpenses = expenses.filter(
             (expense) => expense.expenseCategoryId === id
