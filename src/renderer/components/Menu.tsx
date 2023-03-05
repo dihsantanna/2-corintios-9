@@ -25,7 +25,7 @@ export function Menu({ selectedScreen }: MenuProps) {
   };
 
   return (
-    <nav>
+    <nav className="overflow-y-auto scrollbar-thin scrollbar-track-zinc-100 scrollbar-thumb-zinc-900 min-h-screen">
       <ul className="w-full text-center relative">
         {Object.entries(menuParams).map(([menuLabel, { label, items }]) => (
           <li

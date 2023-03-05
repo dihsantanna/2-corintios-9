@@ -1,9 +1,4 @@
-import {
-  createRoutesFromElements,
-  createBrowserRouter,
-  Route,
-} from 'react-router-dom';
-import { App } from './App';
+import { Route, Routes, redirect } from 'react-router-dom';
 import { AddExpense } from './components/Add/AddExpense';
 import { AddExpenseCategory } from './components/Add/AddExpenseCategory';
 import { AddMember } from './components/Add/AddMember';
@@ -20,11 +15,13 @@ import { EntriesReport } from './components/Report/EntriesReport';
 import { GeneralReport } from './components/Report/GeneralReport';
 import { OutputReport } from './components/Report/OutputReport';
 import { GlobalContextProvider } from './context/GlobalContext/GlobalContextProvider';
+import { Home } from './Home';
 
-export const router = createBrowserRouter(
-  createRoutesFromElements(
-    <GlobalContextProvider>
-      <Route path="/" element={<App />}>
+export function Router() {
+  return (
+    <Routes>
+      <Route path="/" element={<GlobalContextProvider />}>
+        <Route path="home" element={<Home />} />
         <Route path="addMember" element={<AddMember />} />
         <Route path="addTithe" element={<AddTithe />} />
         <Route path="addOffer" element={<AddOffer />} />
@@ -50,6 +47,6 @@ export const router = createBrowserRouter(
         <Route path="outputReport" element={<OutputReport />} />
         <Route path="generalReport" element={<GeneralReport />} />
       </Route>
-    </GlobalContextProvider>
-  )
-);
+    </Routes>
+  );
+}
