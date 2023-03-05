@@ -3,18 +3,20 @@ import { toast } from 'react-toastify';
 import { EditForm } from './EditForm';
 import { FilterByMonthAndYear } from '../FilterByMonthAndYear';
 
-interface WithdrawToTheBankAccount {
+interface WithdrawsToTheBankAccount {
   id: string;
   value: string;
   referenceMonth: number;
   referenceYear: number;
 }
 
-export function EditWithdrawToTheBankAccount() {
-  const [defaultWithdrawToTheBankAccount, setDefaultWithdrawToTheBankAccount] =
-    useState<WithdrawToTheBankAccount[]>([]);
-  const [withdrawToTheBankAccount, setWithdrawToTheBankAccount] = useState<
-    WithdrawToTheBankAccount[]
+export function EditWithdrawsToTheBankAccount() {
+  const [
+    defaultWithdrawsToTheBankAccount,
+    setDefaultWithdrawsToTheBankAccount,
+  ] = useState<WithdrawsToTheBankAccount[]>([]);
+  const [withdrawsToTheBankAccount, setWithdrawsToTheBankAccount] = useState<
+    WithdrawsToTheBankAccount[]
   >([]);
   const [editing, setEditing] = useState('');
   const [loading, setLoading] = useState(false);
@@ -24,24 +26,23 @@ export function EditWithdrawToTheBankAccount() {
   const [referenceYear, setReferenceYear] = useState(new Date().getFullYear());
 
   useEffect(() => {
-    const getWithdrawToTheBankAccount = async () => {
+    const getWithdrawsToTheBankAccount = async () => {
       try {
         setLoading(true);
-        const newWithdrawToTheBankAccount =
+        const newWithdrawsToTheBankAccount =
           await window.withdrawToTheBankAccount.findAllByReferenceDate(
             referenceMonth,
             referenceYear
           );
 
-        const toFixedWithdrawToTheBankAccount = newWithdrawToTheBankAccount.map(
-          (withdraw) => ({
+        const toFixedWithdrawsToTheBankAccount =
+          newWithdrawsToTheBankAccount.map((withdraw) => ({
             ...withdraw,
             value: withdraw.value.toFixed(2),
-          })
-        );
+          }));
 
-        setWithdrawToTheBankAccount(toFixedWithdrawToTheBankAccount);
-        setDefaultWithdrawToTheBankAccount(toFixedWithdrawToTheBankAccount);
+        setWithdrawsToTheBankAccount(toFixedWithdrawsToTheBankAccount);
+        setDefaultWithdrawsToTheBankAccount(toFixedWithdrawsToTheBankAccount);
       } catch (err) {
         toast.error(`Erro ao buscar saques: ${(err as Error).message}`, {
           progress: undefined,
@@ -52,18 +53,18 @@ export function EditWithdrawToTheBankAccount() {
     };
 
     if (referenceMonth !== 0 && referenceYear !== 0)
-      getWithdrawToTheBankAccount();
+      getWithdrawsToTheBankAccount();
   }, [referenceMonth, referenceYear]);
 
   const handleReset = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setWithdrawToTheBankAccount(defaultWithdrawToTheBankAccount);
+    setWithdrawsToTheBankAccount(defaultWithdrawsToTheBankAccount);
     setEditing('');
   };
 
   const valueChangeReplace = (value: string, index: number) => {
     const validateValue = /^(\d+)(\.|,)?(\d{0,2}$)/.test(value) || value === '';
-    if (!validateValue) return `${withdrawToTheBankAccount[index].value}`;
+    if (!validateValue) return `${withdrawsToTheBankAccount[index].value}`;
 
     return value.replace(',', '.');
   };
@@ -75,14 +76,14 @@ export function EditWithdrawToTheBankAccount() {
     index: number
   ) => {
     const newTithe = {
-      ...withdrawToTheBankAccount[index],
+      ...withdrawsToTheBankAccount[index],
       value: valueChangeReplace(value, index),
-    } as WithdrawToTheBankAccount;
+    } as WithdrawsToTheBankAccount;
 
-    const newWithdrawToTheBankAccount = [...withdrawToTheBankAccount];
-    newWithdrawToTheBankAccount.splice(index, 1, newTithe);
+    const newWithdrawsToTheBankAccount = [...withdrawsToTheBankAccount];
+    newWithdrawsToTheBankAccount.splice(index, 1, newTithe);
 
-    setWithdrawToTheBankAccount(newWithdrawToTheBankAccount);
+    setWithdrawsToTheBankAccount(newWithdrawsToTheBankAccount);
   };
 
   const handleValueInputBlur = (
@@ -91,19 +92,19 @@ export function EditWithdrawToTheBankAccount() {
   ) => {
     const newValue = value ? parseFloat(value).toFixed(2) : '';
     const newTithe = {
-      ...withdrawToTheBankAccount[index],
+      ...withdrawsToTheBankAccount[index],
       value: newValue,
     };
 
-    const newWithdrawToTheBankAccount = [...withdrawToTheBankAccount];
-    newWithdrawToTheBankAccount.splice(index, 1, newTithe);
+    const newWithdrawsToTheBankAccount = [...withdrawsToTheBankAccount];
+    newWithdrawsToTheBankAccount.splice(index, 1, newTithe);
 
-    setWithdrawToTheBankAccount(newWithdrawToTheBankAccount);
+    setWithdrawsToTheBankAccount(newWithdrawsToTheBankAccount);
   };
 
   const handleSetEditing = (id: string) => {
     setEditing(id);
-    setWithdrawToTheBankAccount(defaultWithdrawToTheBankAccount);
+    setWithdrawsToTheBankAccount(defaultWithdrawsToTheBankAccount);
   };
 
   const handleEdit = async (
@@ -111,8 +112,8 @@ export function EditWithdrawToTheBankAccount() {
     index: number
   ) => {
     event.preventDefault();
-    const editedWithdraw = withdrawToTheBankAccount[index];
-    if (editedWithdraw === defaultWithdrawToTheBankAccount[index]) {
+    const editedWithdraw = withdrawsToTheBankAccount[index];
+    if (editedWithdraw === defaultWithdrawsToTheBankAccount[index]) {
       toast.warn('Faça alguma modificação ou clique em fechar para cancelar', {
         progress: undefined,
       });
@@ -139,7 +140,7 @@ export function EditWithdrawToTheBankAccount() {
       toast.success('Saque alterado com sucesso!', {
         progress: undefined,
       });
-      setDefaultWithdrawToTheBankAccount(withdrawToTheBankAccount);
+      setDefaultWithdrawsToTheBankAccount(withdrawsToTheBankAccount);
     } catch (err) {
       toast.error(`Erro ao editar saque: ${(err as Error).message}`, {
         progress: undefined,
@@ -154,10 +155,10 @@ export function EditWithdrawToTheBankAccount() {
     try {
       await window.withdrawToTheBankAccount.delete(id);
 
-      const newWithdrawToTheBankAccount = [...withdrawToTheBankAccount];
-      newWithdrawToTheBankAccount.splice(index, 1);
-      setWithdrawToTheBankAccount(newWithdrawToTheBankAccount);
-      setDefaultWithdrawToTheBankAccount(newWithdrawToTheBankAccount);
+      const newWithdrawsToTheBankAccount = [...withdrawsToTheBankAccount];
+      newWithdrawsToTheBankAccount.splice(index, 1);
+      setWithdrawsToTheBankAccount(newWithdrawsToTheBankAccount);
+      setDefaultWithdrawsToTheBankAccount(newWithdrawsToTheBankAccount);
 
       toast.success('Saque excluído com sucesso!', {
         progress: undefined,
@@ -187,12 +188,12 @@ export function EditWithdrawToTheBankAccount() {
         <span className="w-2/6 flex items-center justify-center">Editar</span>
       </div>
       <div className="w-full h-full flex flex-col overflow-auto scrollbar-thin scrollbar-thumb-zinc-900 scrollbar-track-zinc-300">
-        {!withdrawToTheBankAccount.length ? (
+        {!withdrawsToTheBankAccount.length ? (
           <span className="m-auto text-zinc-500">
             Não há saques cadastrados para o mês e ano selecionados!
           </span>
         ) : (
-          withdrawToTheBankAccount.map(({ id, value }, index) => (
+          withdrawsToTheBankAccount.map(({ id, value }, index) => (
             <EditForm
               key={id}
               handleSubmit={(event) => handleEdit(event, index)}

@@ -1,26 +1,12 @@
 import { useContext, useState } from 'react';
 import { ToastContainer } from 'react-toastify';
 import { FaChurch } from 'react-icons/fa';
+import { Outlet } from 'react-router-dom';
 import { ReactComponent as Logo } from './assets/logo.svg';
 import { Menu } from './components/Menu';
 import type { Screens } from './@types/Screens.type';
 import { InitialConfig } from './components/Config/InitialConfig';
 import { PartialBalance } from './components/PartialBalance';
-import { AddMember } from './components/Add/AddMember';
-import { AddTithe } from './components/Add/AddTithe';
-import { AddOffer } from './components/Add/AddOffer';
-import { AddExpenseCategory } from './components/Add/AddExpenseCategory';
-import { AddExpense } from './components/Add/AddExpense';
-import { AddWithdrawToTheBankAccount } from './components/Add/AddWithdrawToTheBankAccount';
-import { EditMembers } from './components/Edit/EditMembers';
-import { EditTithes } from './components/Edit/EditTithes';
-import { EditOffers } from './components/Edit/EditOffers';
-import { EditExpenseCategories } from './components/Edit/EditExpenseCategories';
-import { EditExpenses } from './components/Edit/EditExpenses';
-import { EditWithdrawToTheBankAccount } from './components/Edit/EditWithdrawToTheBankAccount';
-import { EntriesReport } from './components/Report/EntriesReport';
-import { OutputReport } from './components/Report/OutputReport';
-import { GeneralReport } from './components/Report/GeneralReport';
 import { BalanceConfig } from './components/Config/BalanceConfig';
 import { DataOfChurchConfig } from './components/Config/DataOfChurchConfig';
 import { GlobalContext } from './context/GlobalContext';
@@ -62,32 +48,7 @@ export function App() {
         {/* Initial Config */}
         {showInitialConfig && <InitialConfig />}
 
-        {/* Add Screens */}
-        {selectedScreen === 'addMember' && <AddMember />}
-        {selectedScreen === 'addTithe' && <AddTithe />}
-        {selectedScreen === 'addOffer' && <AddOffer />}
-        {selectedScreen === 'addExpenseCategory' && <AddExpenseCategory />}
-        {selectedScreen === 'addExpense' && <AddExpense />}
-        {selectedScreen === 'addWithdrawToAccount' && (
-          <AddWithdrawToTheBankAccount />
-        )}
-
-        {/* Edit Screens */}
-        {selectedScreen === 'editMembers' && <EditMembers />}
-        {selectedScreen === 'editTithes' && <EditTithes />}
-        {selectedScreen === 'editOffers' && <EditOffers />}
-        {selectedScreen === 'editExpenseCategories' && (
-          <EditExpenseCategories />
-        )}
-        {selectedScreen === 'editExpenses' && <EditExpenses />}
-        {selectedScreen === 'editWithdrawToAccount' && (
-          <EditWithdrawToTheBankAccount />
-        )}
-
-        {/* Report Screens */}
-        {selectedScreen === 'entriesReport' && <EntriesReport />}
-        {selectedScreen === 'outputReport' && <OutputReport />}
-        {selectedScreen === 'generalReport' && <GeneralReport />}
+        <Outlet />
 
         {/* Logo */}
         {logoSrc ? (
