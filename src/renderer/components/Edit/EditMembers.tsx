@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { IMemberState } from 'main/@types/Member';
 import { EditForm } from './EditForm';
+import { LogoChurch } from '../LogoChurch';
 
 export function EditMembers() {
   const [defaultMembers, setDefaultMembers] = useState<IMemberState[]>([]);
@@ -114,70 +115,73 @@ export function EditMembers() {
   };
 
   return (
-    <div className="flex flex-col items-center w-full h-full">
-      <h1 className="flex items-center font-semibold text-2xl text-zinc-900 h-20">
-        Editar Membros
-      </h1>
-      <div className="flex w-full h-10 items-center justify-between border-y border-zinc-300 text-zinc-900">
-        <span className="w-6/12 flex items-center justify-center">Nome</span>
-        <span className="w-1/12 flex items-center justify-center">
-          Congregado
-        </span>
-        <span className="w-2/6 flex items-center justify-center">Editar</span>
+    <>
+      <div className="flex flex-col items-center w-full h-full">
+        <h1 className="flex items-center font-semibold text-2xl text-zinc-900 h-20">
+          Editar Membros
+        </h1>
+        <div className="flex w-full h-10 items-center justify-between border-y border-zinc-300 text-zinc-900">
+          <span className="w-6/12 flex items-center justify-center">Nome</span>
+          <span className="w-1/12 flex items-center justify-center">
+            Congregado
+          </span>
+          <span className="w-2/6 flex items-center justify-center">Editar</span>
+        </div>
+        <div className="w-full h-full overflow-auto scrollbar-thin scrollbar-thumb-zinc-900 scrollbar-track-zinc-300">
+          {members.map(({ id, name, congregated }, index) => (
+            <EditForm
+              key={id}
+              handleSubmit={(event: React.FormEvent<HTMLFormElement>) =>
+                handleEdit(event, index)
+              }
+              handleReset={handleReset}
+              isLoading={loading}
+              editingId={id}
+              isEditing={editing === id}
+              setIsEditing={handleSetEditing}
+              className={index % 2 === 0 ? 'bg-zinc-100' : ''}
+              onDelete={() => handleDelete(id, index)}
+              deleteMessage={`Tem certeza que deseja excluir o membro "${
+                name.split(' ')[0]
+              }"? Esta ação não poderá ser desfeita. Clique em "SIM" para confirmar.`}
+              deleteTitle="Excluir Membro"
+              editType="membro"
+            >
+              <label className="w-6/12 flex items-center justify-center text-zinc-900">
+                <input
+                  title="Nome do membro"
+                  name="name"
+                  value={name}
+                  onChange={(event) => handleChange(event, index)}
+                  className="text-center text-zinc-200 bg-zinc-900 p-2 disabled:p-0 disabled:text-zinc-900 disabled:bg-transparent font-light disabled:font-normal block w-11/12 h-full appearance-none leading-normal rounded-sm"
+                  disabled={editing !== id}
+                />
+              </label>
+              <label className="w-1/12 flex items-center justify-center text-zinc-900">
+                <select
+                  title="É congregado?"
+                  value={congregated ? 'true' : 'false'}
+                  name="congregated"
+                  onChange={(event) => handleChange(event, index)}
+                  className="cursor-pointer disabled:cursor-default text-center text-zinc-200 bg-zinc-900 p-2 disabled:p-0 disabled:text-zinc-900 disabled:bg-transparent font-light disabled:font-normal block w-full h-full disabled:appearance-none leading-normal rounded-sm"
+                  disabled={editing !== id}
+                >
+                  <option disabled value="">
+                    É Congregado?
+                  </option>
+                  <option title="true" value="true">
+                    Sim
+                  </option>
+                  <option title="false" value="false">
+                    Não
+                  </option>
+                </select>
+              </label>
+            </EditForm>
+          ))}
+        </div>
       </div>
-      <div className="w-full h-full overflow-auto scrollbar-thin scrollbar-thumb-zinc-900 scrollbar-track-zinc-300">
-        {members.map(({ id, name, congregated }, index) => (
-          <EditForm
-            key={id}
-            handleSubmit={(event: React.FormEvent<HTMLFormElement>) =>
-              handleEdit(event, index)
-            }
-            handleReset={handleReset}
-            isLoading={loading}
-            editingId={id}
-            isEditing={editing === id}
-            setIsEditing={handleSetEditing}
-            className={index % 2 === 0 ? 'bg-zinc-100' : ''}
-            onDelete={() => handleDelete(id, index)}
-            deleteMessage={`Tem certeza que deseja excluir o membro "${
-              name.split(' ')[0]
-            }"? Esta ação não poderá ser desfeita. Clique em "SIM" para confirmar.`}
-            deleteTitle="Excluir Membro"
-            editType="membro"
-          >
-            <label className="w-6/12 flex items-center justify-center text-zinc-900">
-              <input
-                title="Nome do membro"
-                name="name"
-                value={name}
-                onChange={(event) => handleChange(event, index)}
-                className="text-center text-zinc-200 bg-zinc-900 p-2 disabled:p-0 disabled:text-zinc-900 disabled:bg-transparent font-light disabled:font-normal block w-11/12 h-full appearance-none leading-normal rounded-sm"
-                disabled={editing !== id}
-              />
-            </label>
-            <label className="w-1/12 flex items-center justify-center text-zinc-900">
-              <select
-                title="É congregado?"
-                value={congregated ? 'true' : 'false'}
-                name="congregated"
-                onChange={(event) => handleChange(event, index)}
-                className="cursor-pointer disabled:cursor-default text-center text-zinc-200 bg-zinc-900 p-2 disabled:p-0 disabled:text-zinc-900 disabled:bg-transparent font-light disabled:font-normal block w-full h-full disabled:appearance-none leading-normal rounded-sm"
-                disabled={editing !== id}
-              >
-                <option disabled value="">
-                  É Congregado?
-                </option>
-                <option title="true" value="true">
-                  Sim
-                </option>
-                <option title="false" value="false">
-                  Não
-                </option>
-              </select>
-            </label>
-          </EditForm>
-        ))}
-      </div>
-    </div>
+      <LogoChurch />
+    </>
   );
 }

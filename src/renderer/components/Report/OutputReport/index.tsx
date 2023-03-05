@@ -1,12 +1,12 @@
-import { useCallback, useContext, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { toast } from 'react-toastify';
 import { IExpenseState } from 'main/@types/Expense';
 import { IExpenseCategoryState } from 'main/@types/ExpenseCategory';
-import { GlobalContext } from '../../../context/GlobalContext';
 import { ReportView } from '../ReportView';
 import { months } from '../../../utils/months';
 import { OutputReportDocument } from '../Document/OutputReportDocument';
 import { Table } from '../Table';
+import { useGlobalContext } from '../../../context/GlobalContext/GlobalContextProvider';
 
 type MonthKey = keyof typeof months;
 
@@ -22,7 +22,7 @@ export function OutputReport() {
   const [expenses, setExpenses] = useState<IExpenseState[]>([]);
   const [categories, setCategories] = useState<IExpenseCategoryState[]>([]);
   const [loading, setLoading] = useState(false);
-  const { churchData } = useContext(GlobalContext);
+  const { churchData } = useGlobalContext();
 
   const mounted = useRef(false);
 

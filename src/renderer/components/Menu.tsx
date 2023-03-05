@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { BsArrowBarUp } from 'react-icons/bs';
 import { menuParams } from '../utils/menuParams';
 import type { Screens } from '../@types/Screens.type';
@@ -6,11 +7,10 @@ import type { Screens } from '../@types/Screens.type';
 type MenuLabelsType = 'add' | 'edit' | 'reports' | 'themes';
 
 interface MenuProps {
-  setSelectedScreen: (screen: Screens) => void;
   selectedScreen: Screens | '';
 }
 
-export function Menu({ setSelectedScreen, selectedScreen }: MenuProps) {
+export function Menu({ selectedScreen }: MenuProps) {
   const [menuOpened, setMenuOpened] = useState<MenuLabelsType[]>([]);
 
   const toggleMenu = (menuLabel: MenuLabelsType) => {
@@ -65,14 +65,13 @@ export function Menu({ setSelectedScreen, selectedScreen }: MenuProps) {
                   } border-b-2 border-b-zinc-900 rounded-b-sm cursor-pointer hover:bg-teal-500 hover:text-zinc-900 text-sm`}
                   key={id}
                 >
-                  <button
+                  <Link
                     type="button"
-                    className="w-full h-full py-2 focus:outline-none focus:bg-teal-500 focus:text-zinc-900 disabled:cursor-not-allowed"
-                    onClick={() => setSelectedScreen(id as Screens)}
-                    disabled={selectedScreen === id}
+                    to={id}
+                    className="w-full h-full py-2 focus:outline-none focus:bg-teal-500 focus:text-zinc-900"
                   >
                     {subLabel}
-                  </button>
+                  </Link>
                 </li>
               ))}
             </ul>

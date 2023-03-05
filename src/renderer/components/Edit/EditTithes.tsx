@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { EditForm } from './EditForm';
 import { FilterByMonthAndYear } from '../FilterByMonthAndYear';
+import { LogoChurch } from '../LogoChurch';
 
 interface TitheStateWithMemberName {
   id: string;
@@ -167,69 +168,74 @@ export function EditTithes() {
   };
 
   return (
-    <div className="flex flex-col items-center w-full h-full">
-      <h1 className="flex items-center font-semibold text-2xl text-zinc-900 h-20">
-        Editar Dízimos
-      </h1>
-      <FilterByMonthAndYear
-        monthValue={referenceMonth}
-        yearValue={referenceYear}
-        setReferenceMonth={setReferenceMonth}
-        setReferenceYear={setReferenceYear}
-      />
-      <div className="flex w-full h-10 items-center justify-between border-y border-zinc-300 text-zinc-900">
-        <span className="w-6/12 flex items-center justify-center">Membro</span>
-        <span className="w-1/12 flex items-center justify-center">
-          Valor (R$)
-        </span>
-        <span className="w-2/6 flex items-center justify-center">Editar</span>
-      </div>
-      <div className="w-full h-full flex flex-col overflow-auto scrollbar-thin scrollbar-thumb-zinc-900 scrollbar-track-zinc-300">
-        {!tithes.length ? (
-          <span className="m-auto text-zinc-500">
-            Não há dízimos cadastrados para o mês e ano selecionados!
+    <>
+      <div className="flex flex-col items-center w-full h-full">
+        <h1 className="flex items-center font-semibold text-2xl text-zinc-900 h-20">
+          Editar Dízimos
+        </h1>
+        <FilterByMonthAndYear
+          monthValue={referenceMonth}
+          yearValue={referenceYear}
+          setReferenceMonth={setReferenceMonth}
+          setReferenceYear={setReferenceYear}
+        />
+        <div className="flex w-full h-10 items-center justify-between border-y border-zinc-300 text-zinc-900">
+          <span className="w-6/12 flex items-center justify-center">
+            Membro
           </span>
-        ) : (
-          tithes.map(({ id, value, memberName }, index) => (
-            <EditForm
-              key={id}
-              handleSubmit={(event) => handleEdit(event, index)}
-              handleReset={handleReset}
-              isLoading={loading}
-              editingId={id}
-              isEditing={editing === id}
-              setIsEditing={handleSetEditing}
-              className={index % 2 === 0 ? 'bg-zinc-100' : ''}
-              onDelete={() => handleDelete(id, index)}
-              deleteMessage={`Tem certeza que deseja excluir este dízimo, no valor de "R$ ${value}"? Esta ação não poderá ser desfeita. Clique em "SIM" para confirmar.`}
-              deleteTitle="Excluir Dízimo"
-              editType="dízimo"
-            >
-              <label className="w-6/12 flex items-center justify-center text-zinc-900">
-                <input
-                  title="Nome do membro"
-                  value={memberName}
-                  readOnly
-                  name="memberId"
-                  className="cursor-default text-center p-0 text-zinc-900 bg-transparent font-normal focus:outline-none block w-full h-full appearance-none leading-normal rounded-sm"
-                />
-              </label>
-              <label className="w-1/12 flex items-center justify-center text-zinc-900">
-                <input
-                  required
-                  title="Valor do dízimo"
-                  name="value"
-                  value={value}
-                  onChange={(event) => handleChange(event, index)}
-                  onBlur={(event) => handleValueInputBlur(event, index)}
-                  className="text-center text-zinc-200 bg-zinc-900 disabled:p-0 disabled:text-zinc-900 disabled:bg-transparent font-light disabled:font-normal focus:outline-none block w-11/12 h-full disabled:appearance-none leading-normal rounded-sm"
-                  disabled={editing !== id}
-                />
-              </label>
-            </EditForm>
-          ))
-        )}
+          <span className="w-1/12 flex items-center justify-center">
+            Valor (R$)
+          </span>
+          <span className="w-2/6 flex items-center justify-center">Editar</span>
+        </div>
+        <div className="w-full h-full flex flex-col overflow-auto scrollbar-thin scrollbar-thumb-zinc-900 scrollbar-track-zinc-300">
+          {!tithes.length ? (
+            <span className="m-auto text-zinc-500">
+              Não há dízimos cadastrados para o mês e ano selecionados!
+            </span>
+          ) : (
+            tithes.map(({ id, value, memberName }, index) => (
+              <EditForm
+                key={id}
+                handleSubmit={(event) => handleEdit(event, index)}
+                handleReset={handleReset}
+                isLoading={loading}
+                editingId={id}
+                isEditing={editing === id}
+                setIsEditing={handleSetEditing}
+                className={index % 2 === 0 ? 'bg-zinc-100' : ''}
+                onDelete={() => handleDelete(id, index)}
+                deleteMessage={`Tem certeza que deseja excluir este dízimo, no valor de "R$ ${value}"? Esta ação não poderá ser desfeita. Clique em "SIM" para confirmar.`}
+                deleteTitle="Excluir Dízimo"
+                editType="dízimo"
+              >
+                <label className="w-6/12 flex items-center justify-center text-zinc-900">
+                  <input
+                    title="Nome do membro"
+                    value={memberName}
+                    readOnly
+                    name="memberId"
+                    className="cursor-default text-center p-0 text-zinc-900 bg-transparent font-normal focus:outline-none block w-full h-full appearance-none leading-normal rounded-sm"
+                  />
+                </label>
+                <label className="w-1/12 flex items-center justify-center text-zinc-900">
+                  <input
+                    required
+                    title="Valor do dízimo"
+                    name="value"
+                    value={value}
+                    onChange={(event) => handleChange(event, index)}
+                    onBlur={(event) => handleValueInputBlur(event, index)}
+                    className="text-center text-zinc-200 bg-zinc-900 disabled:p-0 disabled:text-zinc-900 disabled:bg-transparent font-light disabled:font-normal focus:outline-none block w-11/12 h-full disabled:appearance-none leading-normal rounded-sm"
+                    disabled={editing !== id}
+                  />
+                </label>
+              </EditForm>
+            ))
+          )}
+        </div>
       </div>
-    </div>
+      <LogoChurch />
+    </>
   );
 }

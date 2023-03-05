@@ -1,12 +1,12 @@
-import { useCallback, useContext, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { toast } from 'react-toastify';
 import { IEntriesState } from 'main/@types/Report';
-import { GlobalContext } from '../../../context/GlobalContext';
 import { ReportView } from '../ReportView';
 import { EntriesReportDocument } from '../Document/EntriesReportDocument';
 import { months } from '../../../utils/months';
 import { Infos } from '../Infos';
 import { Table } from '../Table';
+import { useGlobalContext } from '../../../context/GlobalContext/GlobalContextProvider';
 
 type MonthKey = keyof typeof months;
 
@@ -33,7 +33,7 @@ export function EntriesReport() {
   });
   const [entries, setEntries] = useState<IEntriesState>({ ...INITIAL_STATE });
   const [loading, setLoading] = useState(false);
-  const { churchData } = useContext(GlobalContext);
+  const { churchData } = useGlobalContext();
 
   const mounted = useRef(false);
 
