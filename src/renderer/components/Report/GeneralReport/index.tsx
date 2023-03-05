@@ -88,28 +88,37 @@ export function GeneralReport() {
     }
   }, [getReport]);
 
-  const infoTop = [
-    {
-      title: 'SALDO ANTERIOR',
-      amount: totalEntries.previousBalance,
-    },
-    {
-      title: 'DÍZIMOS',
-      amount: totalEntries.totalTithes,
-    },
-    {
-      title: 'OFERTAS ESPECIAIS',
-      amount: totalEntries.totalSpecialOffers,
-    },
-    {
-      title: 'OFERTAS DE GAZOFILÁCIO',
-      amount: totalEntries.totalLooseOffers,
-    },
-    {
-      title: 'SAQUE EM CONTA BANCÁRIA',
-      amount: totalEntries.totalWithdrawalsBankAccount,
-    },
-  ];
+  const handleInfoTop = useCallback(() => {
+    const info = [
+      {
+        title: 'SALDO ANTERIOR',
+        amount: totalEntries.previousBalance,
+      },
+      {
+        title: 'DÍZIMOS',
+        amount: totalEntries.totalTithes,
+      },
+      {
+        title: 'OFERTAS ESPECIAIS',
+        amount: totalEntries.totalSpecialOffers,
+      },
+      {
+        title: 'OFERTAS DE GAZOFILÁCIO',
+        amount: totalEntries.totalLooseOffers,
+      },
+    ];
+
+    if (totalEntries.totalWithdrawalsBankAccount) {
+      info.push({
+        title: 'SAÍDAS BANCÁRIAS',
+        amount: totalEntries.totalWithdrawalsBankAccount,
+      });
+    }
+
+    return info;
+  }, [totalEntries]);
+
+  const infoTop = handleInfoTop();
 
   const infoBottom = [
     {
