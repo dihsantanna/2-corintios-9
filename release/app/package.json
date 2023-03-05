@@ -1,6 +1,6 @@
 {
   "name": "2-corintios-9",
-  "version": "0.0.1",
+  "version": "1.0.0b",
   "description": "A Solução para a tesouraria de sua igreja",
   "license": "MIT",
   "author": {
@@ -15,8 +15,6 @@
     "link-modules": "node -r ts-node/register ../../.erb/scripts/link-modules.ts"
   },
   "dependencies": {
-    "ejs": "^3.1.8",
-    "puppeteer": "^19.6.2",
     "sqlite3": "^5.1.4",
     "tailwindcss": "^3.2.4"
   }

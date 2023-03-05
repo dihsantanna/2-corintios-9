@@ -1,9 +1,8 @@
-import { useContext } from 'react';
-import { GlobalContext } from 'renderer/context/GlobalContext';
+import { useGlobalContext } from '../context/GlobalContext/GlobalContextProvider';
 import { months } from '../utils/months';
 
 export function PartialBalance() {
-  const { partialBalance } = useContext(GlobalContext);
+  const { partialBalance } = useGlobalContext();
 
   const {
     previousBalance,

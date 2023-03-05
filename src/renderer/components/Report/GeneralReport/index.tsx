@@ -1,14 +1,14 @@
-import { useEffect, useContext, useState, useCallback, useRef } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import { toast } from 'react-toastify';
 import { IExpenseState } from 'main/@types/Expense';
 import { IExpenseCategoryState } from 'main/@types/ExpenseCategory';
 import { ITotalEntries } from 'main/@types/Report';
-import { GlobalContext } from '../../../context/GlobalContext';
 import { ReportView } from '../ReportView';
 import { months } from '../../../utils/months';
 import { GeneralReportDocument } from '../Document/GeneralReportDocument';
 import { Table } from '../Table';
 import { Infos } from '../Infos';
+import { useGlobalContext } from '../../../context/GlobalContext/GlobalContextProvider';
 
 type MonthKey = keyof typeof months;
 
@@ -36,7 +36,7 @@ export function GeneralReport() {
     ...INITIAL_STATE,
   } as ITotalEntries);
   const [loading, setLoading] = useState(false);
-  const { churchData } = useContext(GlobalContext);
+  const { churchData } = useGlobalContext();
 
   const mounted = useRef(false);
 

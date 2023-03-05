@@ -1,19 +1,12 @@
-import {
-  Dispatch,
-  useState,
-  ChangeEvent,
-  FormEvent,
-  useEffect,
-  useContext,
-} from 'react';
+import { Dispatch, useState, ChangeEvent, FormEvent, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { ImSpinner2 } from 'react-icons/im';
-import { GlobalContext } from 'renderer/context/GlobalContext';
 import { ResetButton } from '../ResetButton';
 import { SubmitButton } from '../SubmitButton';
 import logoEmptySrc from '../../assets/logo-empty.png';
 import { states } from '../../utils/states';
 import type { ChurchData } from '../../@types/ChurchData.type';
+import { useGlobalContext } from '../../context/GlobalContext/GlobalContextProvider';
 
 interface DataOfChurchFormProps {
   isInitialConfig?: boolean;
@@ -50,7 +43,7 @@ export function DataOfChurchForm({
   });
   const [loading, setLoading] = useState(false);
   const [loadPreviewImage, setLoadPreviewImage] = useState(false);
-  const { setRefreshPartialBalance, churchData } = useContext(GlobalContext);
+  const { setRefreshPartialBalance, churchData } = useGlobalContext();
 
   useEffect(() => {
     const getDataOfChurch = async () => {

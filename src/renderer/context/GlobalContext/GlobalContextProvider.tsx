@@ -1,11 +1,7 @@
-import { ReactNode, useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { IPartialBalance } from 'main/@types/Report';
-import { GlobalContext } from '.';
+import { Outlet, useOutletContext } from 'react-router-dom';
 import { ChurchData } from '../../@types/ChurchData.type';
-
-interface GlobalContextProviderProps {
-  children?: ReactNode;
-}
 
 const PARTIAL_BALANCE: IPartialBalance = {
   previousBalance: 0.0,
@@ -31,9 +27,7 @@ const CHURCH_DATA: ChurchData = {
   cep: '',
 };
 
-export function GlobalContextProvider({
-  children,
-}: GlobalContextProviderProps) {
+export function GlobalContextProvider() {
   const [churchData, setChurchData] = useState<ChurchData>({
     ...CHURCH_DATA,
   } as ChurchData);
@@ -81,8 +75,8 @@ export function GlobalContextProvider({
   }, [refreshPartialBalance, setInitialConfig, setRefreshPartialBalance]);
 
   return (
-    <GlobalContext.Provider
-      value={{
+    <Outlet
+      context={{
         churchData,
         setChurchData,
         partialBalance,
@@ -93,8 +87,22 @@ export function GlobalContextProvider({
         showInitialConfig,
         setShowInitialConfig,
       }}
-    >
-      {children}
-    </GlobalContext.Provider>
+    />
   );
+}
+
+export type GlobalContextType = {
+  churchData: ChurchData;
+  setChurchData: React.Dispatch<React.SetStateAction<ChurchData>>;
+  partialBalance: IPartialBalance;
+  setPartialBalance: React.Dispatch<React.SetStateAction<IPartialBalance>>;
+  refreshPartialBalance: boolean;
+  setRefreshPartialBalance: React.Dispatch<React.SetStateAction<boolean>>;
+  logoSrc: string;
+  showInitialConfig: boolean;
+  setShowInitialConfig: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+export function useGlobalContext() {
+  return useOutletContext<GlobalContextType>();
 }

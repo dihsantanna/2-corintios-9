@@ -1,10 +1,10 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { months } from 'renderer/utils/months';
 import { getYears } from 'renderer/utils/years';
-import { GlobalContext } from 'renderer/context/GlobalContext';
 import { SubmitButton } from '../SubmitButton';
 import { ResetButton } from '../ResetButton';
+import { useGlobalContext } from '../../context/GlobalContext/GlobalContextProvider';
 
 interface BalanceConfigProps {
   setShow: (bool: boolean) => void;
@@ -26,8 +26,7 @@ export function BalanceConfigForm({
   });
   const [balance, setBalance] = useState('');
   const [loading, setLoading] = useState(false);
-  const { setRefreshPartialBalance, setShowInitialConfig } =
-    useContext(GlobalContext);
+  const { setRefreshPartialBalance, setShowInitialConfig } = useGlobalContext();
 
   useEffect(() => {
     const getInitialBalance = async () => {
