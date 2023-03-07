@@ -1,6 +1,7 @@
 import { Dispatch, useState, ChangeEvent, FormEvent, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { ImSpinner2 } from 'react-icons/im';
+import { resizeImg } from 'renderer/utils/resizeImg';
 import { ResetButton } from '../ResetButton';
 import { SubmitButton } from '../SubmitButton';
 import logoEmptySrc from '../../assets/logo-empty.png';
@@ -90,7 +91,7 @@ export function DataOfChurchForm({
     return true;
   };
 
-  const imageToBase64 = async (file: File) => {
+  const imageToBase64 = async (file: Blob) => {
     const reader = new FileReader();
     reader.readAsDataURL(file);
     return new Promise<string>((resolve) => {
@@ -154,7 +155,14 @@ export function DataOfChurchForm({
       if (imageValidate(files)) {
         setLoadPreviewImage(true);
         try {
-          const src = await imageToBase64((files as FileList)[0]);
+          const options = {
+            width: 500,
+            quality: 0.8,
+          };
+
+          const src = await imageToBase64(
+            await resizeImg((files as FileList)[0], options)
+          );
 
           setPreviewImage({
             filename: (files as FileList)[0].name,
