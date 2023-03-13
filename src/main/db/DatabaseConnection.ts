@@ -6,26 +6,28 @@ import { createTablesQuery } from './createTablesQuery';
 const { Database } = sqlite.verbose();
 
 export class DatabaseConnection extends Database {
-  constructor(fileName = path.join(__dirname, '2corintios9.db')) {
+  constructor(pathFile = path.join(__dirname, '2corintios9.db')) {
     const customFileName =
       process.env.NODE_ENV === 'production'
         ? path.join(process.resourcesPath, 'db/2corintios9.sqlite')
-        : fileName;
+        : pathFile;
 
     super(customFileName, (err) => {
       if (err) {
-        console.log('Error opening database: ', err);
-      } else {
-        console.log('Database opened successfully');
+        console.log('Error opening database: ', err.message);
       }
     });
   }
 
-  createTables = () => {
-    this.exec(createTablesQuery, (err) => {
-      if (!err) {
-        console.log('Tables created successfully');
-      }
-    }).close();
-  };
+  async createTables() {
+    await new Promise<void>((resolve, reject) => {
+      this.exec(createTablesQuery, (err) => {
+        if (err) {
+          console.log('Error creating tables: ', err.message);
+          reject(err);
+        }
+        resolve();
+      });
+    });
+  }
 }
