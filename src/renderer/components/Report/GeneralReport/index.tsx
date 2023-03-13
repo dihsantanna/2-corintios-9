@@ -88,33 +88,47 @@ export function GeneralReport() {
     }
   }, [getReport]);
 
-  const infoTop = [
-    {
-      title: 'SALDO ANTERIOR',
-      amount: totalEntries.previousBalance,
-    },
-    {
-      title: 'DÍZIMOS',
-      amount: totalEntries.totalTithes,
-    },
-    {
-      title: 'OFERTAS ESPECIAIS',
-      amount: totalEntries.totalSpecialOffers,
-    },
-    {
-      title: 'OFERTAS DE GAZOFILÁCIO',
-      amount: totalEntries.totalLooseOffers,
-    },
-    {
-      title: 'SAQUE EM CONTA BANCÁRIA',
-      amount: totalEntries.totalWithdrawalsBankAccount,
-    },
-  ];
+  const handleInfoTop = useCallback(() => {
+    const info = [
+      {
+        title: 'SALDO ANTERIOR',
+        amount: totalEntries.previousBalance,
+      },
+      {
+        title: 'DÍZIMOS',
+        amount: totalEntries.totalTithes,
+      },
+      {
+        title: 'OFERTAS ESPECIAIS',
+        amount: totalEntries.totalSpecialOffers,
+      },
+      {
+        title: 'OFERTAS DE GAZOFILÁCIO',
+        amount: totalEntries.totalLooseOffers,
+      },
+    ];
+
+    if (totalEntries.totalWithdrawalsBankAccount) {
+      info.push({
+        title: 'SAÍDAS BANCÁRIAS',
+        amount: totalEntries.totalWithdrawalsBankAccount,
+      });
+    }
+
+    info.push({
+      title: 'TOTAL DE ENTRADAS',
+      amount: totalEntries.totalEntries,
+    });
+
+    return info;
+  }, [totalEntries]);
+
+  const infoTop = handleInfoTop();
 
   const infoBottom = [
     {
-      title: 'TOTAL DE ENTRADAS',
-      amount: totalEntries.totalEntries,
+      title: 'TOTAL GERAL DE ENTRADAS',
+      amount: totalEntries.totalEntries + totalEntries.previousBalance,
     },
     {
       title: 'TOTAL DE SAÍDAS',
@@ -122,7 +136,7 @@ export function GeneralReport() {
     },
     {
       title: `SALDO P/ O MÊS DE ${months[
-        monthAndYear.month as MonthKey
+        (monthAndYear.month + 1) as MonthKey
       ].toLocaleUpperCase()}`,
       amount:
         totalEntries.previousBalance +
@@ -155,7 +169,7 @@ export function GeneralReport() {
       }
     >
       <>
-        <Infos infos={infoTop} />
+        <Infos infos={infoTop} isTop />
         {categories.map(({ id, name }) => {
           const filteredExpenses = expenses.filter(
             (expense) => expense.expenseCategoryId === id

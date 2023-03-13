@@ -15,8 +15,8 @@ interface Tithe {
 const INITIAL_STATE: Tithe = {
   memberId: '',
   value: '',
-  referenceMonth: 0,
-  referenceYear: 0,
+  referenceMonth: new Date().getMonth() + 1,
+  referenceYear: new Date().getFullYear(),
 };
 
 export function AddTithe() {

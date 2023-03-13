@@ -15,8 +15,8 @@ interface Offer {
 const INITIAL_STATE: Offer = {
   memberId: '',
   value: '',
-  referenceMonth: 0,
-  referenceYear: 0,
+  referenceMonth: new Date().getMonth() + 1,
+  referenceYear: new Date().getFullYear(),
 };
 
 export function AddOffer() {

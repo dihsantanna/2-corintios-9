@@ -34,7 +34,7 @@ export function GeneralReportDocument({
       referenceYear={referenceYear}
     >
       <>
-        <Infos infos={infoTop} />
+        <Infos infos={infoTop} isTop />
         {expenseCategories.map(({ id, name }) => {
           const filteredExpenses = expenses.filter(
             (expense) => expense.expenseCategoryId === id
