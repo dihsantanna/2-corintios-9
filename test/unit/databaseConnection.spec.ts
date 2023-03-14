@@ -20,7 +20,7 @@ describe('DatabaseConnection:', () => {
   afterAll(() => {
     dataBaseConnection.close();
     if (fs.existsSync(dbPath)) {
-      fs.rmSync(dbPath, { force: true, recursive: true });
+      fs.rmSync(dbPath, { force: true });
     }
   });
   it('should it instantiates a Database class', () => {
