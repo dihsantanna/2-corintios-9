@@ -6,11 +6,14 @@ import {
   deleteQuery,
 } from './queries/expense';
 import { idGenerator } from '../../helpers/idGenerator';
-import {
-  IExpense,
-  IExpenseState,
-  IExpenseStateWithCategoryName,
-} from '../../@types/Expense';
+import { IExpense, IExpenseStateWithCategoryName } from '../../@types/Expense';
+
+interface UpdateExpenseParams {
+  id: string;
+  expenseCategoryId: string;
+  title: string;
+  value: number;
+}
 
 export class Expense {
   private id = idGenerator;
@@ -69,7 +72,12 @@ export class Expense {
     }).finally(() => this.db.close());
   };
 
-  update = async ({ id, expenseCategoryId, title, value }: IExpenseState) => {
+  update = async ({
+    id,
+    expenseCategoryId,
+    title,
+    value,
+  }: UpdateExpenseParams) => {
     return new Promise<void>((resolve, reject) => {
       this.db.run(
         updateQuery,
