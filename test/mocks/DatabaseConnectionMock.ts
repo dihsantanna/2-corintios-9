@@ -6,17 +6,26 @@ interface IResponse {
   err: Error | null;
   row: any;
   rows?: any[];
+  closeErr?: Error | null;
 }
 
 export class DatabaseConnectionMock {
   constructor(private response: IResponse) {}
 
-  get = (
-    _params: any,
-    callback?: ((err: Error | null, row: any) => void) | undefined
-  ): this => {
-    if (callback) callback(this.response.err, this.response.row);
-    return this;
+  get = (sql: string, ...rest: any): this => {
+    return rest.length === 2
+      ? ((
+          _sql: any,
+          _params: any,
+          callback?: (err: Error | null, row: any) => void
+        ) => {
+          if (callback) callback(this.response.err, this.response.row);
+          return this;
+        })(sql, rest[0], rest[1])
+      : ((_sql: any, callback?: (err: Error | null, row: any) => void) => {
+          if (callback) callback(this.response.err, this.response.row);
+          return this;
+        })(sql, rest[0]);
   };
 
   run = (
@@ -37,5 +46,7 @@ export class DatabaseConnectionMock {
     return this;
   };
 
-  close = () => {};
+  close = (callback?: (err: Error | null) => void) => {
+    if (callback) callback(this.response.closeErr! || null);
+  };
 }
