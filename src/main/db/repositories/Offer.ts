@@ -17,16 +17,23 @@ export class Offer {
 
   constructor(private db = new DatabaseConnection()) {}
 
-  create = ({ memberId, value, referenceMonth, referenceYear }: IOffer) => {
+  create = async ({
+    memberId,
+    value,
+    referenceMonth,
+    referenceYear,
+  }: IOffer) => {
     const id = this.id();
-    this.db.run(createQuery, [
-      id,
-      memberId || null,
-      value,
-      referenceMonth,
-      referenceYear,
-    ]);
-    this.db.close();
+    return new Promise<void>((resolve, reject) => {
+      this.db.run(
+        createQuery,
+        [id, memberId || null, value, referenceMonth, referenceYear],
+        (err) => {
+          if (err) reject(err);
+          resolve();
+        }
+      );
+    }).finally(() => this.db.close());
   };
 
   findAllByReferencesWithMemberName = async (
