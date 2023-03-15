@@ -7,7 +7,7 @@ import {
   createOrUpdateResolveResponse,
   getRejectResponse,
   getResolveResponse,
-} from '../utils/dataOfChurchResponses';
+} from '../mocks/responses/dataOfChurchResponses';
 
 const createOrUpdateParams = { ...getResolveResponse.row };
 

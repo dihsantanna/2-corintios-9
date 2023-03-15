@@ -11,7 +11,7 @@ import {
   findAllResolveResponse,
   updateRejectResponse,
   updateResolveResponse,
-} from '../utils/expenseResponses';
+} from '../mocks/responses/expenseResponses';
 
 const createParams = {
   expenseCategoryId: 'expenseCategoryId',
