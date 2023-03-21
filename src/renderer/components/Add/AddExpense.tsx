@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { IExpenseCategoryState } from 'main/@types/ExpenseCategory';
+import { useGlobalContext } from '../../context/GlobalContext/GlobalContextProvider';
 import { AddForm } from './AddForm';
 import { months } from '../../utils/months';
 import { getYears } from '../../utils/years';
@@ -23,6 +24,8 @@ const INITIAL_STATE: Expense = {
 
 export function AddExpense() {
   const [expense, setExpense] = useState<Expense>({ ...INITIAL_STATE });
+
+  const { setRefreshPartialBalance } = useGlobalContext();
 
   const [expenseCategories, setExpenseCategories] = useState<
     IExpenseCategoryState[]
@@ -117,6 +120,7 @@ export function AddExpense() {
       toast.success('Despesa cadastrada com sucesso!', {
         progress: undefined,
       });
+      setRefreshPartialBalance(true);
     } catch (err) {
       toast.error(`Erro ao cadastrar despesa: ${(err as Error).message}`, {
         progress: undefined,

@@ -4,6 +4,7 @@ import { IExpenseCategoryState } from 'main/@types/ExpenseCategory';
 import { EditForm } from './EditForm';
 import { FilterByMonthAndYear } from '../FilterByMonthAndYear';
 import { LogoChurch } from '../LogoChurch';
+import { useGlobalContext } from '../../context/GlobalContext/GlobalContextProvider';
 
 interface ExpensesWithExpenseCategory {
   id: string;
@@ -30,6 +31,8 @@ export function EditExpenses() {
     new Date().getMonth() + 1
   );
   const [referenceYear, setReferenceYear] = useState(new Date().getFullYear());
+
+  const { setRefreshPartialBalance } = useGlobalContext();
 
   useEffect(() => {
     const getExpenseCategories = async () => {
@@ -180,6 +183,7 @@ export function EditExpenses() {
         progress: undefined,
       });
       setDefaultExpenses(expenses);
+      setRefreshPartialBalance(true);
     } catch (err) {
       toast.error(`Erro ao editar despesa: ${(err as Error).message}`, {
         progress: undefined,

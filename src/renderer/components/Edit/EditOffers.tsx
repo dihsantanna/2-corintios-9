@@ -3,6 +3,7 @@ import { toast } from 'react-toastify';
 import { EditForm } from './EditForm';
 import { FilterByMonthAndYear } from '../FilterByMonthAndYear';
 import { LogoChurch } from '../LogoChurch';
+import { useGlobalContext } from '../../context/GlobalContext/GlobalContextProvider';
 
 export interface OfferWithMemberName {
   id: string;
@@ -25,6 +26,8 @@ export function EditOffers() {
   );
   const [referenceYear, setReferenceYear] = useState(new Date().getFullYear());
   const [offerType, setOfferType] = useState<OfferType>('all');
+
+  const { setRefreshPartialBalance } = useGlobalContext();
 
   const filterOfferByType = (
     offersArr: OfferWithMemberName[]
@@ -157,6 +160,7 @@ export function EditOffers() {
         progress: undefined,
       });
       setDefaultOffers(offers);
+      setRefreshPartialBalance(true);
     } catch (err) {
       toast.error(`Erro ao editar oferta: ${(err as Error).message}`, {
         progress: undefined,

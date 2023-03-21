@@ -3,6 +3,7 @@ import { toast } from 'react-toastify';
 import { EditForm } from './EditForm';
 import { FilterByMonthAndYear } from '../FilterByMonthAndYear';
 import { LogoChurch } from '../LogoChurch';
+import { useGlobalContext } from '../../context/GlobalContext/GlobalContextProvider';
 
 interface TitheStateWithMemberName {
   id: string;
@@ -24,6 +25,8 @@ export function EditTithes() {
     new Date().getMonth() + 1
   );
   const [referenceYear, setReferenceYear] = useState(new Date().getFullYear());
+
+  const { setRefreshPartialBalance } = useGlobalContext();
 
   useEffect(() => {
     const getTithes = async () => {
@@ -138,6 +141,7 @@ export function EditTithes() {
         progress: undefined,
       });
       setDefaultTithes(tithes);
+      setRefreshPartialBalance(true);
     } catch (err) {
       toast.error(`Erro ao editar dízimo: ${(err as Error).message}`, {
         progress: undefined,

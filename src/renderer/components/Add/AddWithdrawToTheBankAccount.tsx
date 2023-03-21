@@ -3,6 +3,7 @@ import { toast } from 'react-toastify';
 import { AddForm } from './AddForm';
 import { months } from '../../utils/months';
 import { getYears } from '../../utils/years';
+import { useGlobalContext } from '../../context/GlobalContext/GlobalContextProvider';
 
 interface WithdrawToTheBankAccount {
   value: string;
@@ -20,6 +21,8 @@ export function AddWithdrawToTheBankAccount() {
   const [withdrawToTheBankAccount, setWithdrawToTheBankAccount] =
     useState<WithdrawToTheBankAccount>({ ...INITIAL_STATE });
   const [loading, setLoading] = useState(false);
+
+  const { setRefreshPartialBalance } = useGlobalContext();
 
   const formValidate = (
     floatValue: number,
@@ -64,6 +67,7 @@ export function AddWithdrawToTheBankAccount() {
       toast.success('Saque cadastrado com sucesso!', {
         progress: undefined,
       });
+      setRefreshPartialBalance(true);
     } catch (err) {
       toast.error(`Erro ao cadastrar saque: ${(err as Error).message}`, {
         progress: undefined,
