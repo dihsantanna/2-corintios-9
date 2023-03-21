@@ -34,5 +34,6 @@
       "name": "2Corintios9-dev",
       "database": "${workspaceFolder:2-corintios-9}/src/main/db/2corintios9.db"
     }
-  ]
+  ],
+  "sqltools.useNodeRuntime": true
 }

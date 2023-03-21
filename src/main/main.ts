@@ -25,9 +25,32 @@ class AppUpdater {
   }
 }
 
-if (process.env.NODE_ENV === 'development') {
-  new DatabaseConnection().createTables();
+const databaseConnection = new DatabaseConnection();
+
+const createProductionDbFolder = () => {
+  const dbFolder = path.join(process.resourcesPath, 'db');
+  if (!fs.existsSync(dbFolder)) {
+    fs.mkdirSync(dbFolder);
+  }
+};
+
+if (app.isPackaged) {
+  createProductionDbFolder();
 }
+
+databaseConnection
+  .createTables()
+  .then(() => {
+    databaseConnection.close((error) => {
+      if (error) console.log(error);
+    });
+  })
+  .catch((err) => {
+    console.log(err);
+    databaseConnection.close((error) => {
+      if (error) console.log(error);
+    });
+  });
 
 let mainWindow: BrowserWindow | null = null;
 
@@ -36,18 +59,6 @@ createPreloadHandlers();
 if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');
   sourceMapSupport.install();
-}
-
-const createProductionDB = () => {
-  const dbFolder = path.join(process.resourcesPath, 'db');
-  if (!fs.existsSync(dbFolder)) {
-    fs.mkdirSync(dbFolder);
-  }
-  new DatabaseConnection().createTables();
-};
-
-if (app.isPackaged) {
-  createProductionDB();
 }
 
 const createWindow = async () => {
