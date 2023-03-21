@@ -3,6 +3,7 @@ import { toast } from 'react-toastify';
 import { IExpenseCategoryState } from 'main/@types/ExpenseCategory';
 import { useGlobalContext } from '../../context/GlobalContext/GlobalContextProvider';
 import { AddForm } from './AddForm';
+import { ExpenseTitleSuggestions } from '../ExpenseTitleSuggestions';
 import { months } from '../../utils/months';
 import { getYears } from '../../utils/years';
 
@@ -31,6 +32,7 @@ export function AddExpense() {
     IExpenseCategoryState[]
   >([]);
   const [loading, setLoading] = useState(false);
+  const [openTitleSuggestions, setOpenTitleSuggestions] = useState(false);
 
   useEffect(() => {
     const getExpenseCategories = async () => {
@@ -128,6 +130,7 @@ export function AddExpense() {
     } finally {
       setLoading(false);
       setExpense({ ...INITIAL_STATE });
+      await window.expenseTitleSuggestions.create(title);
     }
   };
 
@@ -153,6 +156,26 @@ export function AddExpense() {
       ...expense,
       [name]: newValue.replace(',', '.'),
     });
+  };
+
+  const setTitleSuggestions = (title: string) => {
+    setExpense({
+      ...expense,
+      title,
+    });
+    setOpenTitleSuggestions(false);
+  };
+
+  const handleTitleSuggestionsBlur = () => {
+    setTimeout(() => {
+      setOpenTitleSuggestions(false);
+    }, 250);
+  };
+
+  const handleTitleSuggestionsFocus = () => {
+    setTimeout(() => {
+      setOpenTitleSuggestions(true);
+    }, 250);
   };
 
   const handleValueInputBlur = ({
@@ -206,7 +229,11 @@ export function AddExpense() {
           ))}
         </select>
       </label>
-      <label className="flex items-center bg-zinc-900 p-2 border-l-4 border-teal-500 rounded-sm w-8/12">
+      <label
+        onFocus={handleTitleSuggestionsFocus}
+        onBlur={handleTitleSuggestionsBlur}
+        className="flex items-center bg-zinc-900 p-2 border-l-4 border-teal-500 rounded-sm w-8/12 relative"
+      >
         <input
           required
           title="Dê um título para a despesa"
@@ -216,6 +243,12 @@ export function AddExpense() {
           value={expense.title}
           className="bg-zinc-900 placeholder:text-zinc-200 font-light block w-full appearance-none leading-normal"
         />
+        {openTitleSuggestions && (
+          <ExpenseTitleSuggestions
+            onSuggestionClick={setTitleSuggestions}
+            title={expense.title}
+          />
+        )}
       </label>
       <label className="flex gap-2 items-center bg-zinc-900 p-2 border-l-4 border-teal-500 rounded-sm w-4/12">
         <span>R$</span>

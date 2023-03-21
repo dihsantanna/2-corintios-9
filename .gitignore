@@ -29,3 +29,5 @@ npm-debug.log.*
 *.scss.d.ts
 
 2corintios9.db
+
+expense-title-suggestions.json
