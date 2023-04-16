@@ -4,6 +4,7 @@ import { IMemberState } from 'main/@types/Member';
 import { AddForm } from './AddForm';
 import { months } from '../../utils/months';
 import { getYears } from '../../utils/years';
+import { useGlobalContext } from '../../context/GlobalContext/GlobalContextProvider';
 
 interface Tithe {
   memberId: string;
@@ -21,9 +22,10 @@ const INITIAL_STATE: Tithe = {
 
 export function AddTithe() {
   const [tithe, setTithe] = useState<Tithe>({ ...INITIAL_STATE });
-
   const [members, setMembers] = useState<IMemberState[]>([]);
   const [loading, setLoading] = useState(false);
+
+  const { setRefreshPartialBalance } = useGlobalContext();
 
   useEffect(() => {
     const getMembers = async () => {
@@ -93,6 +95,7 @@ export function AddTithe() {
       toast.success('Dízimo cadastrado com sucesso!', {
         progress: undefined,
       });
+      setRefreshPartialBalance(true);
     } catch (err) {
       toast.error(`Erro ao cadastrar dízimo: ${(err as Error).message}`, {
         progress: undefined,

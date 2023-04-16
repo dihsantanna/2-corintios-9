@@ -198,6 +198,20 @@ const dataOfChurchHandler = {
   },
 };
 
+const expenseTitleSuggestions = {
+  get: async () => {
+    return ipcRenderer.invoke('expenseTitleSuggestions:get') as Promise<
+      string[]
+    >;
+  },
+  create: async (expenseTitle: string) => {
+    return ipcRenderer.invoke(
+      'expenseTitleSuggestions:create',
+      expenseTitle
+    ) as Promise<void>;
+  },
+};
+
 contextBridge.exposeInMainWorld('member', memberHandler);
 contextBridge.exposeInMainWorld('tithe', titheHandler);
 contextBridge.exposeInMainWorld('offer', offerHandler);
@@ -210,6 +224,10 @@ contextBridge.exposeInMainWorld(
   withdrawToTheBankAccountHandler
 );
 contextBridge.exposeInMainWorld('dataOfChurch', dataOfChurchHandler);
+contextBridge.exposeInMainWorld(
+  'expenseTitleSuggestions',
+  expenseTitleSuggestions
+);
 
 export type MemberHandler = typeof memberHandler;
 export type TitheHandler = typeof titheHandler;
@@ -221,3 +239,4 @@ export type InitialBalanceHandler = typeof initialBalanceHandler;
 export type WithdrawToTheBankAccountHandler =
   typeof withdrawToTheBankAccountHandler;
 export type DataOfChurchHandler = typeof dataOfChurchHandler;
+export type ExpenseTitleSuggestions = typeof expenseTitleSuggestions;

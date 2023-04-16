@@ -4,6 +4,7 @@ import { IMemberState } from 'main/@types/Member';
 import { AddForm } from './AddForm';
 import { months } from '../../utils/months';
 import { getYears } from '../../utils/years';
+import { useGlobalContext } from '../../context/GlobalContext/GlobalContextProvider';
 
 interface Offer {
   memberId: string;
@@ -23,6 +24,8 @@ export function AddOffer() {
   const [tithe, setOffer] = useState<Offer>({ ...INITIAL_STATE });
   const [members, setMembers] = useState<IMemberState[]>([]);
   const [loading, setLoading] = useState(false);
+
+  const { setRefreshPartialBalance } = useGlobalContext();
 
   useEffect(() => {
     const getMembers = async () => {
@@ -83,6 +86,7 @@ export function AddOffer() {
       toast.success('Oferta cadastrada com sucesso!', {
         progress: undefined,
       });
+      setRefreshPartialBalance(true);
     } catch (err) {
       toast.error(`Erro ao cadastrar oferta: ${(err as Error).message}`, {
         progress: undefined,

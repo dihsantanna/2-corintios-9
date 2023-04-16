@@ -3,6 +3,7 @@ import { toast } from 'react-toastify';
 import { EditForm } from './EditForm';
 import { FilterByMonthAndYear } from '../FilterByMonthAndYear';
 import { LogoChurch } from '../LogoChurch';
+import { useGlobalContext } from '../../context/GlobalContext/GlobalContextProvider';
 
 interface WithdrawsToTheBankAccount {
   id: string;
@@ -25,6 +26,8 @@ export function EditWithdrawsToTheBankAccount() {
     new Date().getMonth() + 1
   );
   const [referenceYear, setReferenceYear] = useState(new Date().getFullYear());
+
+  const { setRefreshPartialBalance } = useGlobalContext();
 
   useEffect(() => {
     const getWithdrawsToTheBankAccount = async () => {
@@ -142,6 +145,7 @@ export function EditWithdrawsToTheBankAccount() {
         progress: undefined,
       });
       setDefaultWithdrawsToTheBankAccount(withdrawsToTheBankAccount);
+      setRefreshPartialBalance(true);
     } catch (err) {
       toast.error(`Erro ao editar saque: ${(err as Error).message}`, {
         progress: undefined,
