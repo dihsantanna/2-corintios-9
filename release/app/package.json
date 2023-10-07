@@ -15,7 +15,7 @@
     "link-modules": "node -r ts-node/register ../../.erb/scripts/link-modules.ts"
   },
   "dependencies": {
-    "sqlite3": "^5.1.4",
+    "sqlite3": "^5.1.6",
     "tailwindcss": "^3.2.4"
   }
 }

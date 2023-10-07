@@ -26,14 +26,5 @@
     "test/**/__snapshots__": true,
     "package-lock.json": true,
     "*.{css,sass,scss}.d.ts": true
-  },
-  "sqltools.connections": [
-    {
-      "previewLimit": 50,
-      "driver": "SQLite",
-      "name": "2Corintios9-dev",
-      "database": "${workspaceFolder:2-corintios-9}/src/main/db/2corintios9.db"
-    }
-  ],
-  "sqltools.useNodeRuntime": true
+  }
 }
