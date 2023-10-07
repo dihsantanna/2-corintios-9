@@ -5,6 +5,7 @@ import { expenseTitleSuggestionsHandlers } from './expenseTitleSuggestionsHandle
 import { initialBalanceHandler } from './initialBalanceHandler';
 import { memberHandlers } from './memberHandlers';
 import { offerHandlers } from './offerHandlers';
+import { otherEntryHandlers } from './otherEntryHandlers';
 import { reportHandlers } from './reportHandlers';
 import { titheHandlers } from './titheHandlers';
 import { withdrawsToTheBankAccountHandlers } from './withdrawToTheBankAccountHandlers';
@@ -20,4 +21,5 @@ export const createPreloadHandlers = () => {
   withdrawsToTheBankAccountHandlers();
   dataOfChurchHandler();
   expenseTitleSuggestionsHandlers();
+  otherEntryHandlers();
 };

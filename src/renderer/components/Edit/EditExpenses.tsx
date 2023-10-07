@@ -28,7 +28,7 @@ export function EditExpenses() {
   const [editing, setEditing] = useState('');
   const [loading, setLoading] = useState(false);
   const [referenceMonth, setReferenceMonth] = useState(
-    new Date().getMonth() + 1
+    new Date().getMonth() + 1,
   );
   const [referenceYear, setReferenceYear] = useState(new Date().getFullYear());
 
@@ -44,7 +44,7 @@ export function EditExpenses() {
           `Erro ao carregar categorias de despesa: ${(err as Error).message}`,
           {
             progress: undefined,
-          }
+          },
         );
       }
     };
@@ -59,7 +59,7 @@ export function EditExpenses() {
         const newExpenses =
           await window.expense.findAllByReferencesWithCategoryName(
             referenceMonth,
-            referenceYear
+            referenceYear,
           );
         const toFixedExpenses = newExpenses.map((expense) => ({
           ...expense,
@@ -87,7 +87,7 @@ export function EditExpenses() {
 
   const valueChangeReplace = (
     value: string,
-    expense: ExpensesWithExpenseCategory
+    expense: ExpensesWithExpenseCategory,
   ) => {
     const validateValue = /^(\d+)(\.|,)?(\d{0,2}$)/.test(value) || value === '';
     if (!validateValue) return `${expense.value}`;
@@ -99,7 +99,7 @@ export function EditExpenses() {
     {
       target: { name, value },
     }: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
-    expense: ExpensesWithExpenseCategory
+    expense: ExpensesWithExpenseCategory,
   ) => {
     const key = name as keyof ExpensesWithExpenseCategory;
     const newExpense = {
@@ -108,7 +108,7 @@ export function EditExpenses() {
     } as ExpensesWithExpenseCategory;
 
     const newExpenses = expenses.map((item) =>
-      item.id === expense.id ? newExpense : item
+      item.id === expense.id ? newExpense : item,
     );
 
     setExpenses(newExpenses);
@@ -116,7 +116,7 @@ export function EditExpenses() {
 
   const handleValueInputBlur = (
     { target: { value } }: React.FocusEvent<HTMLInputElement>,
-    expense: ExpensesWithExpenseCategory
+    expense: ExpensesWithExpenseCategory,
   ) => {
     const newValue = value ? parseFloat(value).toFixed(2) : '';
     const newExpense = {
@@ -125,7 +125,7 @@ export function EditExpenses() {
     };
 
     const newExpenses = expenses.map((item) =>
-      item.id === expense.id ? newExpense : item
+      item.id === expense.id ? newExpense : item,
     );
 
     setExpenses(newExpenses);
@@ -138,11 +138,11 @@ export function EditExpenses() {
 
   const handleEdit = async (
     event: React.FormEvent<HTMLFormElement>,
-    id: string
+    id: string,
   ) => {
     event.preventDefault();
     const editedExpense = expenses.find(
-      (expense) => expense.id === id
+      (expense) => expense.id === id,
     ) as ExpensesWithExpenseCategory;
     if (
       editedExpense === defaultExpenses.find((expense) => expense.id === id)
@@ -216,7 +216,7 @@ export function EditExpenses() {
     categorySelected === 'all'
       ? expenses
       : expenses.filter(
-          (expense) => expense.expenseCategoryId === categorySelected
+          (expense) => expense.expenseCategoryId === categorySelected,
         );
 
   const filteredExpenses = handleFilter();
@@ -286,7 +286,7 @@ export function EditExpenses() {
                   referenceMonth: month,
                   referenceYear: year,
                 },
-                index
+                index,
               ) => (
                 <EditForm
                   key={id}
@@ -333,7 +333,7 @@ export function EditExpenses() {
                           >
                             {categoryName}
                           </option>
-                        )
+                        ),
                       )}
                     </select>
                   </label>
@@ -391,7 +391,7 @@ export function EditExpenses() {
                     />
                   </label>
                 </EditForm>
-              )
+              ),
             )
           )}
         </div>

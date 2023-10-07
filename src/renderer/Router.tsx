@@ -16,6 +16,8 @@ import { GeneralReport } from './components/Report/GeneralReport';
 import { OutputReport } from './components/Report/OutputReport';
 import { GlobalContextProvider } from './context/GlobalContext/GlobalContextProvider';
 import { Home } from './Home';
+import { AddOtherEntry } from './components/Add/AddOtherEntry';
+import { EditOtherEntries } from './components/Edit/EditOtherEntries';
 
 export function Router() {
   return (
@@ -25,6 +27,7 @@ export function Router() {
         <Route path="addMember" element={<AddMember />} />
         <Route path="addTithe" element={<AddTithe />} />
         <Route path="addOffer" element={<AddOffer />} />
+        <Route path="addOtherEntry" element={<AddOtherEntry />} />
         <Route path="addExpenseCategory" element={<AddExpenseCategory />} />
         <Route path="addExpense" element={<AddExpense />} />
         <Route
@@ -34,6 +37,7 @@ export function Router() {
         <Route path="editMembers" element={<EditMembers />} />
         <Route path="editTithes" element={<EditTithes />} />
         <Route path="editOffers" element={<EditOffers />} />
+        <Route path="editOtherEntries" element={<EditOtherEntries />} />
         <Route
           path="editExpenseCategories"
           element={<EditExpenseCategories />}

@@ -9,12 +9,14 @@ import {
   TitheHandler,
   WithdrawToTheBankAccountHandler,
   ExpenseTitleSuggestions,
+  OtherEntryHandler,
 } from 'main/preload';
 
 declare global {
   interface Window {
     member: MemberHandler;
     tithe: TitheHandler;
+    otherEntry: OtherEntryHandler;
     offer: OfferHandler;
     expenseCategory: ExpenseCategoryHandler;
     expense: ExpenseHandler;

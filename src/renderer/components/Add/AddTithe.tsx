@@ -46,7 +46,7 @@ export function AddTithe() {
     floatValue: number,
     referenceMonth: number,
     referenceYear: number,
-    memberId: string
+    memberId: string,
   ) => {
     if (floatValue <= 0) {
       toast.warn('Valor do dízimo deve ser maior que 0', {

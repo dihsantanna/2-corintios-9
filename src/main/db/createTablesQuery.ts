@@ -12,6 +12,13 @@ CREATE TABLE IF NOT EXISTS "tithes" (
     "referenceYear" INTEGER NOT NULL,
     CONSTRAINT "tithe_memberId_fkey" FOREIGN KEY ("memberId") REFERENCES "members" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
+CREATE TABLE IF NOT EXISTS "otherEntries" (
+    "id" TEXT NOT NULL PRIMARY KEY,
+    "title" TEXT NOT NULL,
+    "value" REAL NOT NULL,
+    "referenceMonth" INTEGER NOT NULL,
+    "referenceYear" INTEGER NOT NULL
+);
 CREATE TABLE IF NOT EXISTS "offers" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "memberId" TEXT DEFAULT '',

@@ -18,6 +18,7 @@ import {
 } from './@types/WithdrawToTheBankAccount';
 import { IEntriesState, IPartialBalance } from './@types/Report';
 import { IDataOfChurch } from './@types/DataOfChurch';
+import { IOtherEntry, IOtherEntryState } from './@types/OtherEntry';
 
 const memberHandler = {
   create: async (member: IMember) => {
@@ -40,12 +41,12 @@ const titheHandler = {
   },
   findAllByReferencesWithMemberName: async (
     referenceMonth: number,
-    referenceYear: number
+    referenceYear: number,
   ) => {
     return ipcRenderer.invoke(
       'tithe:findAllByReferencesWithMemberName',
       referenceMonth,
-      referenceYear
+      referenceYear,
     ) as Promise<ITitheStateWithMemberName[]>;
   },
   update: async (tithe: ITitheState) => {
@@ -56,18 +57,43 @@ const titheHandler = {
   },
 };
 
+const otherEntryHandler = {
+  create: async (otherEntry: IOtherEntry) => {
+    return ipcRenderer.invoke('otherEntry:create', otherEntry) as Promise<void>;
+  },
+  findAllByReferences: async (
+    referenceMonth: number,
+    referenceYear: number,
+  ) => {
+    return ipcRenderer.invoke(
+      'otherEntry:findAllByReferences',
+      referenceMonth,
+      referenceYear,
+    ) as Promise<IOtherEntryState[]>;
+  },
+  update: async (otherEntry: IOtherEntryState) => {
+    return ipcRenderer.invoke('otherEntry:update', otherEntry) as Promise<void>;
+  },
+  delete: async (otherEntryId: string) => {
+    return ipcRenderer.invoke(
+      'otherEntry:delete',
+      otherEntryId,
+    ) as Promise<void>;
+  },
+};
+
 const offerHandler = {
   create: async (offer: IOffer) => {
     return ipcRenderer.invoke('offer:create', offer) as Promise<void>;
   },
   findAllByReferencesWithMemberName: async (
     referenceMonth: number,
-    referenceYear: number
+    referenceYear: number,
   ) => {
     return ipcRenderer.invoke(
       'offer:findAllByReferencesWithMemberName',
       referenceMonth,
-      referenceYear
+      referenceYear,
     ) as Promise<IOfferStateWithMemberName[]>;
   },
   update: async (offer: IOfferState) => {
@@ -82,7 +108,7 @@ const expenseCategoryHandler = {
   create: async (expenseCategory: IExpenseCategory) => {
     return ipcRenderer.invoke(
       'expenseCategory:create',
-      expenseCategory
+      expenseCategory,
     ) as Promise<void>;
   },
   findAll: async () => {
@@ -93,13 +119,13 @@ const expenseCategoryHandler = {
   update: async (expenseCategory: IExpenseCategoryState) => {
     return ipcRenderer.invoke(
       'expenseCategory:update',
-      expenseCategory
+      expenseCategory,
     ) as Promise<void>;
   },
   delete: async (expenseCategoryId: string) => {
     return ipcRenderer.invoke(
       'expenseCategory:delete',
-      expenseCategoryId
+      expenseCategoryId,
     ) as Promise<void>;
   },
 };
@@ -110,12 +136,12 @@ const expenseHandler = {
   },
   findAllByReferencesWithCategoryName: async (
     referenceMonth: number,
-    referenceYear: number
+    referenceYear: number,
   ) => {
     return ipcRenderer.invoke(
       'expense:findAllByReferencesWithCategoryName',
       referenceMonth,
-      referenceYear
+      referenceYear,
     ) as Promise<IExpenseStateWithCategoryName[]>;
   },
   update: async (expense: IExpenseState) => {
@@ -131,14 +157,14 @@ const reportHandler = {
     return ipcRenderer.invoke(
       'report:entries',
       referenceMonth,
-      referenceYear
+      referenceYear,
     ) as Promise<IEntriesState>;
   },
   partial: async (referenceMonth: number, referenceYear: number) => {
     return ipcRenderer.invoke(
       'report:partial',
       referenceMonth,
-      referenceYear
+      referenceYear,
     ) as Promise<IPartialBalance>;
   },
 };
@@ -150,7 +176,7 @@ const initialBalanceHandler = {
   createOrUpdate: async (balance: IBalance) => {
     return ipcRenderer.invoke(
       'initialBalance:createOrUpdate',
-      balance
+      balance,
     ) as Promise<void>;
   },
 };
@@ -159,29 +185,29 @@ const withdrawToTheBankAccountHandler = {
   create: async (withdrawToTheBankAccount: IWithdrawToTheBankAccount) => {
     return ipcRenderer.invoke(
       'withdrawToTheBankAccount:create',
-      withdrawToTheBankAccount
+      withdrawToTheBankAccount,
     ) as Promise<void>;
   },
   findAllByReferenceDate: async (
     referenceMonth: number,
-    referenceYear: number
+    referenceYear: number,
   ) => {
     return ipcRenderer.invoke(
       'withdrawToTheBankAccount:findAllByReferenceDate',
       referenceMonth,
-      referenceYear
+      referenceYear,
     ) as Promise<IWithdrawToTheBankAccountState[]>;
   },
   update: async (withdrawToTheBankAccount: IWithdrawToTheBankAccountState) => {
     return ipcRenderer.invoke(
       'withdrawToTheBankAccount:update',
-      withdrawToTheBankAccount
+      withdrawToTheBankAccount,
     ) as Promise<void>;
   },
   delete: async (withdrawToTheBankAccountId: string) => {
     return ipcRenderer.invoke(
       'withdrawToTheBankAccount:delete',
-      withdrawToTheBankAccountId
+      withdrawToTheBankAccountId,
     ) as Promise<void>;
   },
 };
@@ -190,7 +216,7 @@ const dataOfChurchHandler = {
   createOrUpdate: async (dataOfChurch: IDataOfChurch) => {
     return ipcRenderer.invoke(
       'dataOfChurch:createOrUpdate',
-      dataOfChurch
+      dataOfChurch,
     ) as Promise<void>;
   },
   get: async () => {
@@ -199,21 +225,22 @@ const dataOfChurchHandler = {
 };
 
 const expenseTitleSuggestions = {
-  get: async () => {
-    return ipcRenderer.invoke('expenseTitleSuggestions:get') as Promise<
+  get: async (search?: string) => {
+    return ipcRenderer.invoke('expenseTitleSuggestions:get', search) as Promise<
       string[]
     >;
   },
   create: async (expenseTitle: string) => {
     return ipcRenderer.invoke(
       'expenseTitleSuggestions:create',
-      expenseTitle
+      expenseTitle,
     ) as Promise<void>;
   },
 };
 
 contextBridge.exposeInMainWorld('member', memberHandler);
 contextBridge.exposeInMainWorld('tithe', titheHandler);
+contextBridge.exposeInMainWorld('otherEntry', otherEntryHandler);
 contextBridge.exposeInMainWorld('offer', offerHandler);
 contextBridge.exposeInMainWorld('expenseCategory', expenseCategoryHandler);
 contextBridge.exposeInMainWorld('expense', expenseHandler);
@@ -221,16 +248,17 @@ contextBridge.exposeInMainWorld('report', reportHandler);
 contextBridge.exposeInMainWorld('initialBalance', initialBalanceHandler);
 contextBridge.exposeInMainWorld(
   'withdrawToTheBankAccount',
-  withdrawToTheBankAccountHandler
+  withdrawToTheBankAccountHandler,
 );
 contextBridge.exposeInMainWorld('dataOfChurch', dataOfChurchHandler);
 contextBridge.exposeInMainWorld(
   'expenseTitleSuggestions',
-  expenseTitleSuggestions
+  expenseTitleSuggestions,
 );
 
 export type MemberHandler = typeof memberHandler;
 export type TitheHandler = typeof titheHandler;
+export type OtherEntryHandler = typeof otherEntryHandler;
 export type OfferHandler = typeof offerHandler;
 export type ExpenseCategoryHandler = typeof expenseCategoryHandler;
 export type ExpenseHandler = typeof expenseHandler;

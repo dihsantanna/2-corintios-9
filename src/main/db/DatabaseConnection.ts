@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import sqlite from 'sqlite3';
+import * as sqlite from 'sqlite3';
 import path from 'path';
 import { createTablesQuery } from './createTablesQuery';
 

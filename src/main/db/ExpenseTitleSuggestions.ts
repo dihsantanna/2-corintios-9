@@ -17,7 +17,7 @@ export class ExpenseTitleSuggestions {
     return new ExpenseTitleSuggestions(filePath);
   }
 
-  get = async (): Promise<string[]> =>
+  get = async (search?: string): Promise<string[]> =>
     new Promise((resolve, reject) => {
       if (!fs.existsSync(this.filePath)) {
         resolve([]);
@@ -26,7 +26,12 @@ export class ExpenseTitleSuggestions {
         if (err) {
           reject(err);
         } else {
-          resolve(JSON.parse(data));
+          const suggestions = JSON.parse(data);
+          resolve(
+            search
+              ? suggestions.filter((s: string) => s.includes(search))
+              : suggestions,
+          );
         }
       });
     });
@@ -48,20 +53,22 @@ export class ExpenseTitleSuggestions {
     return new Promise((resolve, reject) => {
       const expenseTitleSuggestions = JSON.parse(dataFile);
 
-      if (expenseTitleSuggestions.includes(suggestion)) resolve();
+      if (!expenseTitleSuggestions.includes(suggestion)) {
+        expenseTitleSuggestions.push(suggestion);
+        fs.writeFile(
+          this.filePath,
+          JSON.stringify(expenseTitleSuggestions),
+          (err) => {
+            if (err) {
+              return reject(err);
+            }
 
-      expenseTitleSuggestions.push(suggestion);
-      fs.writeFile(
-        this.filePath,
-        JSON.stringify(expenseTitleSuggestions),
-        (err) => {
-          if (err) {
-            reject(err);
-          } else {
-            resolve();
-          }
-        }
-      );
+            return resolve();
+          },
+        );
+      }
+
+      resolve();
     });
   };
 }

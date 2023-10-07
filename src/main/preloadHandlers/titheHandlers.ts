@@ -14,9 +14,9 @@ export const titheHandlers = () => {
       const model = new Tithe();
       return model.findAllByReferencesWithMemberName(
         referenceMonth,
-        referenceYear
+        referenceYear,
       );
-    }
+    },
   );
 
   ipcMain.handle('tithe:update', (_event, tithe) => {

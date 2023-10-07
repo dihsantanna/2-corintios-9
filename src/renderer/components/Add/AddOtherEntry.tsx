@@ -1,66 +1,40 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { toast } from 'react-toastify';
-import { IExpenseCategoryState } from 'main/@types/ExpenseCategory';
-import { useGlobalContext } from '../../context/GlobalContext/GlobalContextProvider';
 import { AddForm } from './AddForm';
-import { ExpenseTitleSuggestions } from '../ExpenseTitleSuggestions';
 import { months } from '../../utils/months';
 import { getYears } from '../../utils/years';
+import { useGlobalContext } from '../../context/GlobalContext/GlobalContextProvider';
 
-interface Expense {
-  expenseCategoryId: string;
+interface OtherEntry {
   title: string;
   value: string;
   referenceMonth: number;
   referenceYear: number;
 }
 
-const INITIAL_STATE: Expense = {
-  expenseCategoryId: '',
+const INITIAL_STATE: OtherEntry = {
   title: '',
   value: '',
   referenceMonth: new Date().getMonth() + 1,
   referenceYear: new Date().getFullYear(),
 };
 
-export function AddExpense() {
-  const [expense, setExpense] = useState<Expense>({ ...INITIAL_STATE });
+export function AddOtherEntry() {
+  const [otherEntry, setOtherEntry] = useState<OtherEntry>({
+    ...INITIAL_STATE,
+  });
+  const [loading, setLoading] = useState(false);
 
   const { setRefreshPartialBalance } = useGlobalContext();
 
-  const [expenseCategories, setExpenseCategories] = useState<
-    IExpenseCategoryState[]
-  >([]);
-  const [loading, setLoading] = useState(false);
-  const [openTitleSuggestions, setOpenTitleSuggestions] = useState(false);
-
-  useEffect(() => {
-    const getExpenseCategories = async () => {
-      try {
-        const newExpenseCategories = await window.expenseCategory.findAll();
-        setExpenseCategories(newExpenseCategories);
-      } catch (err) {
-        toast.error(
-          `Erro ao carregar categorias de despesa: ${(err as Error).message}`,
-          {
-            progress: undefined,
-          },
-        );
-      }
-    };
-
-    getExpenseCategories();
-  }, []);
-
   const formValidate = (
     floatValue: number,
-    title: string,
     referenceMonth: number,
     referenceYear: number,
-    expenseCategoryId: string,
+    title: string,
   ) => {
     if (floatValue <= 0) {
-      toast.warn('Valor da despesa deve ser maior que 0', {
+      toast.warn('Valor da entrada deve ser maior que 0', {
         progress: undefined,
       });
       return false;
@@ -77,14 +51,8 @@ export function AddExpense() {
       });
       return false;
     }
-    if (expenseCategoryId === '') {
-      toast.warn('Por favor selecione a categoria da despesa', {
-        progress: undefined,
-      });
-      return false;
-    }
-    if (title.length < 4) {
-      toast.warn('O Título da despesa deve possuir pelo menos 4 caracteres', {
+    if (title === '') {
+      toast.warn('Por favor descreva a entrada', {
         progress: undefined,
       });
       return false;
@@ -95,87 +63,60 @@ export function AddExpense() {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const { expenseCategoryId, title, value, referenceMonth, referenceYear } =
-      expense;
+    const { title, value, referenceMonth, referenceYear } = otherEntry;
     const floatValue = parseFloat(value);
 
-    if (
-      !formValidate(
-        floatValue,
-        title,
-        referenceMonth,
-        referenceYear,
-        expenseCategoryId,
-      )
-    )
-      return;
+    if (!formValidate(floatValue, referenceMonth, referenceYear, title)) return;
 
     setLoading(true);
     try {
-      await window.expense.create({
-        expenseCategoryId,
+      await window.otherEntry.create({
         title,
         value: floatValue,
         referenceMonth,
         referenceYear,
       });
-      toast.success('Despesa cadastrada com sucesso!', {
+      toast.success('Entrada cadastrado com sucesso!', {
         progress: undefined,
       });
       setRefreshPartialBalance(true);
     } catch (err) {
-      toast.error(`Erro ao cadastrar despesa: ${(err as Error).message}`, {
+      toast.error(`Erro ao cadastrar entrada: ${(err as Error).message}`, {
         progress: undefined,
       });
     } finally {
       setLoading(false);
-      setExpense({ ...INITIAL_STATE });
-      await window.expenseTitleSuggestions.create(title);
+      setOtherEntry({ ...INITIAL_STATE });
     }
   };
 
   const handleSelectChange = ({
     target: { value, name },
   }: React.ChangeEvent<HTMLSelectElement>) => {
-    setExpense({
-      ...expense,
-      [name]: name === 'expenseCategoryId' ? value : +value,
+    setOtherEntry({
+      ...otherEntry,
+      [name]: +value,
     });
   };
 
   const handleValueInputChange = ({
     target: { value, name },
   }: React.ChangeEvent<HTMLInputElement>) => {
+    if (name === 'title') {
+      setOtherEntry({ ...otherEntry, title: value });
+      return;
+    }
+
     const validateValue = /^(\d+)(\.|,)?(\d{0,2}$)/.test(value) || value === '';
     if (!validateValue) return;
 
     const valueEdit = value.match(/\d|\.|,/g) || '';
     const newValue = valueEdit.length ? [...valueEdit].join('') : '';
 
-    setExpense({
-      ...expense,
+    setOtherEntry({
+      ...otherEntry,
       [name]: newValue.replace(',', '.'),
     });
-  };
-
-  const setTitleSuggestions = (title: string) => {
-    setExpense({
-      ...expense,
-      title,
-    });
-    setOpenTitleSuggestions(false);
-  };
-
-  const handleTitleSuggestionsBlur = () => {
-    setTimeout(() => {
-      setOpenTitleSuggestions(false);
-    }, 250);
-  };
-
-  const handleTitleSuggestionsFocus = () => {
-    setTimeout(() => {
-      setOpenTitleSuggestions(true);
-    }, 250);
   };
 
   const handleValueInputBlur = ({
@@ -183,24 +124,15 @@ export function AddExpense() {
   }: React.FocusEvent<HTMLInputElement>) => {
     const newValue = value ? parseFloat(value).toFixed(2) : '';
 
-    setExpense({
-      ...expense,
+    setOtherEntry({
+      ...otherEntry,
       [name]: newValue,
-    });
-  };
-
-  const handleChange = ({
-    target: { value, name },
-  }: React.ChangeEvent<HTMLInputElement>) => {
-    setExpense({
-      ...expense,
-      [name]: value,
     });
   };
 
   const handleReset = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setExpense({ ...INITIAL_STATE });
+    setOtherEntry({ ...INITIAL_STATE });
   };
 
   return (
@@ -208,67 +140,38 @@ export function AddExpense() {
       handleSubmit={handleSubmit}
       handleReset={handleReset}
       isLoading={loading}
-      title="Cadastrar Despesa"
+      title="Cadastrar Outras Entradas"
     >
       <label className="flex items-center bg-zinc-900 p-2 border-l-4 border-teal-500 rounded-sm w-8/12">
-        <select
-          required
-          title="Selecione uma categoria para a despesa"
-          name="expenseCategoryId"
-          value={expense.expenseCategoryId}
-          onChange={handleSelectChange}
-          className="cursor-pointer bg-zinc-900 font-light block w-full leading-normal"
-        >
-          <option disabled value="">
-            Selecione uma categoria para a despesa
-          </option>
-          {expenseCategories.map(({ id, name }) => (
-            <option title={name} key={id} value={id}>
-              {name}
-            </option>
-          ))}
-        </select>
-      </label>
-      <label
-        onFocus={handleTitleSuggestionsFocus}
-        onBlur={handleTitleSuggestionsBlur}
-        className="flex items-center bg-zinc-900 p-2 border-l-4 border-teal-500 rounded-sm w-8/12 relative"
-      >
         <input
           required
-          title="Dê um título para a despesa"
+          title="Título da Entrada"
           name="title"
-          placeholder="Dê um título para a despesa"
-          onChange={handleChange}
-          value={expense.title}
           className="bg-zinc-900 placeholder:text-zinc-200 font-light block w-full appearance-none leading-normal"
+          value={otherEntry.title}
+          onChange={handleValueInputChange}
+          placeholder="Título da Entrada"
         />
-        {openTitleSuggestions && (
-          <ExpenseTitleSuggestions
-            onSuggestionClick={setTitleSuggestions}
-            search={expense.title}
-          />
-        )}
       </label>
       <label className="flex gap-2 items-center bg-zinc-900 p-2 border-l-4 border-teal-500 rounded-sm w-4/12">
         <span>R$</span>
         <input
           required
-          title="Valor da Despesa"
+          title="Valor da entrada"
           className="bg-zinc-900 placeholder:text-zinc-200 font-light block w-full appearance-none leading-normal"
           name="value"
           onChange={handleValueInputChange}
           onBlur={handleValueInputBlur}
-          value={expense.value}
-          placeholder="Valor da Despesa"
+          value={otherEntry.value}
+          placeholder="Valor da entrada"
         />
       </label>
       <label className="flex items-center bg-zinc-900 p-2 border-l-4 border-teal-500 rounded-sm w-4/12">
         <select
           required
-          title="Selecione o mês da despesa"
+          title="Selecione o mês da entrada"
           name="referenceMonth"
-          value={expense.referenceMonth}
+          value={otherEntry.referenceMonth}
           onChange={handleSelectChange}
           className="cursor-pointer bg-zinc-900 font-light block w-full leading-normal"
         >
@@ -289,9 +192,9 @@ export function AddExpense() {
       <label className="flex items-center bg-zinc-900 p-2 border-l-4 border-teal-500 rounded-sm w-4/12">
         <select
           required
-          title="Selecione o ano da despesa"
+          title="Selecione o ano da entrada"
           name="referenceYear"
-          value={expense.referenceYear}
+          value={otherEntry.referenceYear}
           onChange={handleSelectChange}
           className="cursor-pointer bg-zinc-900 font-light block w-full leading-normal"
         >
