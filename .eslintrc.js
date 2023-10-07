@@ -13,6 +13,12 @@ module.exports = {
     '@typescript-eslint/no-shadow': 'error',
     'no-unused-vars': 'off',
     '@typescript-eslint/no-unused-vars': 'error',
+    'import/prefer-default-export': 'off',
+    'jsx-a11y/label-has-associated-control': 'off',
+    'react/require-default-props': 'off',
+    'react/jsx-no-undef': 'off',
+    'no-undef': 'off',
+    'no-useless-constructor': 'off',
   },
   parserOptions: {
     ecmaVersion: 2022,

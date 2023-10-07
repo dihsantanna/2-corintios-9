@@ -21,6 +21,8 @@ node_modules
 release/app/dist
 release/build
 .erb/dll
+2corintios9.db
+expense-title-suggestions.json
 
 .idea
 npm-debug.log.*

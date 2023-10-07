@@ -13,6 +13,10 @@ if (
     process.platform === 'win32'
       ? electronRebuildCmd.replace(/\//g, '\\')
       : electronRebuildCmd;
+
+  console.log({
+    cmd,
+  });
   execSync(cmd, {
     cwd: webpackPaths.appPath,
     stdio: 'inherit',
