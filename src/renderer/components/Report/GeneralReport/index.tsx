@@ -107,15 +107,19 @@ export function GeneralReport() {
         title: 'OFERTAS DE GAZOFILÁCIO',
         amount: totalEntries.totalLooseOffers,
       },
-      {
-        title: 'OUTRAS ENTRADAS',
-        amount: totalEntries.totalOtherEntries,
-      },
+      ...(totalEntries.totalOtherEntries
+        ? [
+            {
+              title: 'OUTRAS ENTRADAS',
+              amount: totalEntries.totalOtherEntries,
+            },
+          ]
+        : []),
     ];
 
     if (totalEntries.totalWithdrawalsBankAccount) {
       info.push({
-        title: 'SAÍDAS BANCÁRIAS',
+        title: 'SAQUES EM CONTA BANCÁRIA',
         amount: totalEntries.totalWithdrawalsBankAccount,
       });
     }
