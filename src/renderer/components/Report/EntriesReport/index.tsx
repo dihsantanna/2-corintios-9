@@ -12,11 +12,13 @@ type MonthKey = keyof typeof months;
 
 const INITIAL_STATE: IEntriesState = {
   tithesAndSpecialOffers: [],
+  otherEntries: [],
   totalEntries: {
     totalLooseOffers: 0,
     totalSpecialOffers: 0,
     totalTithes: 0,
     totalWithdrawalsBankAccount: 0,
+    totalOtherEntries: 0,
     totalEntries: 0,
     previousBalance: 0,
   },
@@ -24,7 +26,7 @@ const INITIAL_STATE: IEntriesState = {
 
 export function EntriesReport() {
   const [referenceMonth, setReferenceMonth] = useState(
-    new Date().getMonth() + 1
+    new Date().getMonth() + 1,
   );
   const [referenceYear, setReferenceYear] = useState(new Date().getFullYear());
   const [monthAndYear, setMonthAndYear] = useState({
@@ -43,10 +45,17 @@ export function EntriesReport() {
       try {
         const allEntries = await window.report.entries(
           referenceMonth,
-          referenceYear
+          referenceYear,
+        );
+        const otherEntries = await window.otherEntry.findAllByReferences(
+          referenceMonth,
+          referenceYear,
         );
         setMonthAndYear({ month: referenceMonth, year: referenceYear });
-        setEntries(allEntries);
+        setEntries({
+          ...allEntries,
+          otherEntries,
+        });
       } catch (err) {
         toast.error((err as Error).message);
       } finally {
@@ -62,7 +71,7 @@ export function EntriesReport() {
     }
   }, [getReport]);
 
-  const { tithesAndSpecialOffers, totalEntries } = entries;
+  const { tithesAndSpecialOffers, otherEntries, totalEntries } = entries;
 
   const {
     totalLooseOffers,
@@ -70,6 +79,7 @@ export function EntriesReport() {
     totalTithes,
     totalSpecialOffers,
     totalEntries: totalAllEntries,
+    totalOtherEntries,
   } = totalEntries;
 
   const infos = [
@@ -98,6 +108,7 @@ export function EntriesReport() {
           referenceYear={monthAndYear.year}
           tithesAndSpecialOffers={tithesAndSpecialOffers}
           totalEntriesReport={totalEntries}
+          otherEntries={otherEntries}
           infos={infos}
         />
       }
@@ -121,6 +132,15 @@ export function EntriesReport() {
           firstColKey="name"
           secondColKey="totalOffers"
           subTotal={totalSpecialOffers}
+        />
+        <Table
+          title="OUTRAS ENTRADAS"
+          firstColName="TÍTULO"
+          secondColName="VALOR"
+          rows={otherEntries}
+          firstColKey="title"
+          secondColKey="value"
+          subTotal={totalOtherEntries}
         />
         <div className="bg-yellow-300 text-zinc-900 font-semibold mt-4 w-full p-1 text-center">
           <div>TOTAL DE ENTRADAS</div>

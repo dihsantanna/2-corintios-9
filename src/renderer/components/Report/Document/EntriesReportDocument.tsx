@@ -3,6 +3,7 @@ import {
   ITotalEntries,
 } from 'main/@types/Report';
 import { View, Text } from '@react-pdf/renderer';
+import { IOtherEntryState } from 'main/@types/OtherEntry';
 import type { ChurchData } from '../../../@types/ChurchData.type';
 import { ReportDocument } from './ReportDocument';
 import { reportStyles } from './reportStyles';
@@ -14,6 +15,7 @@ export interface EntriesReportDocumentProps {
   referenceMonth: number;
   referenceYear: number;
   tithesAndSpecialOffers: IMemberWithTotalOffersAndTotalTithes[];
+  otherEntries: IOtherEntryState[];
   totalEntriesReport: ITotalEntries;
   infos: Info[];
 }
@@ -24,9 +26,11 @@ export function EntriesReportDocument({
   referenceYear,
   tithesAndSpecialOffers,
   totalEntriesReport,
+  otherEntries,
   infos,
 }: EntriesReportDocumentProps) {
-  const { totalSpecialOffers, totalTithes, totalEntries } = totalEntriesReport;
+  const { totalSpecialOffers, totalTithes, totalEntries, totalOtherEntries } =
+    totalEntriesReport;
 
   return (
     <ReportDocument
@@ -54,6 +58,15 @@ export function EntriesReportDocument({
           firstColKey="name"
           secondColKey="totalOffers"
           subTotal={totalSpecialOffers}
+        />
+        <Table
+          title="OUTRAS ENTRADAS"
+          firstColName="TÍTULO"
+          secondColName="VALOR"
+          rows={otherEntries}
+          firstColKey="title"
+          secondColKey="value"
+          subTotal={totalOtherEntries}
         />
         <View style={reportStyles.totalContent} wrap={false}>
           <Text>TOTAL DE ENTRADAS</Text>

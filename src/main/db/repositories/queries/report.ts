@@ -40,6 +40,15 @@ SELECT
       t.referenceMonth = $referenceMonth
       AND t.referenceYear = $referenceYear
   ) AS totalTithes,
+    (
+    SELECT
+      IFNULL(SUM(oe.value), 0)
+    FROM
+      otherEntries oe
+    WHERE
+      oe.referenceMonth = $referenceMonth
+      AND oe.referenceYear = $referenceYear
+  ) AS totalOtherEntries,
   (
     SELECT
       IFNULL(SUM(so.value), 0)
@@ -97,6 +106,14 @@ SELECT
         WHERE
           wb.referenceMonth = $referenceMonth
           AND wb.referenceYear = $referenceYear
+        UNION
+        SELECT
+          IFNULL(SUM(oet.value), 0)
+        FROM
+          otherEntries oet
+        WHERE
+          oet.referenceMonth = $referenceMonth
+          AND oet.referenceYear = $referenceYear
       ) AS et
   ) AS totalEntries,
   (
@@ -142,6 +159,16 @@ SELECT
           CASE
             WHEN wb.referenceYear = $referenceYear THEN wb.referenceMonth < $referenceMonth
             ELSE wb.referenceYear < $referenceYear
+          END
+        UNION
+        SELECT
+          IFNULL(SUM(oets.value), 0)
+        FROM
+          otherEntries oets
+        WHERE
+          CASE
+            WHEN oets.referenceYear = $referenceYear THEN oets.referenceMonth < $referenceMonth
+            ELSE oets.referenceYear < $referenceYear
           END
       ) a
       LEFT JOIN (

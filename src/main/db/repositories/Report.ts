@@ -9,7 +9,9 @@ import {
 } from './queries/report';
 
 export class Report {
-  constructor(private db = new DatabaseConnection()) {}
+  constructor(private db = new DatabaseConnection()) {
+    //
+  }
 
   close = async () => {
     return new Promise<void>((resolve, reject) => {
@@ -24,7 +26,7 @@ export class Report {
 
   getOffersAndTithesFromMembers = async (
     referenceMonth: number,
-    referenceYear: number
+    referenceYear: number,
   ) => {
     return new Promise<IMemberWithTotalOffersAndTotalTithes[]>(
       (resolve, reject) => {
@@ -34,14 +36,14 @@ export class Report {
             $referenceMonth: referenceMonth,
             $referenceYear: referenceYear,
           },
-          (err, rows) => {
+          (err, rows: IMemberWithTotalOffersAndTotalTithes[]) => {
             if (err) {
               reject(err);
             }
             resolve(rows.sort((a, b) => a.name.localeCompare(b.name)));
-          }
+          },
         );
-      }
+      },
     );
   };
 
@@ -53,12 +55,12 @@ export class Report {
           $referenceMonth: referenceMonth,
           $referenceYear: referenceYear,
         },
-        (err, row) => {
+        (err, row: ITotalEntries) => {
           if (err) {
             reject(err);
           }
           resolve(row);
-        }
+        },
       );
     });
   };

@@ -1,3 +1,5 @@
+import { IOtherEntryState } from './OtherEntry';
+
 export interface IMemberWithTotalOffersAndTotalTithes {
   id: string;
   name: string;
@@ -10,6 +12,7 @@ export interface ITotalEntries {
   totalTithes: number;
   totalSpecialOffers: number;
   totalLooseOffers: number;
+  totalOtherEntries: number;
   totalWithdrawalsBankAccount: number;
   totalEntries: number;
 }
@@ -27,5 +30,6 @@ export interface IPartialBalance {
 
 export interface IEntriesState {
   tithesAndSpecialOffers: IMemberWithTotalOffersAndTotalTithes[];
+  otherEntries: IOtherEntryState[];
   totalEntries: ITotalEntries;
 }

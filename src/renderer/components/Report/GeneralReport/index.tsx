@@ -17,13 +17,14 @@ const INITIAL_STATE: ITotalEntries = {
   totalSpecialOffers: 0,
   totalTithes: 0,
   totalWithdrawalsBankAccount: 0,
+  totalOtherEntries: 0,
   totalEntries: 0,
   previousBalance: 0,
 };
 
 export function GeneralReport() {
   const [referenceMonth, setReferenceMonth] = useState(
-    new Date().getMonth() + 1
+    new Date().getMonth() + 1,
   );
   const [referenceYear, setReferenceYear] = useState(new Date().getFullYear());
   const [monthAndYear, setMonthAndYear] = useState({
@@ -46,7 +47,7 @@ export function GeneralReport() {
       setCategories(allCategories);
     } catch (err) {
       toast.error(
-        `Erro ao buscar categorias de despesa: ${(err as Error).message}`
+        `Erro ao buscar categorias de despesa: ${(err as Error).message}`,
       );
     }
   }, []);
@@ -64,11 +65,11 @@ export function GeneralReport() {
         const allExpenses =
           await window.expense.findAllByReferencesWithCategoryName(
             referenceMonth,
-            referenceYear
+            referenceYear,
           );
         const { totalEntries: entries } = await window.report.entries(
           referenceMonth,
-          referenceYear
+          referenceYear,
         );
         setTotalEntries(entries);
         setMonthAndYear({ month: referenceMonth, year: referenceYear });
@@ -105,6 +106,10 @@ export function GeneralReport() {
       {
         title: 'OFERTAS DE GAZOFILÁCIO',
         amount: totalEntries.totalLooseOffers,
+      },
+      {
+        title: 'OUTRAS ENTRADAS',
+        amount: totalEntries.totalOtherEntries,
       },
     ];
 
@@ -172,12 +177,12 @@ export function GeneralReport() {
         <Infos infos={infoTop} isTop />
         {categories.map(({ id, name }) => {
           const filteredExpenses = expenses.filter(
-            (expense) => expense.expenseCategoryId === id
+            (expense) => expense.expenseCategoryId === id,
           );
 
           const subTotal = filteredExpenses.reduce(
             (total, { value }) => total + value,
-            0
+            0,
           );
           return (
             <Table
