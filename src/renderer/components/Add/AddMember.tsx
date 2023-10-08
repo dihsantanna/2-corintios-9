@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { toast } from 'react-toastify';
+import { capitalize } from 'renderer/utils/capitalize';
 import { AddForm } from './AddForm';
 
 interface Member {
@@ -19,7 +20,7 @@ export function AddMember() {
   }: React.ChangeEvent<HTMLInputElement>) => {
     setMember({
       ...member,
-      [name]: type === 'checkbox' ? checked : value,
+      [name]: type === 'checkbox' ? checked : capitalize(value),
     });
   };
 
@@ -41,7 +42,7 @@ export function AddMember() {
         `Membro "${member.name.split(' ')[0]}" cadastrado com sucesso!`,
         {
           progress: undefined,
-        }
+        },
       );
       setMember({
         name: '',
