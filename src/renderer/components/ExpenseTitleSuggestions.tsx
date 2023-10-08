@@ -3,11 +3,12 @@ import { useCallback, useEffect, useState } from 'react';
 interface ExpenseTitleSuggestionsProps {
   onSuggestionClick: (suggestion: string) => void;
   search: string;
+  inputElement: HTMLInputElement | null;
 }
 
 export function ExpenseTitleSuggestions({
   onSuggestionClick,
-
+  inputElement,
   search,
 }: ExpenseTitleSuggestionsProps) {
   const [suggestions, setSuggestions] = useState<string[]>([]);
@@ -22,7 +23,7 @@ export function ExpenseTitleSuggestions({
   }, [getSuggestions]);
 
   const filteredSuggestions = suggestions.filter((suggestion) =>
-    suggestion.includes(search),
+    suggestion.toLowerCase().includes(search.toLowerCase()),
   );
 
   return (
@@ -36,6 +37,7 @@ export function ExpenseTitleSuggestions({
                 type="button"
                 onClick={() => {
                   onSuggestionClick(suggestion);
+                  inputElement?.blur();
                 }}
               >
                 {suggestion}

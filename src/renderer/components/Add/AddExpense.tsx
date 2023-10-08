@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { toast } from 'react-toastify';
 import { IExpenseCategoryState } from 'main/@types/ExpenseCategory';
 import { useGlobalContext } from '../../context/GlobalContext/GlobalContextProvider';
@@ -33,6 +33,8 @@ export function AddExpense() {
   >([]);
   const [loading, setLoading] = useState(false);
   const [openTitleSuggestions, setOpenTitleSuggestions] = useState(false);
+
+  const inputTitle = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
     const getExpenseCategories = async () => {
@@ -163,13 +165,12 @@ export function AddExpense() {
       ...expense,
       title,
     });
-    setOpenTitleSuggestions(false);
   };
 
   const handleTitleSuggestionsBlur = () => {
     setTimeout(() => {
       setOpenTitleSuggestions(false);
-    }, 250);
+    }, 200);
   };
 
   const handleTitleSuggestionsFocus = () => {
@@ -229,12 +230,11 @@ export function AddExpense() {
           ))}
         </select>
       </label>
-      <label
-        onFocus={handleTitleSuggestionsFocus}
-        onBlur={handleTitleSuggestionsBlur}
-        className="flex items-center bg-zinc-900 p-2 border-l-4 border-teal-500 rounded-sm w-8/12 relative"
-      >
+      <label className="flex items-center bg-zinc-900 p-2 border-l-4 border-teal-500 rounded-sm w-8/12 relative">
         <input
+          onFocus={handleTitleSuggestionsFocus}
+          onBlur={handleTitleSuggestionsBlur}
+          ref={inputTitle}
           required
           title="Dê um título para a despesa"
           name="title"
@@ -245,6 +245,7 @@ export function AddExpense() {
         />
         {openTitleSuggestions && (
           <ExpenseTitleSuggestions
+            inputElement={inputTitle.current}
             onSuggestionClick={setTitleSuggestions}
             search={expense.title}
           />
