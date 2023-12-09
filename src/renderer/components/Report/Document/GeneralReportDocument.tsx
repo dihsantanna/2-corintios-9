@@ -37,14 +37,14 @@ export function GeneralReportDocument({
         <Infos infos={infoTop} isTop />
         {expenseCategories.map(({ id, name }) => {
           const filteredExpenses = expenses.filter(
-            (expense) => expense.expenseCategoryId === id
+            (expense) => expense.expenseCategoryId === id,
           );
 
           const subTotal = filteredExpenses.reduce(
             (total, { value }) => total + value,
-            0
+            0,
           );
-          return (
+          return subTotal > 0 ? (
             <Table
               key={id}
               title={name}
@@ -55,7 +55,7 @@ export function GeneralReportDocument({
               secondColKey="value"
               subTotal={subTotal}
             />
-          );
+          ) : null;
         })}
         <Infos infos={infoBottom} />
         <View style={reportStyles.signature} wrap={false}>

@@ -188,7 +188,7 @@ export function GeneralReport() {
             (total, { value }) => total + value,
             0,
           );
-          return (
+          return subTotal ? (
             <Table
               key={id}
               title={name}
@@ -199,7 +199,7 @@ export function GeneralReport() {
               secondColKey="value"
               subTotal={subTotal}
             />
-          );
+          ) : null;
         })}
         <Infos infos={infoBottom} />
       </>
