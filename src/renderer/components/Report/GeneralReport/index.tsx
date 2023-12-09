@@ -144,9 +144,9 @@ export function GeneralReport() {
       amount: totalExpenses,
     },
     {
-      title: `SALDO P/ O MÊS DE ${months[
+      title: `SALDO P/ O MÊS DE ${months?.[
         (monthAndYear.month + 1) as MonthKey
-      ].toLocaleUpperCase()}`,
+      ]?.toUpperCase()}`,
       amount:
         totalEntries.previousBalance +
         totalEntries.totalEntries -

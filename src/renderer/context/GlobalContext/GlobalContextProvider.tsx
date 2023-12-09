@@ -45,7 +45,7 @@ export function GlobalContextProvider() {
     const month = date.getMonth() + 1;
     const year = date.getFullYear();
 
-    const dataOfChurch = await window.dataOfChurch.get();
+    const dataOfChurch = await window.dataOfChurch?.get();
 
     if (!dataOfChurch) {
       setShowInitialConfig(true);
@@ -58,7 +58,7 @@ export function GlobalContextProvider() {
     setChurchData({
       ...dataOfChurch,
       foundationDate: new Intl.DateTimeFormat('pt-BR').format(
-        dataOfChurch.foundationDate
+        dataOfChurch.foundationDate,
       ),
     });
   }, []);

@@ -25,7 +25,7 @@ export function Table({
   return (
     <View style={reportStyles.table} wrap={false}>
       <View style={reportStyles.tableTitle}>
-        <Text>{title.toLocaleUpperCase()}</Text>
+        <Text>{title?.toUpperCase()}</Text>
       </View>
       <View style={reportStyles.tableHeader}>
         <View style={reportStyles.rowLeft}>
@@ -44,7 +44,7 @@ export function Table({
           key={`${row[firstColKey]}-${row[secondColKey]}-${index + 1}`}
         >
           <View style={reportStyles.rowLeft}>
-            <Text>{row[firstColKey].toUpperCase()}</Text>
+            <Text>{row?.[firstColKey]?.toUpperCase()}</Text>
           </View>
           <View style={reportStyles.rowRight}>
             <Text>

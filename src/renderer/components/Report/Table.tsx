@@ -21,7 +21,7 @@ export function Table({
   return (
     <div className="w-full">
       <div className="w-full bg-blue-600 text-zinc-100 p-1 text-center font-semibold">
-        {title.toLocaleUpperCase()}
+        {title?.toUpperCase()}
       </div>
       <div className="flex items-center justify-center bg-zinc-900 text-zinc-100 w-full font-semibold">
         <span className="flex justify-start p-1 w-1/2">{firstColName}</span>
@@ -37,7 +37,7 @@ export function Table({
           key={`${title}-${index + 1}`}
         >
           <span className="flex justify-start p-1 w-1/2">
-            {row[firstColKey].toUpperCase()}
+            {row?.[firstColKey]?.toUpperCase()}
           </span>
           <span className="flex justify-end p-1 w-1/2 font-semibold border-l-2 border-l-zinc-300">
             {row[secondColKey].toLocaleString('pt-BR', {
