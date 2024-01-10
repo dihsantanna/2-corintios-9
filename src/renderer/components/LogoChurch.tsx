@@ -7,23 +7,19 @@ interface LogoChurchProps {
 
 export function LogoChurch({ isHome }: LogoChurchProps) {
   const { logoSrc } = useGlobalContext();
-  return (
-    <>
-      {logoSrc ? (
-        <img
-          src={logoSrc}
-          alt="Logo"
-          className={`${
-            isHome ? 'w-[200px]' : 'w-12 fixed bottom-4 right-4 opacity-80'
-          } transition-all duration-500 ease-in-out`}
-        />
-      ) : (
-        <Logo
-          className={`${
-            isHome ? 'w-[200px]' : 'w-12 fixed bottom-4 right-4 opacity-80'
-          } transition-all duration-500 ease-in-out`}
-        />
-      )}
-    </>
+  return logoSrc ? (
+    <img
+      src={logoSrc}
+      alt="Logo"
+      className={`${
+        isHome ? 'w-[200px]' : 'w-12 fixed bottom-4 right-4 opacity-80'
+      } transition-all duration-500 ease-in-out`}
+    />
+  ) : (
+    <Logo
+      className={`${
+        isHome ? 'w-[200px]' : 'w-12 fixed bottom-4 right-4 opacity-80'
+      } transition-all duration-500 ease-in-out`}
+    />
   );
 }
