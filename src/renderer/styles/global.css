@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+* {
+  @apply scrollbar scrollbar-w-[10px] scrollbar-h-[10px] scrollbar-track-zinc-100 scrollbar-thumb-zinc-900 scrollbar-thumb-rounded-md;
+}
+
 body {
   @apply text-zinc-200 placeholder-zinc-200 font-sans;
 }

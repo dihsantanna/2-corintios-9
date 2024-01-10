@@ -18,8 +18,8 @@ export function App() {
   }, [location.pathname, navigate]);
 
   return (
-    <div className="flex w-screen h-screen">
-      <aside className="border-r-2 border-r-zinc-300 w-1/6 h-screen rounded-r-sm overflow-y-auto">
+    <div className="flex w-screen h-screen overflow-y-hidden">
+      <aside className="border-r-2 border-r-zinc-300 w-1/6 max-h-screen rounded-r-sm overflow-y-none min-w-[200px]">
         <Menu selectedScreen={location.pathname.replace('/', '') as Screens} />
       </aside>
       <main className="flex flex-1 justify-center items-center w-5/6">
@@ -33,7 +33,6 @@ export function App() {
           </Link>
         )}
         <Router />
-        {/* Logo */}
       </main>
       <ToastContainer
         position="bottom-right"
