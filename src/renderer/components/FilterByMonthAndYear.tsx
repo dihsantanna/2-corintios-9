@@ -50,7 +50,12 @@ export function FilterByMonthAndYear({
               title={value}
               key={key}
               value={key}
-              disabled={year === yearValue && +key <= month}
+              disabled={
+                new Date(`${year}-${month}-01`).getTime() >
+                  new Date(`${yearValue}-${key}-01`).getTime() ||
+                new Date().getTime() <
+                  new Date(`${yearValue}-${key}-01`).getTime()
+              }
             >
               {value}
             </option>
@@ -73,9 +78,11 @@ export function FilterByMonthAndYear({
             key={year}
             value={year}
             disabled={
-              initialDate.current.month < monthValue
-                ? year < initialDate.current.year
-                : true
+              new Date(
+                `${initialDate.current.year}-${initialDate.current.month}-01`,
+              ).getTime() > new Date(`${year}-${monthValue}-01`).getTime() ||
+              new Date().getTime() <
+                new Date(`${year}-${monthValue}-01`).getTime()
             }
           >
             {year}
