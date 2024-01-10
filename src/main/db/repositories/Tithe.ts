@@ -11,6 +11,7 @@ import {
   ITitheState,
   ITitheStateWithMemberName,
 } from '../../@types/Tithe';
+import { toFloat, toInteger } from '../../helpers/ValueTransform';
 
 export class Tithe {
   private id = idGenerator;
@@ -25,23 +26,24 @@ export class Tithe {
   }: ITithe) => {
     return new Promise<void>((resolve, reject) => {
       const id = this.id();
+      const parsedValue = toInteger(value);
       this.db.run(
         createQuery,
-        [id, memberId, value, referenceMonth, referenceYear],
+        [id, memberId, parsedValue, referenceMonth, referenceYear],
         (err) => {
           if (err) {
             reject(err);
           } else {
             resolve();
           }
-        }
+        },
       );
     }).finally(() => this.db.close());
   };
 
   findAllByReferencesWithMemberName = async (
     referenceMonth: number,
-    referenceYear: number
+    referenceYear: number,
   ) => {
     return new Promise<ITitheStateWithMemberName[]>((resolve, reject) => {
       this.db.all(
@@ -52,10 +54,12 @@ export class Tithe {
             reject(err);
           } else {
             resolve(
-              rows.sort((a, b) => a.memberName.localeCompare(b.memberName))
+              rows
+                .map((row: any) => ({ ...row, value: toFloat(row.value) }))
+                .sort((a, b) => a.memberName.localeCompare(b.memberName)),
             );
           }
-        }
+        },
       );
     }).finally(() => this.db.close());
   };
@@ -73,7 +77,7 @@ export class Tithe {
         {
           $id: id,
           $memberId: memberId,
-          $value: value,
+          $value: toInteger(value),
           $referenceMonth: referenceMonth,
           $referenceYear: referenceYear,
         },
@@ -83,7 +87,7 @@ export class Tithe {
           } else {
             resolve();
           }
-        }
+        },
       );
     }).finally(() => this.db.close());
   };

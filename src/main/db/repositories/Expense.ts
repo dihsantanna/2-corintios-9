@@ -1,3 +1,4 @@
+import { toFloat, toInteger } from '../../helpers/ValueTransform';
 import { DatabaseConnection } from '../DatabaseConnection';
 import {
   createQuery,
@@ -29,22 +30,30 @@ export class Expense {
   }: IExpense) => {
     return new Promise<void>((resolve, reject) => {
       const id = this.id();
+      const parsedValue = toInteger(value);
       this.db.run(
         createQuery,
-        [id, expenseCategoryId, title, value, referenceMonth, referenceYear],
+        [
+          id,
+          expenseCategoryId,
+          title,
+          parsedValue,
+          referenceMonth,
+          referenceYear,
+        ],
         (err) => {
           if (err) {
             reject(err);
           }
           resolve();
-        }
+        },
       );
     }).finally(() => this.db.close());
   };
 
   findAllByReferencesWithCategoryName = async (
     referenceMonth: number,
-    referenceYear: number
+    referenceYear: number,
   ) => {
     return new Promise<IExpenseStateWithCategoryName[]>((resolve, reject) => {
       this.db.all(
@@ -55,19 +64,21 @@ export class Expense {
             reject(err);
           }
           resolve(
-            rows.sort((a, b) => {
-              if (a.expenseCategoryName !== b.expenseCategoryName) {
-                return a.expenseCategoryName.localeCompare(
-                  b.expenseCategoryName
-                );
-              }
-              if (a.title !== b.title) {
-                return a.title.localeCompare(b.title);
-              }
-              return a.value - b.value;
-            }) as IExpenseStateWithCategoryName[]
+            rows
+              .map((row: any) => ({ ...row, value: toFloat(row.value) }))
+              .sort((a, b) => {
+                if (a.expenseCategoryName !== b.expenseCategoryName) {
+                  return a.expenseCategoryName.localeCompare(
+                    b.expenseCategoryName,
+                  );
+                }
+                if (a.title !== b.title) {
+                  return a.title.localeCompare(b.title);
+                }
+                return a.value - b.value;
+              }) as IExpenseStateWithCategoryName[],
           );
-        }
+        },
       );
     }).finally(() => this.db.close());
   };
@@ -79,20 +90,21 @@ export class Expense {
     value,
   }: UpdateExpenseParams) => {
     return new Promise<void>((resolve, reject) => {
+      const parsedValue = toInteger(value);
       this.db.run(
         updateQuery,
         {
           $id: id,
           $expenseCategoryId: expenseCategoryId,
           $title: title,
-          $value: value,
+          $value: parsedValue,
         },
         (err) => {
           if (err) {
             reject(err);
           }
           resolve();
-        }
+        },
       );
     }).finally(() => this.db.close());
   };

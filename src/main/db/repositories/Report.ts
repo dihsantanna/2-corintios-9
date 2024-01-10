@@ -7,6 +7,7 @@ import {
   allMembersWithTithesAndOffersQuery,
   reportTotalEntriesByReferenceDateQuery,
 } from './queries/report';
+import { toFloat } from '../../helpers/ValueTransform';
 
 export class Report {
   constructor(private db = new DatabaseConnection()) {
@@ -40,7 +41,15 @@ export class Report {
             if (err) {
               reject(err);
             }
-            resolve(rows.sort((a, b) => a.name.localeCompare(b.name)));
+            resolve(
+              rows
+                .map((row) => ({
+                  ...row,
+                  totalOffers: toFloat(row.totalOffers),
+                  totalTithes: toFloat(row.totalTithes),
+                }))
+                .sort((a, b) => a.name.localeCompare(b.name)),
+            );
           },
         );
       },
@@ -59,7 +68,17 @@ export class Report {
           if (err) {
             reject(err);
           }
-          resolve(row);
+          resolve({
+            previousBalance: toFloat(row.previousBalance),
+            totalEntries: toFloat(row.totalEntries),
+            totalLooseOffers: toFloat(row.totalLooseOffers),
+            totalOtherEntries: toFloat(row.totalOtherEntries),
+            totalSpecialOffers: toFloat(row.totalSpecialOffers),
+            totalTithes: toFloat(row.totalTithes),
+            totalWithdrawalsBankAccount: toFloat(
+              row.totalWithdrawalsBankAccount,
+            ),
+          });
         },
       );
     });

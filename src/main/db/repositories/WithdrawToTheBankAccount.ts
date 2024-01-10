@@ -1,3 +1,4 @@
+import { toFloat, toInteger } from '../../helpers/ValueTransform';
 import {
   IWithdrawToTheBankAccount,
   IWithdrawToTheBankAccountState,
@@ -27,21 +28,21 @@ export class WithdrawToTheBankAccount {
         createQuery,
         {
           $id: id,
-          $value: value,
+          $value: toInteger(value),
           $referenceMonth: referenceMonth,
           $referenceYear: referenceYear,
         },
         (err) => {
           if (err) reject(err);
           resolve();
-        }
+        },
       );
     });
   };
 
   findAllByReferenceDate = async (
     referenceMonth: number,
-    referenceYear: number
+    referenceYear: number,
   ) => {
     return new Promise<IWithdrawToTheBankAccountState[]>((resolve, reject) => {
       this.db.all(
@@ -50,10 +51,10 @@ export class WithdrawToTheBankAccount {
           $referenceMonth: referenceMonth,
           $referenceYear: referenceYear,
         },
-        (err, rows) => {
+        (err, rows: IWithdrawToTheBankAccountState[]) => {
           if (err) reject(err);
-          resolve(rows);
-        }
+          resolve(rows.map((row) => ({ ...row, value: toFloat(row.value) })));
+        },
       );
     });
   };
@@ -69,14 +70,14 @@ export class WithdrawToTheBankAccount {
         updateQuery,
         {
           $id: id,
-          $value: value,
+          $value: toInteger(value),
           $referenceMonth: referenceMonth,
           $referenceYear: referenceYear,
         },
         (err) => {
           if (err) reject(err);
           resolve();
-        }
+        },
       );
     });
   };

@@ -7,6 +7,7 @@ import {
 } from './queries/otherEntry';
 import { idGenerator } from '../../helpers/idGenerator';
 import { IOtherEntry, IOtherEntryState } from '../../@types/OtherEntry';
+import { toFloat, toInteger } from '../../helpers/ValueTransform';
 
 export class OtherEntry {
   private id = idGenerator;
@@ -23,9 +24,10 @@ export class OtherEntry {
   }: IOtherEntry) => {
     return new Promise<void>((resolve, reject) => {
       const id = this.id();
+      const parsedValue = toInteger(value);
       this.db.run(
         createQuery,
-        [id, title, value, referenceMonth, referenceYear],
+        [id, title, parsedValue, referenceMonth, referenceYear],
         (err) => {
           if (err) {
             reject(err);
@@ -49,7 +51,11 @@ export class OtherEntry {
           if (err) {
             reject(err);
           } else {
-            resolve(rows.sort((a, b) => a.title.localeCompare(b.title)));
+            resolve(
+              rows
+                .map((row: any) => ({ ...row, value: toFloat(row.value) }))
+                .sort((a, b) => a.title.localeCompare(b.title)),
+            );
           }
         },
       );
@@ -69,7 +75,7 @@ export class OtherEntry {
         {
           $id: id,
           $title: title,
-          $value: value,
+          $value: toInteger(value),
           $referenceMonth: referenceMonth,
           $referenceYear: referenceYear,
         },

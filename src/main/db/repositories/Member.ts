@@ -33,7 +33,7 @@ export class Member {
           reject(err);
         } else {
           resolve(
-            rows.sort((a, b) => a.name.localeCompare(b.name)) as IMemberState[]
+            rows.sort((a, b) => a.name.localeCompare(b.name)) as IMemberState[],
           );
         }
       });
@@ -55,7 +55,7 @@ export class Member {
           } else {
             resolve();
           }
-        }
+        },
       );
     }).finally(() => this.db.close());
   };

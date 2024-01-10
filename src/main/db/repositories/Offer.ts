@@ -1,3 +1,4 @@
+import { toFloat, toInteger } from '../../helpers/ValueTransform';
 import { DatabaseConnection } from '../DatabaseConnection';
 import {
   createQuery,
@@ -25,20 +26,21 @@ export class Offer {
   }: IOffer) => {
     const id = this.id();
     return new Promise<void>((resolve, reject) => {
+      const parsedValue = toInteger(value);
       this.db.run(
         createQuery,
-        [id, memberId || null, value, referenceMonth, referenceYear],
+        [id, memberId || null, parsedValue, referenceMonth, referenceYear],
         (err) => {
           if (err) reject(err);
           resolve();
-        }
+        },
       );
     }).finally(() => this.db.close());
   };
 
   findAllByReferencesWithMemberName = async (
     referenceMonth: number,
-    referenceYear: number
+    referenceYear: number,
   ) => {
     return new Promise<IOfferStateWithMemberName[]>((resolve, reject) => {
       this.db.all(
@@ -49,12 +51,14 @@ export class Offer {
             reject(err);
           } else {
             resolve(
-              rows.sort((a, b) =>
-                (a.memberName || '').localeCompare(b.memberName || '')
-              )
+              rows
+                .map((row: any) => ({ ...row, value: toFloat(row.value) }))
+                .sort((a, b) =>
+                  (a.memberName || '').localeCompare(b.memberName || ''),
+                ),
             );
           }
-        }
+        },
       );
     }).finally(() => this.db.close());
   };
@@ -72,7 +76,7 @@ export class Offer {
         {
           $id: id,
           $memberId: memberId,
-          $value: value,
+          $value: toInteger(value),
           $referenceMonth: referenceMonth,
           $referenceYear: referenceYear,
         },
@@ -82,7 +86,7 @@ export class Offer {
           } else {
             resolve();
           }
-        }
+        },
       );
     }).finally(() => this.db.close());
   };
