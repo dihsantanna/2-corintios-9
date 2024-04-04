@@ -8,6 +8,7 @@ import { useGlobalContext } from '../../context/GlobalContext/GlobalContextProvi
 interface OtherEntry {
   title: string;
   value: string;
+  description?: string | null;
   referenceMonth: number;
   referenceYear: number;
 }
@@ -15,6 +16,7 @@ interface OtherEntry {
 const INITIAL_STATE: OtherEntry = {
   title: '',
   value: '',
+  description: '',
   referenceMonth: new Date().getMonth() + 1,
   referenceYear: new Date().getFullYear(),
 };
@@ -63,7 +65,8 @@ export function AddOtherEntry() {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const { title, value, referenceMonth, referenceYear } = otherEntry;
+    const { title, value, description, referenceMonth, referenceYear } =
+      otherEntry;
     const floatValue = parseFloat(value);
 
     if (!formValidate(floatValue, referenceMonth, referenceYear, title)) return;
@@ -73,6 +76,7 @@ export function AddOtherEntry() {
       await window.otherEntry.create({
         title,
         value: floatValue,
+        description,
         referenceMonth,
         referenceYear,
       });
@@ -101,9 +105,14 @@ export function AddOtherEntry() {
 
   const handleValueInputChange = ({
     target: { value, name },
-  }: React.ChangeEvent<HTMLInputElement>) => {
+  }: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     if (name === 'title') {
       setOtherEntry({ ...otherEntry, title: value });
+      return;
+    }
+
+    if (name === 'description') {
+      setOtherEntry({ ...otherEntry, description: value });
       return;
     }
 
@@ -164,6 +173,17 @@ export function AddOtherEntry() {
           onBlur={handleValueInputBlur}
           value={otherEntry.value}
           placeholder="Valor da entrada"
+        />
+      </label>
+      <label className="flex items-center bg-zinc-900 p-2 border-l-4 border-teal-500 rounded-sm w-8/12">
+        <textarea
+          title="Descrição da Entrada"
+          name="description"
+          className="bg-zinc-900 placeholder:text-zinc-200 font-light block w-full appearance-none outline-none border-2 border-transparent rounded-md focus:border-teal-500 leading-normal h-14 max-h-14 min-h-14 pl-1 resize-none"
+          value={otherEntry?.description || ''}
+          onChange={handleValueInputChange}
+          placeholder="Descrição da Entrada (opcional)"
+          rows={2}
         />
       </label>
       <label className="flex items-center bg-zinc-900 p-2 border-l-4 border-teal-500 rounded-sm w-4/12">

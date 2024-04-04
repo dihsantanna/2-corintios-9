@@ -9,6 +9,7 @@ interface OtherEntry {
   id: string;
   title: string;
   value: string;
+  description?: string | null;
   referenceMonth: number;
   referenceYear: number;
 }
@@ -59,9 +60,9 @@ export function EditOtherEntries() {
     setEditing('');
   };
 
-  const valueChangeReplace = (value: string, expense: OtherEntry) => {
+  const valueChangeReplace = (value: string, entry: OtherEntry) => {
     const validateValue = /^(\d+)(\.|,)?(\d{0,2}$)/.test(value) || value === '';
-    if (!validateValue) return `${expense.value}`;
+    if (!validateValue) return `${entry.value}`;
 
     return value.replace(',', '.');
   };
@@ -69,7 +70,9 @@ export function EditOtherEntries() {
   const handleChange = (
     {
       target: { name, value },
-    }: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+    }: React.ChangeEvent<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >,
     entry: OtherEntry,
   ) => {
     const key = name as keyof OtherEntry;
@@ -144,6 +147,7 @@ export function EditOtherEntries() {
         id: editedEntry.id,
         title: editedEntry.title,
         value: floatValue,
+        description: editedEntry?.description || '',
         referenceMonth: editedEntry.referenceMonth,
         referenceYear: editedEntry.referenceYear,
       });
@@ -195,12 +199,9 @@ export function EditOtherEntries() {
           />
         </div>
         <div className="flex w-full h-10 items-center justify-between border-y border-zinc-300 text-zinc-900">
-          <span className="w-3/12 flex items-center justify-center">
-            Título
-          </span>
-          <span className="w-1/12 flex items-center justify-center">
-            Valor (R$)
-          </span>
+          <span className="w-3/12 flex items-center ml-2">Título</span>
+          <span className="w-3/12 flex items-center">Descrição</span>
+          <span className="w-1/12 flex items-center">Valor (R$)</span>
           <span className="w-2/6 flex items-center justify-center">Editar</span>
         </div>
         <div className="w-full h-full flex flex-col overflow-auto scrollbar-thin scrollbar-thumb-zinc-900 scrollbar-track-zinc-300">
@@ -215,6 +216,7 @@ export function EditOtherEntries() {
                   id,
                   title,
                   value,
+                  description = '',
                   referenceMonth: month,
                   referenceYear: year,
                 },
@@ -234,7 +236,7 @@ export function EditOtherEntries() {
                   deleteTitle="Excluir Entrada"
                   editType="entrada"
                 >
-                  <label className="w-3/12 flex items-center justify-center text-zinc-900">
+                  <label className="w-3/12 flex items-center ml-2 text-zinc-900">
                     <input
                       required
                       title="Título da Entrada"
@@ -245,15 +247,41 @@ export function EditOtherEntries() {
                           id,
                           title,
                           value,
+                          description,
                           referenceMonth: month,
                           referenceYear: year,
                         })
                       }
-                      className="text-center text-zinc-200 bg-zinc-900 disabled:p-0 disabled:text-zinc-900 disabled:bg-transparent font-light disabled:font-normal block w-11/12 h-full disabled:appearance-none leading-normal rounded-sm"
+                      className="text-zinc-200 bg-zinc-900 disabled:p-0 disabled:text-zinc-900 disabled:bg-transparent font-light disabled:font-normal block w-11/12 h-full disabled:appearance-none leading-normal rounded-sm"
                       disabled={editing !== id}
                     />
                   </label>
-                  <label className="w-1/12 flex items-center justify-center text-zinc-900">
+                  <label className="w-3/12 flex items-center text-zinc-900">
+                    {editing !== id ? (
+                      <div className="w-full break-words max-h-12 overflow-y-auto">
+                        {description}
+                      </div>
+                    ) : (
+                      <textarea
+                        title="Descrição da Entrada"
+                        name="description"
+                        className="px-1 text-zinc-200 bg-zinc-900 font-light block w-11/12 h-full leading-normal rounded-sm resize-none border-2 border-transparent focus:border-teal-500 outline-none"
+                        value={description ?? ''}
+                        onChange={(event) => {
+                          handleChange(event, {
+                            id,
+                            title,
+                            value,
+                            description,
+                            referenceMonth: month,
+                            referenceYear: year,
+                          });
+                        }}
+                        rows={2}
+                      />
+                    )}
+                  </label>
+                  <label className="w-1/12 flex items-center text-zinc-900">
                     <input
                       required
                       title="Valor da entrada"
@@ -278,7 +306,7 @@ export function EditOtherEntries() {
                           referenceYear: year,
                         })
                       }
-                      className="text-center text-zinc-200 bg-zinc-900 disabled:p-0 disabled:text-zinc-900 disabled:bg-transparent font-light disabled:font-normal block w-11/12 h-full disabled:appearance-none leading-normal rounded-sm"
+                      className="text-zinc-200 bg-zinc-900 disabled:p-0 disabled:text-zinc-900 disabled:bg-transparent font-light disabled:font-normal block w-11/12 h-full disabled:appearance-none leading-normal rounded-sm"
                       disabled={editing !== id}
                     />
                   </label>

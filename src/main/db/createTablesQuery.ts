@@ -66,4 +66,8 @@ CREATE TABLE IF NOT EXISTS "dataOfChurch" (
     "cep" TEXT NOT NULL
 );
 CREATE UNIQUE INDEX IF NOT EXISTS "expenseCategory_name_key" ON "expenseCategories"("name");
+
+-- ALTER TABLE para adicionar a coluna 'description' com valor padrão NULL
+ALTER TABLE otherEntries
+ADD COLUMN description TEXT DEFAULT NULL;
 `;

@@ -1,6 +1,7 @@
 export interface IOtherEntry {
   title: string;
   value: number;
+  description?: string | null;
   referenceMonth: number;
   referenceYear: number;
 }

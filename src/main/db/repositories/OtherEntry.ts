@@ -19,6 +19,7 @@ export class OtherEntry {
   create = async ({
     title,
     value,
+    description,
     referenceMonth,
     referenceYear,
   }: IOtherEntry) => {
@@ -27,7 +28,7 @@ export class OtherEntry {
       const parsedValue = toInteger(value);
       this.db.run(
         createQuery,
-        [id, title, parsedValue, referenceMonth, referenceYear],
+        [id, title, parsedValue, description, referenceMonth, referenceYear],
         (err) => {
           if (err) {
             reject(err);
@@ -66,6 +67,7 @@ export class OtherEntry {
     id,
     title,
     value,
+    description,
     referenceMonth,
     referenceYear,
   }: IOtherEntryState) => {
@@ -76,6 +78,7 @@ export class OtherEntry {
           $id: id,
           $title: title,
           $value: toInteger(value),
+          $description: description,
           $referenceMonth: referenceMonth,
           $referenceYear: referenceYear,
         },

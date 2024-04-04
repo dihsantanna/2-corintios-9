@@ -1,6 +1,6 @@
 export const createQuery = /* sql */ `
-INSERT INTO otherEntries (id, title, value, referenceMonth, referenceYear)
-VALUES (?, ?, ?, ?, ?)
+INSERT INTO otherEntries (id, title, value, description, referenceMonth, referenceYear)
+VALUES (?, ?, ?, ?, ?, ?)
 `;
 
 export const findAllQuery = /* sql */ `
@@ -16,6 +16,7 @@ export const updateQuery = /* sql */ `
 UPDATE otherEntries
 SET title = $title,
   value = $value,
+  description = $description,
   referenceMonth = $referenceMonth,
   referenceYear = $referenceYear
 WHERE id = $id
