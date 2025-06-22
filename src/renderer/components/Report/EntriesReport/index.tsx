@@ -118,14 +118,14 @@ export function EntriesReport() {
       <>
         <Infos infos={infos} />
         <div className="w-full flex justify-end">
-          <label htmlFor="showOnlyTithers">
+          <label className="mb-4 cursor-pointer" htmlFor="showOnlyTithers">
             <input
-              className="mr-2 mb-4 cursor-pointer"
+              className="mr-2"
               type="checkbox"
               id="showOnlyTithers"
               checked={showOnlyTithers}
               onChange={() => setShowOnlyTithers(!showOnlyTithers)}
-            />{' '}
+            />
             Mostrar somente dizimistas
           </label>
         </div>
@@ -140,13 +140,17 @@ export function EntriesReport() {
           showOnlyNotZeroItems={showOnlyTithers}
         />
         <div className="w-full flex justify-end">
-          <label htmlFor="showOnlySpecialOffers">
+          <label
+            className="my-4 cursor-pointer"
+            htmlFor="showOnlySpecialOffers"
+          >
             <input
+              className="mr-2"
               type="checkbox"
               id="showOnlySpecialOffers"
               checked={showOnlySpecialOffers}
               onChange={() => setShowOnlySpecialOffers(!showOnlySpecialOffers)}
-            />{' '}
+            />
             Mostrar somente ofertantes
           </label>
         </div>
