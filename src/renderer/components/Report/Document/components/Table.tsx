@@ -11,6 +11,7 @@ interface ITableProps {
   secondColKey: string;
   rows: any[];
   subTotal: number;
+  showOnlyNotZeroItems?: boolean;
 }
 
 export function Table({
@@ -21,6 +22,7 @@ export function Table({
   secondColKey,
   rows,
   subTotal,
+  showOnlyNotZeroItems = false,
 }: ITableProps) {
   return (
     <View style={reportStyles.table} wrap={false}>
@@ -35,27 +37,30 @@ export function Table({
           <Text>{secondColName}</Text>
         </View>
       </View>
-      {rows.map((row, index) => (
-        <View
-          style={{
-            ...reportStyles.tableRowContent,
-            backgroundColor: index % 2 === 0 ? colors.white : colors.zinc[200],
-          }}
-          key={`${row[firstColKey]}-${row[secondColKey]}-${index + 1}`}
-        >
-          <View style={reportStyles.rowLeft}>
-            <Text>{row?.[firstColKey]?.toUpperCase()}</Text>
+      {rows.map((row, index) =>
+        showOnlyNotZeroItems && row[secondColKey] === 0 ? null : (
+          <View
+            style={{
+              ...reportStyles.tableRowContent,
+              backgroundColor:
+                index % 2 === 0 ? colors.white : colors.zinc[200],
+            }}
+            key={`${row[firstColKey]}-${row[secondColKey]}-${index + 1}`}
+          >
+            <View style={reportStyles.rowLeft}>
+              <Text>{row?.[firstColKey]?.toUpperCase()}</Text>
+            </View>
+            <View style={reportStyles.rowRight}>
+              <Text>
+                {row[secondColKey].toLocaleString('pt-BR', {
+                  style: 'currency',
+                  currency: 'BRL',
+                })}
+              </Text>
+            </View>
           </View>
-          <View style={reportStyles.rowRight}>
-            <Text>
-              {row[secondColKey].toLocaleString('pt-BR', {
-                style: 'currency',
-                currency: 'BRL',
-              })}
-            </Text>
-          </View>
-        </View>
-      ))}
+        ),
+      )}
       <View style={reportStyles.subTotalContent}>
         <View style={reportStyles.subTotal}>
           <Text>TOTAL</Text>

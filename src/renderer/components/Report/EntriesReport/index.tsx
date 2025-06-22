@@ -35,6 +35,8 @@ export function EntriesReport() {
   });
   const [entries, setEntries] = useState<IEntriesState>({ ...INITIAL_STATE });
   const [loading, setLoading] = useState(false);
+  const [showOnlyTithers, setShowOnlyTithers] = useState(true);
+  const [showOnlySpecialOffers, setShowOnlySpecialOffers] = useState(true);
   const { churchData } = useGlobalContext();
 
   const mounted = useRef(false);
@@ -115,6 +117,18 @@ export function EntriesReport() {
     >
       <>
         <Infos infos={infos} />
+        <div className="w-full flex justify-end">
+          <label htmlFor="showOnlyTithers">
+            <input
+              className="mr-2 mb-4 cursor-pointer"
+              type="checkbox"
+              id="showOnlyTithers"
+              checked={showOnlyTithers}
+              onChange={() => setShowOnlyTithers(!showOnlyTithers)}
+            />{' '}
+            Mostrar somente dizimistas
+          </label>
+        </div>
         <Table
           title="REGISTRO MENSAL DE DIZIMISTAS"
           firstColName="NOME"
@@ -123,7 +137,19 @@ export function EntriesReport() {
           firstColKey="name"
           secondColKey="totalTithes"
           subTotal={totalTithes}
+          showOnlyNotZeroItems={showOnlyTithers}
         />
+        <div className="w-full flex justify-end">
+          <label htmlFor="showOnlySpecialOffers">
+            <input
+              type="checkbox"
+              id="showOnlySpecialOffers"
+              checked={showOnlySpecialOffers}
+              onChange={() => setShowOnlySpecialOffers(!showOnlySpecialOffers)}
+            />{' '}
+            Mostrar somente ofertantes
+          </label>
+        </div>
         <Table
           title="REGISTRO MENSAL DE OFERTAS ESPECIAIS"
           firstColName="NOME"
@@ -132,6 +158,7 @@ export function EntriesReport() {
           firstColKey="name"
           secondColKey="totalOffers"
           subTotal={totalSpecialOffers}
+          showOnlyNotZeroItems={showOnlySpecialOffers}
         />
         <Table
           title="OUTRAS ENTRADAS"

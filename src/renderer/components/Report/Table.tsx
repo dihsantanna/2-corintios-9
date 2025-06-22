@@ -7,6 +7,7 @@ interface ITableProps {
   secondColKey: string;
   rows: any[];
   subTotal: number;
+  showOnlyNotZeroItems?: boolean;
 }
 
 export function Table({
@@ -17,6 +18,7 @@ export function Table({
   secondColKey,
   rows,
   subTotal,
+  showOnlyNotZeroItems = false,
 }: ITableProps) {
   return (
     <div className="w-full">
@@ -29,24 +31,26 @@ export function Table({
           {secondColName}
         </span>
       </div>
-      {rows.map((row, index) => (
-        <div
-          className={`flex items-center justify-center ${
-            index % 2 === 0 ? 'bg-white' : 'bg-zinc-200'
-          } text-zinc-900 w-full`}
-          key={`${title}-${index + 1}`}
-        >
-          <span className="flex justify-start p-1 w-1/2">
-            {row?.[firstColKey]?.toUpperCase()}
-          </span>
-          <span className="flex justify-end p-1 w-1/2 font-semibold border-l-2 border-l-zinc-300">
-            {row[secondColKey].toLocaleString('pt-BR', {
-              style: 'currency',
-              currency: 'BRL',
-            })}
-          </span>
-        </div>
-      ))}
+      {rows.map((row, index) =>
+        showOnlyNotZeroItems && row[secondColKey] === 0 ? null : (
+          <div
+            className={`flex items-center justify-center ${
+              index % 2 === 0 ? 'bg-white' : 'bg-zinc-200'
+            } text-zinc-900 w-full`}
+            key={`${title}-${index + 1}`}
+          >
+            <span className="flex justify-start p-1 w-1/2">
+              {row?.[firstColKey]?.toUpperCase()}
+            </span>
+            <span className="flex justify-end p-1 w-1/2 font-semibold border-l-2 border-l-zinc-300">
+              {row[secondColKey].toLocaleString('pt-BR', {
+                style: 'currency',
+                currency: 'BRL',
+              })}
+            </span>
+          </div>
+        ),
+      )}
       <div className="flex justify-end font-semibold">
         <span className="w-1/2 bg-redOrange text-zinc-100 flex items-center justify-between p-1">
           <span>TOTAL</span>

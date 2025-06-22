@@ -42,13 +42,13 @@ databaseConnection
   .createTables()
   .then(() => {
     databaseConnection.close((error) => {
-      if (error) console.log(error);
+      if (!app.isPackaged && error) console.log(error);
     });
   })
   .catch((err) => {
     console.log(err);
     databaseConnection.close((error) => {
-      if (error) console.log(error);
+      if (!app.isPackaged && error) console.log(error);
     });
   });
 
@@ -79,8 +79,15 @@ const createWindow = async () => {
       preload: app.isPackaged
         ? path.join(__dirname, 'preload.js')
         : path.join(__dirname, '../../.erb/dll/preload.js'),
+      devTools: !app.isPackaged,
     },
   });
+
+  if (process.env.NODE_ENV === 'development') {
+    mainWindow.webContents.openDevTools({
+      mode: 'detach',
+    });
+  }
 
   mainWindow.loadURL(resolveHtmlPath('index.html'));
 

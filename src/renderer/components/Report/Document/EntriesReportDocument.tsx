@@ -18,6 +18,8 @@ export interface EntriesReportDocumentProps {
   otherEntries: IOtherEntryState[];
   totalEntriesReport: ITotalEntries;
   infos: Info[];
+  showOnlyTithers?: boolean;
+  showOnlySpecialOffers?: boolean;
 }
 
 export function EntriesReportDocument({
@@ -28,6 +30,8 @@ export function EntriesReportDocument({
   totalEntriesReport,
   otherEntries,
   infos,
+  showOnlyTithers,
+  showOnlySpecialOffers,
 }: EntriesReportDocumentProps) {
   const { totalSpecialOffers, totalTithes, totalEntries, totalOtherEntries } =
     totalEntriesReport;
@@ -49,6 +53,7 @@ export function EntriesReportDocument({
           firstColKey="name"
           secondColKey="totalTithes"
           subTotal={totalTithes}
+          showOnlyNotZeroItems={showOnlyTithers}
         />
         <Table
           title="REGISTRO MENSAL DE OFERTAS ESPECIAIS"
@@ -58,6 +63,7 @@ export function EntriesReportDocument({
           firstColKey="name"
           secondColKey="totalOffers"
           subTotal={totalSpecialOffers}
+          showOnlyNotZeroItems={showOnlySpecialOffers}
         />
         <Table
           title="OUTRAS ENTRADAS"
