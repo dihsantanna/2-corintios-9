@@ -36,9 +36,9 @@ export class ExpenseCategory {
           reject(err);
         } else {
           resolve(
-            rows.sort((a, b) =>
-              a.name.localeCompare(b.name)
-            ) as IExpenseCategory[]
+            (rows as IExpenseCategory[]).sort((a, b) =>
+              a.name.localeCompare(b.name),
+            ),
           );
         }
       });

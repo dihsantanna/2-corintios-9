@@ -36,7 +36,7 @@ describe('Repository "WithdrawToTheBankAccount":', () => {
       const expectedResult = createRejectResponse.err;
 
       const db = new DatabaseConnectionMock(
-        createRejectResponse
+        createRejectResponse,
       ) as unknown as DatabaseConnection;
 
       repo = new WithdrawToTheBankAccount(db);
@@ -47,7 +47,7 @@ describe('Repository "WithdrawToTheBankAccount":', () => {
     });
     it('should create a new withdraw to the bank account.', async () => {
       const db = new DatabaseConnectionMock(
-        createResolveResponse
+        createResolveResponse,
       ) as unknown as DatabaseConnection;
 
       repo = new WithdrawToTheBankAccount(db);
@@ -63,7 +63,7 @@ describe('Repository "WithdrawToTheBankAccount":', () => {
       const expectedResult = findAllByReferenceDateRejectResponse.err;
 
       const db = new DatabaseConnectionMock(
-        findAllByReferenceDateRejectResponse
+        findAllByReferenceDateRejectResponse,
       ) as unknown as DatabaseConnection;
 
       repo = new WithdrawToTheBankAccount(db);
@@ -73,10 +73,15 @@ describe('Repository "WithdrawToTheBankAccount":', () => {
       await expect(result).rejects.toEqual(expectedResult);
     });
     it('should return all withdraws to the bank account.', async () => {
-      const expectedResult = [...findAllByReferenceDateResolveResponse.rows];
+      const expectedResult = [
+        ...findAllByReferenceDateResolveResponse.rows.map((r) => ({
+          ...r,
+          value: r.value / 100,
+        })),
+      ];
 
       const db = new DatabaseConnectionMock(
-        findAllByReferenceDateResolveResponse
+        findAllByReferenceDateResolveResponse,
       ) as unknown as DatabaseConnection;
 
       repo = new WithdrawToTheBankAccount(db);
@@ -92,7 +97,7 @@ describe('Repository "WithdrawToTheBankAccount":', () => {
       const expectedResult = updateRejectResponse.err;
 
       const db = new DatabaseConnectionMock(
-        updateRejectResponse
+        updateRejectResponse,
       ) as unknown as DatabaseConnection;
 
       repo = new WithdrawToTheBankAccount(db);
@@ -103,7 +108,7 @@ describe('Repository "WithdrawToTheBankAccount":', () => {
     });
     it('should update a withdraw to the bank account.', async () => {
       const db = new DatabaseConnectionMock(
-        updateResolveResponse
+        updateResolveResponse,
       ) as unknown as DatabaseConnection;
 
       repo = new WithdrawToTheBankAccount(db);
@@ -119,7 +124,7 @@ describe('Repository "WithdrawToTheBankAccount":', () => {
       const expectedResult = deleteRejectResponse.err;
 
       const db = new DatabaseConnectionMock(
-        deleteRejectResponse
+        deleteRejectResponse,
       ) as unknown as DatabaseConnection;
 
       repo = new WithdrawToTheBankAccount(db);
@@ -132,7 +137,7 @@ describe('Repository "WithdrawToTheBankAccount":', () => {
     });
     it('should delete a withdraw to the bank account.', async () => {
       const db = new DatabaseConnectionMock(
-        deleteResolveResponse
+        deleteResolveResponse,
       ) as unknown as DatabaseConnection;
 
       repo = new WithdrawToTheBankAccount(db);

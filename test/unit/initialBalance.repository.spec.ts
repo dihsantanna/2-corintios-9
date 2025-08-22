@@ -16,10 +16,13 @@ describe('Repository "InitialBalance":', () => {
 
   describe('Method "get"', () => {
     it('should get the initial balance.', async () => {
-      const expectedResult = { ...getResolveResponse.row };
+      const expectedResult = {
+        ...getResolveResponse.row,
+        value: getResolveResponse.row.value / 100,
+      };
 
       const db = new DatabaseConnectionMock(
-        getResolveResponse
+        getResolveResponse,
       ) as unknown as DatabaseConnection;
 
       repo = new InitialBalance(db);
@@ -33,7 +36,7 @@ describe('Repository "InitialBalance":', () => {
       const expectedResult = getRejectResponse.err;
 
       const db = new DatabaseConnectionMock(
-        getRejectResponse
+        getRejectResponse,
       ) as unknown as DatabaseConnection;
 
       repo = new InitialBalance(db);
@@ -47,7 +50,7 @@ describe('Repository "InitialBalance":', () => {
   describe('Method "createOrUpdate"', () => {
     it('should create or update the initial balance.', async () => {
       const db = new DatabaseConnectionMock(
-        createOrUpdateResolveResponse
+        createOrUpdateResolveResponse,
       ) as unknown as DatabaseConnection;
 
       repo = new InitialBalance(db);
@@ -61,7 +64,7 @@ describe('Repository "InitialBalance":', () => {
       const expectedResult = createOrUpdateRejectResponse.err;
 
       const db = new DatabaseConnectionMock(
-        createOrUpdateRejectResponse
+        createOrUpdateRejectResponse,
       ) as unknown as DatabaseConnection;
 
       repo = new InitialBalance(db);

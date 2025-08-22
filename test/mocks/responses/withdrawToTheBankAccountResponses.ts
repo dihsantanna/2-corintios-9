@@ -14,19 +14,19 @@ export const findAllByReferenceDateResolveResponse = {
   rows: [
     {
       id: 'id1',
-      value: 1,
+      value: 100,
       referenceMonth: 1,
       referenceYear: 2023,
     },
     {
       id: 'id3',
-      value: 2,
+      value: 200,
       referenceMonth: 1,
       referenceYear: 2023,
     },
     {
       id: 'id2',
-      value: 3,
+      value: 300,
       referenceMonth: 1,
       referenceYear: 2023,
     },

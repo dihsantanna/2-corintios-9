@@ -39,7 +39,7 @@ describe('Repository "Offer":', () => {
   describe('Method "create"', () => {
     it('should create an offer.', async () => {
       const db = new DatabaseConnectionMock(
-        createResolveResponse
+        createResolveResponse,
       ) as unknown as DatabaseConnection;
 
       repo = new Offer(db);
@@ -53,7 +53,7 @@ describe('Repository "Offer":', () => {
       const expectedResult = createRejectResponse.err;
 
       const db = new DatabaseConnectionMock(
-        createRejectResponse
+        createRejectResponse,
       ) as unknown as DatabaseConnection;
 
       repo = new Offer(db);
@@ -67,20 +67,25 @@ describe('Repository "Offer":', () => {
   describe('Method "findAllByReferencesWithMemberName"', () => {
     it('should find all offers by references with member name.', async () => {
       const expectedResult = [
-        ...findAllResolveResponse.rows.sort((a, b) =>
-          (a.memberName || '').localeCompare(b.memberName || '')
-        ),
+        ...findAllResolveResponse.rows
+          .sort((a, b) =>
+            (a.memberName || '').localeCompare(b.memberName || ''),
+          )
+          .map((o) => ({
+            ...o,
+            value: o.value / 100,
+          })),
       ];
 
       const db = new DatabaseConnectionMock(
-        findAllResolveResponse
+        findAllResolveResponse,
       ) as unknown as DatabaseConnection;
 
       repo = new Offer(db);
 
       const result = repo.findAllByReferencesWithMemberName(
         referenceMonth,
-        referenceYear
+        referenceYear,
       );
 
       await expect(result).resolves.toStrictEqual(expectedResult);
@@ -90,14 +95,14 @@ describe('Repository "Offer":', () => {
       const expectedResult = findAllRejectResponse.err;
 
       const db = new DatabaseConnectionMock(
-        findAllRejectResponse
+        findAllRejectResponse,
       ) as unknown as DatabaseConnection;
 
       repo = new Offer(db);
 
       const result = repo.findAllByReferencesWithMemberName(
         referenceMonth,
-        referenceYear
+        referenceYear,
       );
 
       await expect(result).rejects.toEqual(expectedResult);
@@ -107,7 +112,7 @@ describe('Repository "Offer":', () => {
   describe('Method "update"', () => {
     it('should update an offer.', async () => {
       const db = new DatabaseConnectionMock(
-        updateResolveResponse
+        updateResolveResponse,
       ) as unknown as DatabaseConnection;
 
       repo = new Offer(db);
@@ -121,7 +126,7 @@ describe('Repository "Offer":', () => {
       const expectedResult = updateRejectResponse.err;
 
       const db = new DatabaseConnectionMock(
-        updateRejectResponse
+        updateRejectResponse,
       ) as unknown as DatabaseConnection;
 
       repo = new Offer(db);
@@ -135,7 +140,7 @@ describe('Repository "Offer":', () => {
   describe('Method "delete"', () => {
     it('should delete an offer.', async () => {
       const db = new DatabaseConnectionMock(
-        deleteResolveResponse
+        deleteResolveResponse,
       ) as unknown as DatabaseConnection;
 
       repo = new Offer(db);
@@ -151,7 +156,7 @@ describe('Repository "Offer":', () => {
       const expectedResult = deleteRejectResponse.err;
 
       const db = new DatabaseConnectionMock(
-        deleteRejectResponse
+        deleteRejectResponse,
       ) as unknown as DatabaseConnection;
 
       repo = new Offer(db);

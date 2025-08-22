@@ -15,7 +15,7 @@ export const findAllResolveResponse = {
     {
       memberId: 'memberId1',
       title: 'title1',
-      value: 1,
+      value: 100,
       referenceMonth: 1,
       referenceYear: 2023,
       id: 'id1',
@@ -24,7 +24,7 @@ export const findAllResolveResponse = {
     {
       memberId: null,
       title: 'title3',
-      value: 3,
+      value: 300,
       referenceMonth: 1,
       referenceYear: 2023,
       id: 'id3',
@@ -33,7 +33,7 @@ export const findAllResolveResponse = {
     {
       memberId: 'memberId2',
       title: 'title2',
-      value: 2,
+      value: 200,
       referenceMonth: 1,
       referenceYear: 2023,
       id: 'id2',
@@ -42,7 +42,7 @@ export const findAllResolveResponse = {
     {
       memberId: 'memberId2',
       title: 'title2',
-      value: 3,
+      value: 300,
       referenceMonth: 1,
       referenceYear: 2023,
       id: 'id4',

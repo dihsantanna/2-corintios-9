@@ -22,7 +22,7 @@ describe('Repository "Report":', () => {
       const expectedResult = closeRejectResponse.closeErr;
 
       const db = new DatabaseConnectionMock(
-        closeRejectResponse
+        closeRejectResponse,
       ) as unknown as DatabaseConnection;
 
       repo = new Report(db);
@@ -33,7 +33,7 @@ describe('Repository "Report":', () => {
     });
     it('should close the connection.', async () => {
       const db = new DatabaseConnectionMock(
-        closeResolveResponse
+        closeResolveResponse,
       ) as unknown as DatabaseConnection;
 
       repo = new Report(db);
@@ -49,34 +49,38 @@ describe('Repository "Report":', () => {
       const expectedResult = getOffersAndTithesFromMembersRejectResponse.err;
 
       const db = new DatabaseConnectionMock(
-        getOffersAndTithesFromMembersRejectResponse
+        getOffersAndTithesFromMembersRejectResponse,
       ) as unknown as DatabaseConnection;
 
       repo = new Report(db);
 
       const result = repo.getOffersAndTithesFromMembers(
         referenceMonth,
-        referenceYear
+        referenceYear,
       );
 
       await expect(result).rejects.toEqual(expectedResult);
     });
     it('should return an array of members with total offers and total tithes.', async () => {
       const expectedResult = [
-        ...getOffersAndTithesFromMembersResolveResponse.rows.sort((a, b) =>
-          a.name.localeCompare(b.name)
-        ),
+        ...getOffersAndTithesFromMembersResolveResponse.rows
+          .sort((a, b) => a.name.localeCompare(b.name))
+          .map((r) => ({
+            ...r,
+            totalTithes: r.totalTithes / 100,
+            totalOffers: r.totalOffers / 100,
+          })),
       ];
 
       const db = new DatabaseConnectionMock(
-        getOffersAndTithesFromMembersResolveResponse
+        getOffersAndTithesFromMembersResolveResponse,
       ) as unknown as DatabaseConnection;
 
       repo = new Report(db);
 
       const result = repo.getOffersAndTithesFromMembers(
         referenceMonth,
-        referenceYear
+        referenceYear,
       );
 
       await expect(result).resolves.toStrictEqual(expectedResult);
@@ -88,7 +92,7 @@ describe('Repository "Report":', () => {
       const expectedResult = getTotalEntriesRejectResponse.err;
 
       const db = new DatabaseConnectionMock(
-        getTotalEntriesRejectResponse
+        getTotalEntriesRejectResponse,
       ) as unknown as DatabaseConnection;
 
       repo = new Report(db);
@@ -98,10 +102,24 @@ describe('Repository "Report":', () => {
       await expect(result).rejects.toEqual(expectedResult);
     });
     it('should return an object with report of total all entries.', async () => {
-      const expectedResult = { ...getTotalEntriesResolveResponse.row };
+      const expectedResult = {
+        ...getTotalEntriesResolveResponse.row,
+        previousBalance:
+          getTotalEntriesResolveResponse.row.previousBalance / 100,
+        totalEntries: getTotalEntriesResolveResponse.row.totalEntries / 100,
+        totalOtherEntries:
+          getTotalEntriesResolveResponse.row.totalOtherEntries / 100,
+        totalLooseOffers:
+          getTotalEntriesResolveResponse.row.totalLooseOffers / 100,
+        totalTithes: getTotalEntriesResolveResponse.row.totalTithes / 100,
+        totalSpecialOffers:
+          getTotalEntriesResolveResponse.row.totalSpecialOffers / 100,
+        totalWithdrawalsBankAccount:
+          getTotalEntriesResolveResponse.row.totalWithdrawalsBankAccount / 100,
+      };
 
       const db = new DatabaseConnectionMock(
-        getTotalEntriesResolveResponse
+        getTotalEntriesResolveResponse,
       ) as unknown as DatabaseConnection;
 
       repo = new Report(db);

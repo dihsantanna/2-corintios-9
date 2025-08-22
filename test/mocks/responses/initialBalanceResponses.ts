@@ -1,7 +1,7 @@
 export const getResolveResponse = {
   err: null,
   row: {
-    value: 1,
+    value: 100,
     referenceMonth: 1,
     referenceYear: 2023,
   },

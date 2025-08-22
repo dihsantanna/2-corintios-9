@@ -11,7 +11,7 @@ export class DataOfChurch {
         if (err) {
           reject(err);
         } else {
-          resolve(row);
+          resolve(row as IDataOfChurch);
         }
       });
     }).finally(() => this.db.close());
@@ -50,7 +50,7 @@ export class DataOfChurch {
           } else {
             resolve();
           }
-        }
+        },
       );
     }).finally(() => this.db.close());
   };
