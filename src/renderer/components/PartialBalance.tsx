@@ -2,14 +2,14 @@ import { useGlobalContext } from '../context/GlobalContext/GlobalContextProvider
 import { months } from '../utils/months';
 
 export function PartialBalance() {
-  const { partialBalance } = useGlobalContext();
+  const { partialBalance, referenceDate } = useGlobalContext();
 
   const {
     previousBalance,
     totalTithes,
     totalSpecialOffers,
     totalLooseOffers,
-    totalWithdraws,
+    // totalWithdraws,
     totalEntries,
     totalExpenses,
     totalBalance,
@@ -18,9 +18,9 @@ export function PartialBalance() {
   return (
     <div className="fixed flex flex-col justify-between bottom-3 right-3 w-[420px] h-60 gap-2 p-2 text-zinc-900 border rounded-md">
       <h1 className="w-full text-center text-lg font-bold">
-        Balanço parcial do mês de{' '}
-        {` ${months[(new Date().getMonth() + 1) as keyof typeof months]} `} de
-        {` ${new Date().getFullYear()}`}
+        Resumo do mês de{' '}
+        {` ${months[referenceDate.month as keyof typeof months]} `} de
+        {` ${referenceDate.year}`}
       </h1>
       <div className="flex-1 flex flex-col justify-end gap-4 text-sm">
         <div className="w-full">
@@ -60,7 +60,7 @@ export function PartialBalance() {
               })}
             </span>
           </div>
-          <div className="flex justify-between">
+          {/* <div className="flex justify-between">
             <span>Saques em Conta Bancária:</span>
             <span className="font-bold">
               {(totalWithdraws || 0.0).toLocaleString('pt-BR', {
@@ -68,7 +68,7 @@ export function PartialBalance() {
                 currency: 'BRL',
               })}
             </span>
-          </div>
+          </div> */}
         </div>
         <div>
           <div className="flex justify-between bg-zinc-100">
@@ -90,7 +90,7 @@ export function PartialBalance() {
             </span>
           </div>
           <div className="flex justify-between bg-zinc-100">
-            <span>Saldo Parcial:</span>
+            <span>Saldo:</span>
             <span className="font-bold">
               {(totalBalance || 0.0).toLocaleString('pt-BR', {
                 style: 'currency',

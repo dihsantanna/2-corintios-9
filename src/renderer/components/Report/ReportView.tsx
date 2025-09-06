@@ -28,7 +28,7 @@ export function ReportView({
   return (
     <>
       <div className="flex flex-col items-center justify-center w-full h-full text-zinc-900 relative mt-2">
-        <div className="flex items-center gap-2 w-full px-11">
+        <div className="flex items-center gap-2 w-11/12">
           <div className="text-zinc-200">
             <FilterByMonthAndYear />
           </div>
