@@ -21,16 +21,12 @@ export function EditOffers() {
   const [offers, setOffers] = useState<OfferWithMemberName[]>([]);
   const [editing, setEditing] = useState('');
   const [loading, setLoading] = useState(false);
-  const [referenceMonth, setReferenceMonth] = useState(
-    new Date().getMonth() + 1
-  );
-  const [referenceYear, setReferenceYear] = useState(new Date().getFullYear());
   const [offerType, setOfferType] = useState<OfferType>('all');
 
-  const { setRefreshPartialBalance } = useGlobalContext();
+  const { setRefreshPartialBalance, referenceDate } = useGlobalContext();
 
   const filterOfferByType = (
-    offersArr: OfferWithMemberName[]
+    offersArr: OfferWithMemberName[],
   ): OfferWithMemberName[] => {
     if (offerType === 'special') {
       return offersArr.filter(({ memberId }) => !!memberId);
@@ -42,12 +38,13 @@ export function EditOffers() {
   };
 
   useEffect(() => {
+    const { month, year } = referenceDate;
     const getOffers = async () => {
       try {
         setLoading(true);
         const newOffers = await window.offer.findAllByReferencesWithMemberName(
-          referenceMonth,
-          referenceYear
+          month,
+          year,
         );
         const toFixedOffers = newOffers.map((offer) => ({
           ...offer,
@@ -64,8 +61,8 @@ export function EditOffers() {
       }
     };
 
-    if (referenceMonth !== 0 && referenceYear !== 0) getOffers();
-  }, [referenceMonth, referenceYear]);
+    if (month !== 0 && year !== 0) getOffers();
+  }, [referenceDate]);
 
   const handleReset = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -84,7 +81,7 @@ export function EditOffers() {
     {
       target: { name, value },
     }: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
-    offer: OfferWithMemberName
+    offer: OfferWithMemberName,
   ) => {
     const key = name as keyof OfferWithMemberName;
     const newOffer = {
@@ -93,7 +90,7 @@ export function EditOffers() {
     } as OfferWithMemberName;
 
     const newOffers = offers.map((item) =>
-      item.id === offer.id ? newOffer : item
+      item.id === offer.id ? newOffer : item,
     );
 
     setOffers(newOffers);
@@ -101,7 +98,7 @@ export function EditOffers() {
 
   const handleValueInputBlur = (
     { target: { value } }: React.FocusEvent<HTMLInputElement>,
-    offer: OfferWithMemberName
+    offer: OfferWithMemberName,
   ) => {
     const newValue = value ? parseFloat(value).toFixed(2) : '';
     const newOffer = {
@@ -110,7 +107,7 @@ export function EditOffers() {
     };
 
     const newOffers = offers.map((item) =>
-      item.id === offer.id ? newOffer : item
+      item.id === offer.id ? newOffer : item,
     );
 
     setOffers(newOffers);
@@ -123,11 +120,11 @@ export function EditOffers() {
 
   const handleEdit = async (
     event: React.FormEvent<HTMLFormElement>,
-    id: string
+    id: string,
   ) => {
     event.preventDefault();
     const editedOffer = offers.find(
-      ({ id: offerId }) => offerId === id
+      ({ id: offerId }) => offerId === id,
     ) as OfferWithMemberName;
     if (
       editedOffer === defaultOffers.find(({ id: offerId }) => offerId === id)
@@ -197,13 +194,8 @@ export function EditOffers() {
         <h1 className="flex items-center font-semibold text-2xl text-zinc-900 h-20">
           Editar Ofertas
         </h1>
-        <div>
-          <FilterByMonthAndYear
-            monthValue={referenceMonth}
-            yearValue={referenceYear}
-            setReferenceMonth={setReferenceMonth}
-            setReferenceYear={setReferenceYear}
-          />
+        <div className="flex items-center gap-2 w-full px-4">
+          <FilterByMonthAndYear />
           <div className="flex items-center justify-center gap-2 py-2">
             <select
               title="Selecione um tipo de oferta"
@@ -253,7 +245,7 @@ export function EditOffers() {
                   referenceMonth: month,
                   referenceYear: year,
                 },
-                index
+                index,
               ) => (
                 <EditForm
                   key={id}
@@ -311,7 +303,7 @@ export function EditOffers() {
                     />
                   </label>
                 </EditForm>
-              )
+              ),
             )
           )}
         </div>

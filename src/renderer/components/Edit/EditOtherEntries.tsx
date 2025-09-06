@@ -21,20 +21,17 @@ export function EditOtherEntries() {
   const [otherEntries, setOtherEntries] = useState<OtherEntry[]>([]);
   const [editing, setEditing] = useState('');
   const [loading, setLoading] = useState(false);
-  const [referenceMonth, setReferenceMonth] = useState(
-    new Date().getMonth() + 1,
-  );
-  const [referenceYear, setReferenceYear] = useState(new Date().getFullYear());
 
-  const { setRefreshPartialBalance } = useGlobalContext();
+  const { setRefreshPartialBalance, referenceDate } = useGlobalContext();
 
   useEffect(() => {
+    const { month, year } = referenceDate;
     const getOtherEntries = async () => {
       setLoading(true);
       try {
         const newEntries = await window.otherEntry.findAllByReferences(
-          referenceMonth,
-          referenceYear,
+          month,
+          year,
         );
         const toFixedEntries = newEntries.map((entry) => ({
           ...entry,
@@ -51,8 +48,8 @@ export function EditOtherEntries() {
       }
     };
 
-    if (referenceMonth !== 0 && referenceYear !== 0) getOtherEntries();
-  }, [referenceMonth, referenceYear]);
+    if (month !== 0 && year !== 0) getOtherEntries();
+  }, [referenceDate]);
 
   const handleReset = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -190,13 +187,8 @@ export function EditOtherEntries() {
         <h1 className="flex items-center font-semibold text-2xl text-zinc-900 h-20">
           Editar Outras Despesas
         </h1>
-        <div>
-          <FilterByMonthAndYear
-            monthValue={referenceMonth}
-            yearValue={referenceYear}
-            setReferenceMonth={setReferenceMonth}
-            setReferenceYear={setReferenceYear}
-          />
+        <div className="flex items-center gap-2 w-full px-4 mb-2">
+          <FilterByMonthAndYear />
         </div>
         <div className="flex w-full h-10 items-center justify-between border-y border-zinc-300 text-zinc-900">
           <span className="w-3/12 flex items-center ml-2">Título</span>

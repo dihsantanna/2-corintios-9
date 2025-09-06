@@ -17,7 +17,8 @@ CREATE TABLE IF NOT EXISTS "otherEntries" (
     "title" TEXT NOT NULL,
     "value" REAL NOT NULL,
     "referenceMonth" INTEGER NOT NULL,
-    "referenceYear" INTEGER NOT NULL
+    "referenceYear" INTEGER NOT NULL,
+    "description" TEXT DEFAULT NULL
 );
 CREATE TABLE IF NOT EXISTS "offers" (
     "id" TEXT NOT NULL PRIMARY KEY,
@@ -67,7 +68,5 @@ CREATE TABLE IF NOT EXISTS "dataOfChurch" (
 );
 CREATE UNIQUE INDEX IF NOT EXISTS "expenseCategory_name_key" ON "expenseCategories"("name");
 
--- ALTER TABLE para adicionar a coluna 'description' com valor padrão NULL
-ALTER TABLE otherEntries
-ADD COLUMN description TEXT DEFAULT NULL;
+
 `;

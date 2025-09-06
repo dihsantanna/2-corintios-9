@@ -12,11 +12,11 @@ export function BalanceConfig() {
         type="button"
         tabIndex={0}
         className="focus:outline-none focus:bg-teal-500 focus:text-zinc-900 flex items-center bg-zinc-900 rounded-sm
-        px-2 py-1 hover:text-zinc-900 hover:bg-teal-500 gap-2"
+        py-2 px-3 hover:text-zinc-900 hover:bg-teal-500 gap-2"
         onClick={() => setShow(true)}
       >
         Configurar Saldo Inicial
-        <MdAccountBalance className="w-8 h-8" />
+        <MdAccountBalance className="w-6 h-6" />
       </button>
       <Transition.Root show={show} as={Fragment}>
         <Dialog

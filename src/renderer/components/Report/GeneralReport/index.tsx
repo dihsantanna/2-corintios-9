@@ -23,13 +23,10 @@ const INITIAL_STATE: ITotalEntries = {
 };
 
 export function GeneralReport() {
-  const [referenceMonth, setReferenceMonth] = useState(
-    new Date().getMonth() + 1,
-  );
-  const [referenceYear, setReferenceYear] = useState(new Date().getFullYear());
+  const { churchData, referenceDate } = useGlobalContext();
   const [monthAndYear, setMonthAndYear] = useState({
-    month: referenceMonth,
-    year: referenceYear,
+    month: referenceDate.month,
+    year: referenceDate.year,
   });
   const [expenses, setExpenses] = useState<IExpenseState[]>([]);
   const [categories, setCategories] = useState<IExpenseCategoryState[]>([]);
@@ -37,7 +34,6 @@ export function GeneralReport() {
     ...INITIAL_STATE,
   } as ITotalEntries);
   const [loading, setLoading] = useState(false);
-  const { churchData } = useGlobalContext();
 
   const mounted = useRef(false);
 
@@ -59,20 +55,18 @@ export function GeneralReport() {
   const totalExpenses = expenses.reduce((total, { value }) => total + value, 0);
 
   const getReport = useCallback(async () => {
-    if (referenceMonth && referenceYear) {
+    const { month, year } = referenceDate;
+    if (month && year) {
       try {
         setLoading(true);
         const allExpenses =
-          await window.expense.findAllByReferencesWithCategoryName(
-            referenceMonth,
-            referenceYear,
-          );
+          await window.expense.findAllByReferencesWithCategoryName(month, year);
         const { totalEntries: entries } = await window.report.entries(
-          referenceMonth,
-          referenceYear,
+          month,
+          year,
         );
         setTotalEntries(entries);
-        setMonthAndYear({ month: referenceMonth, year: referenceYear });
+        setMonthAndYear({ month, year });
         setExpenses(allExpenses);
       } catch (err) {
         toast.error((err as Error).message);
@@ -80,7 +74,7 @@ export function GeneralReport() {
         setLoading(false);
       }
     }
-  }, [referenceMonth, referenceYear]);
+  }, [referenceDate]);
 
   useEffect(() => {
     if (!mounted.current) {
@@ -162,10 +156,6 @@ export function GeneralReport() {
         monthAndYear.month as MonthKey
       ].toLowerCase()}-${monthAndYear.year}.pdf`}
       getReport={getReport}
-      referenceMonth={referenceMonth}
-      referenceYear={referenceYear}
-      setReferenceMonth={setReferenceMonth}
-      setReferenceYear={setReferenceYear}
       isLoading={loading}
       document={
         <GeneralReportDocument

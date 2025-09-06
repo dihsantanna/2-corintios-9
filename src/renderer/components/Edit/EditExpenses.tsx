@@ -27,12 +27,8 @@ export function EditExpenses() {
   const [categorySelected, setCategorySelected] = useState('all');
   const [editing, setEditing] = useState('');
   const [loading, setLoading] = useState(false);
-  const [referenceMonth, setReferenceMonth] = useState(
-    new Date().getMonth() + 1,
-  );
-  const [referenceYear, setReferenceYear] = useState(new Date().getFullYear());
 
-  const { setRefreshPartialBalance } = useGlobalContext();
+  const { setRefreshPartialBalance, referenceDate } = useGlobalContext();
 
   useEffect(() => {
     const getExpenseCategories = async () => {
@@ -53,14 +49,12 @@ export function EditExpenses() {
   }, []);
 
   useEffect(() => {
+    const { month, year } = referenceDate;
     const getExpenses = async () => {
       setLoading(true);
       try {
         const newExpenses =
-          await window.expense.findAllByReferencesWithCategoryName(
-            referenceMonth,
-            referenceYear,
-          );
+          await window.expense.findAllByReferencesWithCategoryName(month, year);
         const toFixedExpenses = newExpenses.map((expense) => ({
           ...expense,
           value: (expense.value as number).toFixed(2),
@@ -76,8 +70,8 @@ export function EditExpenses() {
       }
     };
 
-    if (referenceMonth !== 0 && referenceYear !== 0) getExpenses();
-  }, [referenceMonth, referenceYear]);
+    if (month !== 0 && year !== 0) getExpenses();
+  }, [referenceDate]);
 
   const handleReset = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -227,13 +221,8 @@ export function EditExpenses() {
         <h1 className="flex items-center font-semibold text-2xl text-zinc-900 h-20">
           Editar Despesas
         </h1>
-        <div>
-          <FilterByMonthAndYear
-            monthValue={referenceMonth}
-            yearValue={referenceYear}
-            setReferenceMonth={setReferenceMonth}
-            setReferenceYear={setReferenceYear}
-          />
+        <div className="flex items-center gap-2 w-full px-4">
+          <FilterByMonthAndYear />
           <div className="flex items-center justify-center gap-2 py-2">
             <select
               title="Selecione uma categoria de despesa"

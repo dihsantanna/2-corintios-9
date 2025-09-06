@@ -1,7 +1,28 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { IPartialBalance } from 'main/@types/Report';
 import { Outlet, useOutletContext } from 'react-router-dom';
+import moment from 'moment';
 import { ChurchData } from '../../@types/ChurchData.type';
+
+export interface ReferenceDate {
+  month: number;
+  year: number;
+}
+
+export type GlobalContextType = {
+  churchData: ChurchData;
+  setChurchData: React.Dispatch<React.SetStateAction<ChurchData>>;
+  partialBalance: IPartialBalance;
+  setPartialBalance: React.Dispatch<React.SetStateAction<IPartialBalance>>;
+  refreshPartialBalance: boolean;
+  setRefreshPartialBalance: React.Dispatch<React.SetStateAction<boolean>>;
+  logoSrc: string;
+  showInitialConfig: boolean;
+  setShowInitialConfig: React.Dispatch<React.SetStateAction<boolean>>;
+  referenceDate: ReferenceDate;
+  setReferenceDate: React.Dispatch<React.SetStateAction<ReferenceDate>>;
+  initialDate: React.MutableRefObject<ReferenceDate>;
+};
 
 const PARTIAL_BALANCE: IPartialBalance = {
   previousBalance: 0.0,
@@ -27,6 +48,8 @@ const CHURCH_DATA: ChurchData = {
   cep: '',
 };
 
+const now = moment();
+
 export function GlobalContextProvider() {
   const [churchData, setChurchData] = useState<ChurchData>({
     ...CHURCH_DATA,
@@ -39,12 +62,30 @@ export function GlobalContextProvider() {
   });
 
   const [showInitialConfig, setShowInitialConfig] = useState(false);
+  const [referenceDate, setReferenceDate] = useState<ReferenceDate>({
+    month: now.month() + 1,
+    year: now.year(),
+  });
+
+  const initialDate = useRef({
+    month: now.month() + 1,
+    year: now.year(),
+  });
+
+  useEffect(() => {
+    const getInitialBalance = async () => {
+      const initialBalance = await window.initialBalance?.get();
+      if (initialBalance) {
+        initialDate.current = {
+          month: initialBalance.referenceMonth,
+          year: initialBalance.referenceYear,
+        };
+      }
+    };
+    getInitialBalance();
+  }, []);
 
   const setInitialConfig = useCallback(async () => {
-    const date = new Date();
-    const month = date.getMonth() + 1;
-    const year = date.getFullYear();
-
     const dataOfChurch = await window.dataOfChurch?.get();
 
     if (!dataOfChurch) {
@@ -52,7 +93,10 @@ export function GlobalContextProvider() {
       return;
     }
 
-    const balance = await window.report.partial(month, year);
+    const balance = await window.report.partial(
+      referenceDate.month,
+      referenceDate.year,
+    );
 
     setPartialBalance(balance);
     setChurchData({
@@ -61,7 +105,7 @@ export function GlobalContextProvider() {
         dataOfChurch.foundationDate,
       ),
     });
-  }, []);
+  }, [referenceDate]);
 
   useEffect(() => {
     setInitialConfig();
@@ -86,22 +130,13 @@ export function GlobalContextProvider() {
         logoSrc: churchData.logoSrc,
         showInitialConfig,
         setShowInitialConfig,
+        referenceDate,
+        setReferenceDate,
+        initialDate,
       }}
     />
   );
 }
-
-export type GlobalContextType = {
-  churchData: ChurchData;
-  setChurchData: React.Dispatch<React.SetStateAction<ChurchData>>;
-  partialBalance: IPartialBalance;
-  setPartialBalance: React.Dispatch<React.SetStateAction<IPartialBalance>>;
-  refreshPartialBalance: boolean;
-  setRefreshPartialBalance: React.Dispatch<React.SetStateAction<boolean>>;
-  logoSrc: string;
-  showInitialConfig: boolean;
-  setShowInitialConfig: React.Dispatch<React.SetStateAction<boolean>>;
-};
 
 export function useGlobalContext() {
   return useOutletContext<GlobalContextType>();

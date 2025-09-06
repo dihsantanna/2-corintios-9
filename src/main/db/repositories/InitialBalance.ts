@@ -14,7 +14,7 @@ export class InitialBalance {
         if (err) reject(err);
         resolve({
           ...row,
-          value: toFloat(row.value),
+          value: toFloat(row?.value ?? 0),
         });
       });
     }).finally(() => this.db.close());
@@ -29,7 +29,7 @@ export class InitialBalance {
       this.db.run(
         createOrUpdateQuery,
         {
-          $value: toInteger(value),
+          $value: toInteger(value ?? 0),
           $referenceMonth: referenceMonth,
           $referenceYear: referenceYear,
         },

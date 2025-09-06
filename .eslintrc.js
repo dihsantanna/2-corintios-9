@@ -19,6 +19,7 @@ module.exports = {
     'react/jsx-no-undef': 'off',
     'no-undef': 'off',
     'no-useless-constructor': 'off',
+    'no-nested-ternary': 'off',
   },
   parserOptions: {
     ecmaVersion: 2022,

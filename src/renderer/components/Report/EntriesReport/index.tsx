@@ -25,35 +25,29 @@ const INITIAL_STATE: IEntriesState = {
 };
 
 export function EntriesReport() {
-  const [referenceMonth, setReferenceMonth] = useState(
-    new Date().getMonth() + 1,
-  );
-  const [referenceYear, setReferenceYear] = useState(new Date().getFullYear());
+  const { churchData, referenceDate } = useGlobalContext();
   const [monthAndYear, setMonthAndYear] = useState({
-    month: referenceMonth,
-    year: referenceYear,
+    month: referenceDate.month,
+    year: referenceDate.year,
   });
   const [entries, setEntries] = useState<IEntriesState>({ ...INITIAL_STATE });
   const [loading, setLoading] = useState(false);
   const [showOnlyTithers, setShowOnlyTithers] = useState(true);
   const [showOnlySpecialOffers, setShowOnlySpecialOffers] = useState(true);
-  const { churchData } = useGlobalContext();
 
   const mounted = useRef(false);
 
   const getReport = useCallback(async () => {
-    if (referenceMonth && referenceYear) {
+    const { month, year } = referenceDate;
+    if (month && year) {
       setLoading(true);
       try {
-        const allEntries = await window.report.entries(
-          referenceMonth,
-          referenceYear,
-        );
+        const allEntries = await window.report.entries(month, year);
         const otherEntries = await window.otherEntry.findAllByReferences(
-          referenceMonth,
-          referenceYear,
+          month,
+          year,
         );
-        setMonthAndYear({ month: referenceMonth, year: referenceYear });
+        setMonthAndYear({ month, year });
         setEntries({
           ...allEntries,
           otherEntries,
@@ -64,7 +58,7 @@ export function EntriesReport() {
         setLoading(false);
       }
     }
-  }, [referenceMonth, referenceYear]);
+  }, [referenceDate]);
 
   useEffect(() => {
     if (!mounted.current) {
@@ -98,10 +92,6 @@ export function EntriesReport() {
         monthAndYear.month as MonthKey
       ].toLowerCase()}-${monthAndYear.year}.pdf`}
       getReport={getReport}
-      referenceMonth={referenceMonth}
-      referenceYear={referenceYear}
-      setReferenceMonth={setReferenceMonth}
-      setReferenceYear={setReferenceYear}
       isLoading={loading}
       document={
         <EntriesReportDocument

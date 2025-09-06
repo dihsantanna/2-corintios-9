@@ -1,6 +1,7 @@
 import { FaFilePdf } from 'react-icons/fa';
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import { ReactElement, ReactNode, useEffect } from 'react';
+import { useGlobalContext } from 'renderer/context/GlobalContext/GlobalContextProvider';
 import { FilterByMonthAndYear } from '../FilterByMonthAndYear';
 import { LogoChurch } from '../LogoChurch';
 
@@ -9,10 +10,6 @@ interface ReportViewProps {
   document: ReactElement<Document>;
   children: ReactNode;
   getReport: () => void;
-  setReferenceMonth: React.Dispatch<React.SetStateAction<number>>;
-  setReferenceYear: React.Dispatch<React.SetStateAction<number>>;
-  referenceMonth: number;
-  referenceYear: number;
   isLoading: boolean;
 }
 
@@ -21,49 +18,43 @@ export function ReportView({
   document,
   children,
   getReport,
-  setReferenceMonth,
-  setReferenceYear,
-  referenceMonth,
-  referenceYear,
   isLoading,
 }: ReportViewProps) {
+  const { referenceDate } = useGlobalContext();
   useEffect(() => {
     getReport();
-  }, [getReport, referenceMonth, referenceYear]);
+  }, [getReport, referenceDate.month, referenceDate.year]);
 
   return (
     <>
-      <div className="flex flex-col items-center justify-center w-full h-full text-zinc-900 relative">
-        <div className="absolute left-11 top-6">
-          <PDFDownloadLink
-            className="flex items-baseline font-semibold"
-            document={document}
-            fileName={fileName}
-          >
-            {({ loading }) =>
-              loading ? (
-                <span className="animate-pulse">Gerando PDF...</span>
-              ) : (
-                <span
-                  title="Exportar PDF"
-                  className="flex items-baseline font-semibold opacity-70 hover:opacity-100"
-                >
-                  <FaFilePdf className="w-5 h-5 fill-red-500" />
-                  Exportar PDF
-                </span>
-              )
-            }
-          </PDFDownloadLink>
+      <div className="flex flex-col items-center justify-center w-full h-full text-zinc-900 relative mt-2">
+        <div className="flex items-center gap-2 w-full px-11">
+          <div className="text-zinc-200">
+            <FilterByMonthAndYear />
+          </div>
+          <div>
+            <PDFDownloadLink
+              className="flex items-baseline font-semibold"
+              document={document}
+              fileName={fileName}
+            >
+              {({ loading }) =>
+                loading ? (
+                  <span className="animate-pulse">Gerando PDF...</span>
+                ) : (
+                  <span
+                    title="Exportar PDF"
+                    className="flex items-baseline font-semibold opacity-70 hover:opacity-100"
+                  >
+                    <FaFilePdf className="w-5 h-5 fill-red-500" />
+                    Exportar PDF
+                  </span>
+                )
+              }
+            </PDFDownloadLink>
+          </div>
         </div>
-        <div className="flex items-center justify-center gap-2">
-          <FilterByMonthAndYear
-            setReferenceMonth={setReferenceMonth}
-            setReferenceYear={setReferenceYear}
-            monthValue={referenceMonth}
-            yearValue={referenceYear}
-          />
-        </div>
-        <div className="relative w-11/12 h-[90%] flex items-center justify-center rounded-md border border-zinc-200">
+        <div className="relative w-11/12 h-[90%] flex items-center justify-center rounded-md border border-zinc-200 mt-2">
           {isLoading ? (
             <span className="animate-pulse flex flex-col items-center justify-center gap-2">
               Gerando Relatório ...

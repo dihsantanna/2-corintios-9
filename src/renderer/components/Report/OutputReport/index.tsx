@@ -11,18 +11,14 @@ import { useGlobalContext } from '../../../context/GlobalContext/GlobalContextPr
 type MonthKey = keyof typeof months;
 
 export function OutputReport() {
-  const [referenceMonth, setReferenceMonth] = useState(
-    new Date().getMonth() + 1
-  );
-  const [referenceYear, setReferenceYear] = useState(new Date().getFullYear());
+  const { churchData, referenceDate } = useGlobalContext();
   const [monthAndYear, setMonthAndYear] = useState({
-    month: referenceMonth,
-    year: referenceYear,
+    month: referenceDate.month,
+    year: referenceDate.year,
   });
   const [expenses, setExpenses] = useState<IExpenseState[]>([]);
   const [categories, setCategories] = useState<IExpenseCategoryState[]>([]);
   const [loading, setLoading] = useState(false);
-  const { churchData } = useGlobalContext();
 
   const mounted = useRef(false);
 
@@ -32,7 +28,7 @@ export function OutputReport() {
       setCategories(allCategories);
     } catch (err) {
       toast.error(
-        `Erro ao buscar categorias de despesa: ${(err as Error).message}`
+        `Erro ao buscar categorias de despesa: ${(err as Error).message}`,
       );
     }
   }, []);
@@ -44,15 +40,13 @@ export function OutputReport() {
   const totalExpenses = expenses.reduce((total, { value }) => total + value, 0);
 
   const getReport = useCallback(async () => {
-    if (referenceMonth && referenceYear) {
+    const { month, year } = referenceDate;
+    if (month && year) {
       try {
         setLoading(true);
         const allExpenses =
-          await window.expense.findAllByReferencesWithCategoryName(
-            referenceMonth,
-            referenceYear
-          );
-        setMonthAndYear({ month: referenceMonth, year: referenceYear });
+          await window.expense.findAllByReferencesWithCategoryName(month, year);
+        setMonthAndYear({ month, year });
         setExpenses(allExpenses);
       } catch (err) {
         toast.error((err as Error).message);
@@ -60,7 +54,7 @@ export function OutputReport() {
         setLoading(false);
       }
     }
-  }, [referenceMonth, referenceYear]);
+  }, [referenceDate]);
 
   useEffect(() => {
     if (!mounted.current) {
@@ -75,10 +69,6 @@ export function OutputReport() {
         monthAndYear.month as MonthKey
       ].toLowerCase()}-${monthAndYear.year}.pdf`}
       getReport={getReport}
-      referenceMonth={referenceMonth}
-      referenceYear={referenceYear}
-      setReferenceMonth={setReferenceMonth}
-      setReferenceYear={setReferenceYear}
       isLoading={loading}
       document={
         <OutputReportDocument
@@ -94,12 +84,12 @@ export function OutputReport() {
       <>
         {categories.map(({ id, name }) => {
           const filteredExpenses = expenses.filter(
-            (expense) => expense.expenseCategoryId === id
+            (expense) => expense.expenseCategoryId === id,
           );
 
           const subTotal = filteredExpenses.reduce(
             (total, { value }) => total + value,
-            0
+            0,
           );
           return (
             <Table

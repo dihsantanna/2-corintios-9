@@ -22,21 +22,18 @@ export function EditWithdrawsToTheBankAccount() {
   >([]);
   const [editing, setEditing] = useState('');
   const [loading, setLoading] = useState(false);
-  const [referenceMonth, setReferenceMonth] = useState(
-    new Date().getMonth() + 1
-  );
-  const [referenceYear, setReferenceYear] = useState(new Date().getFullYear());
 
-  const { setRefreshPartialBalance } = useGlobalContext();
+  const { setRefreshPartialBalance, referenceDate } = useGlobalContext();
 
   useEffect(() => {
+    const { month, year } = referenceDate;
     const getWithdrawsToTheBankAccount = async () => {
       try {
         setLoading(true);
         const newWithdrawsToTheBankAccount =
           await window.withdrawToTheBankAccount.findAllByReferenceDate(
-            referenceMonth,
-            referenceYear
+            month,
+            year,
           );
 
         const toFixedWithdrawsToTheBankAccount =
@@ -56,9 +53,8 @@ export function EditWithdrawsToTheBankAccount() {
       }
     };
 
-    if (referenceMonth !== 0 && referenceYear !== 0)
-      getWithdrawsToTheBankAccount();
-  }, [referenceMonth, referenceYear]);
+    if (month !== 0 && year !== 0) getWithdrawsToTheBankAccount();
+  }, [referenceDate]);
 
   const handleReset = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -77,7 +73,7 @@ export function EditWithdrawsToTheBankAccount() {
     {
       target: { value },
     }: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
-    index: number
+    index: number,
   ) => {
     const newTithe = {
       ...withdrawsToTheBankAccount[index],
@@ -92,7 +88,7 @@ export function EditWithdrawsToTheBankAccount() {
 
   const handleValueInputBlur = (
     { target: { value } }: React.FocusEvent<HTMLInputElement>,
-    index: number
+    index: number,
   ) => {
     const newValue = value ? parseFloat(value).toFixed(2) : '';
     const newTithe = {
@@ -113,7 +109,7 @@ export function EditWithdrawsToTheBankAccount() {
 
   const handleEdit = async (
     event: React.FormEvent<HTMLFormElement>,
-    index: number
+    index: number,
   ) => {
     event.preventDefault();
     const editedWithdraw = withdrawsToTheBankAccount[index];
@@ -181,12 +177,9 @@ export function EditWithdrawsToTheBankAccount() {
         <h1 className="flex items-center font-semibold text-2xl text-zinc-900 h-20">
           Editar Saques em Conta Bancária
         </h1>
-        <FilterByMonthAndYear
-          monthValue={referenceMonth}
-          yearValue={referenceYear}
-          setReferenceMonth={setReferenceMonth}
-          setReferenceYear={setReferenceYear}
-        />
+        <div className="flex items-center gap-2 w-full px-4 mb-2">
+          <FilterByMonthAndYear />
+        </div>
         <div className="flex w-full h-10 items-center justify-between border-y border-zinc-300 text-zinc-900">
           <span className="w-7/12 flex items-center justify-center">
             Valor (R$)

@@ -22,7 +22,7 @@ export function App() {
       <aside className="border-r-2 border-r-zinc-300 w-1/6 max-h-screen rounded-r-sm overflow-y-none min-w-[200px]">
         <Menu selectedScreen={location.pathname.replace('/', '') as Screens} />
       </aside>
-      <main className="flex flex-1 justify-center items-center w-5/6">
+      <main className="flex flex-1 justify-center items-center relative">
         {location.pathname !== '/home' && (
           <Link
             tabIndex={0}
